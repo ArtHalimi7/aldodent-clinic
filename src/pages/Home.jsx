@@ -1,9 +1,14 @@
-import React from 'react'
 import Hero from '../components/Hero'
+import HorizontalParallax from '../components/HorizontalParallax'
+import SignatureProcess from '../components/SignatureProcess'
 
 const Home = () => {
   return (
-    <Hero/>
+    <>
+      <Hero />
+      <HorizontalParallax />
+      <SignatureProcess />
+    </>
   )
 }
 
