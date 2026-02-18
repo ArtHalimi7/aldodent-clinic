@@ -1,182 +1,237 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Calendar, Phone, MapPin } from 'lucide-react'
-import logoBlue from '../assets/img/logowhite.png'
+import { Menu, X, Calendar, Phone, MapPin, ArrowRight, Instagram, Facebook } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import logoWhite from '../assets/img/logowhite.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const location = useLocation()
 
-  // Handle scroll effect for glass background
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Close sidebar on route change
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location])
+
   const navLinks = [
-    { name: 'Shërbimet', href: '#sherbimet' },
-    { name: 'Galeria', href: '#galeria' },
-    { name: 'Rreth Nesh', href: '#rreth-nesh' },
-    { name: 'Kontakti', href: '#kontakti' },
+    { name: 'Shërbimet', href: '/services' },
+    { name: 'Galeria', href: '/gallery' },
+    { name: 'Rreth Nesh', href: '/about' },
+    { name: 'Kontakti', href: '/contact' },
   ]
-
-  // Animation variants for mobile menu
-  const sidebarVariants = {
-    closed: { x: "100%", opacity: 0 },
-    open: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const linkVariants = {
-    closed: { x: 20, opacity: 0 },
-    open: { x: 0, opacity: 1 }
-  }
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled || isOpen
-          ? 'bg-white/95 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-6'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+            ? 'bg-[#009299]/95 backdrop-blur-md shadow-lg shadow-black/5 py-5'
+            : 'bg-transparent py-5'
           }`}
         style={{ fontFamily: "'Outfit', sans-serif" }}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
 
-          {/* --- LOGO --- */}
-          <a href="#" className="z-50 relative flex items-center gap-2 group">
-            {/* Logo Icon */}
-            {/* Logo Icon */}
-            <div className={`h-10 w-10 flex items-center justify-center pointer-events-none`}>
-              <img src={logoBlue} alt="Aldo Dent" className="w-12 h-12 object-contain" />
+          {/* Logo — always white */}
+          <Link to="/" className="z-50 relative flex items-center gap-2.5 group">
+            <div className="h-12 w-12 flex items-center justify-center pointer-events-none">
+              <img src={logoWhite} alt="Aldo Dent" className="w-14 h-14 object-contain" />
             </div>
-            <span className={`text-xl font-medium tracking-tight transition-colors duration-300 ${scrolled || isOpen ? 'text-slate-900' : 'text-white'
-              }`}>
+            <span className="text-xl font-medium tracking-tight text-white">
               Aldo Dent
             </span>
-          </a>
+          </Link>
 
-          {/* --- DESKTOP NAVIGATION --- */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className={`text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 ${scrolled ? 'text-slate-600 hover:text-[#009299]' : 'text-white/90 hover:text-white'
+                to={link.href}
+                className={`text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 ${location.pathname === link.href
+                  ? 'text-white'
+                  : 'text-white/70 hover:text-white'
                   }`}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 
-          {/* --- DESKTOP CTA --- */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-6">
             <a
-              href="tel:+38344000000"
-              className={`text-sm font-medium flex items-center gap-2 transition-colors duration-300 ${scrolled ? 'text-slate-600 hover:text-[#009299]' : 'text-white/90 hover:text-white'
-                }`}
+              href="tel:+38344123456"
+              className="text-sm font-medium flex items-center gap-2 text-white/70 hover:text-white transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>+383 44 000 000</span>
+              <span>+383 44 123 456</span>
             </a>
-            <button className={`px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${scrolled
-              ? 'bg-[#009299] hover:bg-[#007a80] text-white shadow-[#009299]/20'
-              : 'bg-white hover:bg-slate-100 text-[#009299] shadow-white/10'
-              }`}>
-              Rezervo
-            </button>
+            <Link to="/booking">
+              <button className={`px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${scrolled
+                ? 'bg-white text-[#009299] hover:bg-teal-50 shadow-black/10'
+                : 'bg-white/10 border border-white/20 text-white hover:bg-white/20 shadow-transparent'
+                }`}>
+                Rezervo
+              </button>
+            </Link>
           </div>
 
-          {/* --- MOBILE MENU BUTTON --- */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden z-50 relative p-2 transition-colors duration-300 ${scrolled || isOpen ? 'text-slate-800' : 'text-white'
-              }`}
+            className="md:hidden z-50 relative p-2 text-white"
+            aria-label="Menu"
           >
-            {isOpen ? <X /> : <Menu />}
+            <AnimatePresence mode="wait">
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X size={24} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu size={24} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </nav>
 
-      {/* --- MOBILE SIDEBAR --- */}
+      {/* ─── MOBILE SIDEBAR ─── */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
+            {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
             />
 
-            {/* Sidebar Panel */}
+            {/* Panel */}
             <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={sidebarVariants}
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white z-50 shadow-2xl md:hidden flex flex-col p-8 pt-28"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 350, damping: 35 }}
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#007a80] z-50 md:hidden flex flex-col overflow-hidden"
               style={{ fontFamily: "'Outfit', sans-serif" }}
             >
-              {/* Mobile Links */}
-              <div className="flex flex-col gap-6 mb-10">
-                {navLinks.map((link) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    variants={linkVariants}
-                    onClick={() => setIsOpen(false)}
-                    className="text-2xl font-light text-slate-800 hover:text-[#009299] transition-colors"
-                  >
-                    {link.name}
-                  </motion.a>
-                ))}
+              {/* Sidebar Background Glow */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-20%] right-[-30%] w-[300px] h-[300px] bg-teal-400/10 rounded-full blur-[80px]" />
+                <div className="absolute bottom-[-10%] left-[-20%] w-[250px] h-[250px] bg-[#006b70]/50 rounded-full blur-[60px]" />
               </div>
 
-              {/* Mobile Info & CTA */}
-              <motion.div variants={linkVariants} className="mt-auto border-t border-slate-100 pt-8 space-y-6">
-
-                <div className="flex items-center gap-4 text-slate-600">
-                  <div className="w-12 h-12 rounded-full bg-[#009299]/10 flex items-center justify-center text-[#009299]">
-                    <Phone size={20} />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider font-medium">Na Telefononi</p>
-                    <p className="font-medium text-slate-900 text-lg">+383 44 123 456</p>
-                  </div>
+              {/* Sidebar Content */}
+              <div className="relative z-10 flex flex-col h-full px-8 pt-28 pb-8">
+                {/* Nav Links */}
+                <div className="flex flex-col gap-1">
+                  {navLinks.map((link, i) => (
+                    <motion.div
+                      key={link.name}
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <Link
+                        to={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`group flex items-center justify-between py-4 border-b border-white/10 transition-colors ${location.pathname === link.href
+                          ? 'text-teal-300'
+                          : 'text-white/80 hover:text-white'
+                          }`}
+                      >
+                        <span className="text-2xl font-light">{link.name}</span>
+                        <ArrowRight size={18} className="text-white/20 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
+                      </Link>
+                    </motion.div>
+                  ))}
                 </div>
 
-                <div className="flex items-center gap-4 text-slate-600">
-                  <div className="w-12 h-12 rounded-full bg-[#009299]/10 flex items-center justify-center text-[#009299]">
-                    <MapPin size={20} />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider font-medium">Lokacioni</p>
-                    <p className="font-medium text-slate-900 text-lg">Prishtinë, Kosovë</p>
-                  </div>
-                </div>
+                {/* Spacer */}
+                <div className="flex-1" />
 
-                <button className="w-full py-4 bg-[#009299] text-white font-medium rounded-xl shadow-lg shadow-[#009299]/30 flex items-center justify-center gap-2 text-lg active:scale-95 transition-transform">
-                  <Calendar className="w-5 h-5" />
-                  Rezervo Termin
-                </button>
-              </motion.div>
+                {/* Contact Info */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="space-y-5 mb-6"
+                >
+                  <a href="tel:+38344123456" className="flex items-center gap-4 group">
+                    <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-teal-300 group-hover:bg-white/15 transition-colors">
+                      <Phone size={18} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-white/30 uppercase tracking-[0.15em] font-bold">Na Telefononi</p>
+                      <p className="text-white font-medium">+383 44 123 456</p>
+                    </div>
+                  </a>
 
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-teal-300">
+                      <MapPin size={18} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-white/30 uppercase tracking-[0.15em] font-bold">Lokacioni</p>
+                      <p className="text-white font-medium">Prishtinë, Kosovë</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* CTA Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <Link to="/booking" onClick={() => setIsOpen(false)}>
+                    <button className="w-full py-4 bg-white text-[#009299] font-medium rounded-2xl shadow-lg shadow-black/10 flex items-center justify-center gap-2.5 text-lg active:scale-[0.97] transition-transform">
+                      <Calendar className="w-5 h-5" />
+                      Rezervo Termin
+                    </button>
+                  </Link>
+                </motion.div>
+
+                {/* Socials */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className="flex items-center gap-3 mt-6 pt-5 border-t border-white/10"
+                >
+                  <a href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Instagram">
+                    <Instagram size={16} />
+                  </a>
+                  <a href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Facebook">
+                    <Facebook size={16} />
+                  </a>
+                  <span className="ml-auto text-[10px] text-white/20 uppercase tracking-widest">© Aldo Dent</span>
+                </motion.div>
+              </div>
             </motion.div>
           </>
         )}

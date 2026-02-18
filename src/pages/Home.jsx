@@ -1,6 +1,7 @@
 import Hero from '../components/Hero'
 import HorizontalParallax from '../components/HorizontalParallax'
 import SignatureProcess from '../components/SignatureProcess'
+import Testimonials from '../components/Testimonials'
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <Hero />
       <HorizontalParallax />
       <SignatureProcess />
+      <Testimonials />
     </>
   )
 }
