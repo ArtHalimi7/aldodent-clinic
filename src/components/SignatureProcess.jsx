@@ -79,22 +79,22 @@ const Step = ({ step, index, total, isMobile }) => {
                 <div className="relative flex items-center justify-center">
                     <Motion.div
                         initial={isMobile ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                        whileInView={isMobile ? undefined : { opacity: 1, scale: 1 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        transition={isMobile ? { duration: 0 } : { duration: 1, ease: [0.16, 1, 0.3, 1] }}
                         className="relative flex items-center justify-center"
                     >
                         <h2
-                            className="text-[25vw] md:text-[20vw] leading-none font-light select-none text-transparent"
+                            className="text-[40vw] md:text-[20vw] leading-none font-light select-none text-transparent"
                             style={{ WebkitTextStroke: '1px #9dd4eb' }}
                         >
                             {step.id}
                         </h2>
                         <Motion.div
                             initial={isMobile ? { scale: 1 } : { scale: 0 }}
-                            whileInView={isMobile ? undefined : { scale: 1 }}
+                            whileInView={{ scale: 1 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
+                            transition={isMobile ? { duration: 0 } : { duration: 1.2, delay: 0.2, ease: "easeOut" }}
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full border border-white/5 -z-10"
                         />
                     </Motion.div>
@@ -104,9 +104,9 @@ const Step = ({ step, index, total, isMobile }) => {
                 <div className="flex flex-col justify-center space-y-8 relative z-20 items-center md:items-start text-center md:text-left">
                     <Motion.div
                         initial={isMobile ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-                        whileInView={isMobile ? undefined : { opacity: 1, x: 0 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        transition={isMobile ? { duration: 0 } : { duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     >
                         <div className="flex items-center gap-4 mb-8 justify-center md:justify-start">
                             <span className="text-xs uppercase tracking-[0.3em] font-bold px-4 py-2 rounded-full bg-white/5 border border-white/10 text-teal-300">
@@ -114,9 +114,9 @@ const Step = ({ step, index, total, isMobile }) => {
                             </span>
                             <Motion.div
                                 initial={isMobile ? { width: 60 } : { width: 0 }}
-                                whileInView={isMobile ? undefined : { width: 60 }}
+                                whileInView={{ width: 60 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
+                                transition={isMobile ? { duration: 0 } : { duration: 0.8, delay: 0.4 }}
                                 className="h-[1px] bg-white/20"
                             />
                         </div>
