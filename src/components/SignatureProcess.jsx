@@ -26,11 +26,10 @@ const STEPS = [
 
 const SignatureProcess = () => {
     const containerRef = useRef(null);
-    const [isMobile, setIsMobile] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
     React.useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
