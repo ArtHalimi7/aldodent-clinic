@@ -1,8 +1,8 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, lazy } from 'react'
 import { motion as Motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import ToothCanvas from './ToothModel'
+const ToothCanvas = lazy(() => import('./ToothModel'))
 import halftoneImg from '../assets/img/halftone.png'
 
 /* ─── Marquee / Ticker Strip ─── */
