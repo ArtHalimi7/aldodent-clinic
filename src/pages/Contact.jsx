@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion as Motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send, Check } from 'lucide-react';
 
@@ -7,7 +8,7 @@ import { Phone, Mail, MapPin, Clock, Send, Check } from 'lucide-react';
 const CONTACT_INFO = [
     { icon: <Phone size={20} />, label: "Telefoni", value: "044 231 769", href: "tel:+38344231769" },
     { icon: <Mail size={20} />, label: "Email", value: "dentaltourism.aldo@gmail.com", href: "mailto:dentaltourism.aldo@gmail.com" },
-    { icon: <MapPin size={20} />, label: "Adresa", value: "Prishtinë, Kosovë", href: null },
+    { icon: <MapPin size={20} />, label: "Adresa", value: "Gjilan, Kosovë", href: null },
 ];
 
 const HOURS = [
@@ -39,6 +40,11 @@ export default function Contact() {
 
     return (
         <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <Helmet>
+                <title>Kontakti — AldoDent | Na Kontaktoni</title>
+                <meta name="description" content="Kontaktoni AldoDent për konsultë falas. Telefoni: 044 231 769, Email: dentaltourism.aldo@gmail.com. Klinikë dentare premium në Prishtinë." />
+                <link rel="canonical" href="https://aldodent.com/contact" />
+            </Helmet>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">

@@ -3,6 +3,7 @@ import { motion as Motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ToothCanvas from './ToothModel'
+import halftoneImg from '../assets/img/halftone.png'
 
 /* ─── Marquee / Ticker Strip ─── */
 const MARQUEE_ITEMS = [
@@ -140,19 +141,27 @@ const Hero = () => {
 
       {/* ── Right Column: 3D Tooth Canvas ── */}
       <div
-        className="relative w-full lg:w-1/2 z-10 mt-8 lg:mt-0"
+        className="relative w-full lg:w-1/2 z-10 mt-16 lg:mt-0"
         style={{ height: 'clamp(300px, 50vw, 500px)' }}
       >
         <Motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
-          className="w-full h-full"
+          className="w-full h-full relative z-20"
         >
           <Suspense fallback={<CanvasSpinner />}>
             <ToothCanvas />
           </Suspense>
         </Motion.div>
+
+        {/* Halftone texture under the tooth */}
+        <img
+          src={halftoneImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute -bottom-6 lg:bottom-0 left-1/2 -translate-x-1/2 w-[140%] max-w-[700px] z-10 pointer-events-none select-none"
+        />
       </div>
 
       {/* Top-right gradient */}

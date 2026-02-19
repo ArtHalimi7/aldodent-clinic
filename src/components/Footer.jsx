@@ -73,7 +73,7 @@ const Footer = () => {
                             </a>
                             <span className="flex items-center gap-3 text-white/60 text-sm">
                                 <MapPin size={15} />
-                                Prishtinë, Kosovë
+                                Gjilan, Kosovë
                             </span>
                         </div>
                     </div>

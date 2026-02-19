@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -134,6 +135,11 @@ export default function Services() {
 
     return (
         <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <Helmet>
+                <title>Shërbimet — AldoDent | Shërbime Dentare Premium</title>
+                <meta name="description" content="Kirurgji, implantologji, estetikë dentare, parodontologji, ortodonci, endodonci dhe mbushje estetike. Shërbime dentare premium në AldoDent Prishtinë." />
+                <link rel="canonical" href="https://aldodent.com/services" />
+            </Helmet>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">

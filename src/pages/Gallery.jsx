@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -69,6 +70,11 @@ export default function Gallery() {
 
     return (
         <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <Helmet>
+                <title>Galeria — AldoDent | Punimet Tona Dentare</title>
+                <meta name="description" content="Shikoni galerin e punimeve tona dentare: faseta, implante, zbardhje, ortodonci dhe më shumë. Rezultate reale nga pacientët tanë." />
+                <link rel="canonical" href="https://aldodent.com/gallery" />
+            </Helmet>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">

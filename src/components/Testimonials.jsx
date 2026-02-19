@@ -75,9 +75,9 @@ const MiniReview = ({ review, delay }) => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay }}
-        className="flex items-center gap-3 px-5 py-4 bg-white/5 border border-white/10 rounded-2xl"
+        className="flex items-center gap-3 px-5 py-4 bg-[#1d7aa1] border border-[#2596be]/30 rounded-2xl"
     >
-        <div className="w-9 h-9 rounded-full bg-teal-400/15 flex items-center justify-center text-teal-300 font-semibold text-sm shrink-0">
+        <div className="w-9 h-9 rounded-full bg-teal-400/20 flex items-center justify-center text-teal-300 font-semibold text-sm shrink-0">
             {review.name.charAt(0)}
         </div>
         <div className="min-w-0">
@@ -87,7 +87,7 @@ const MiniReview = ({ review, delay }) => (
     </Motion.div>
 );
 
-/* ── Full Review Card ── */
+/* ── Full Review Card (blue cards on white background) ── */
 const ReviewCard = ({ review, delay, className = "" }) => (
     <Motion.div
         initial={{ opacity: 0, y: 25 }}
@@ -95,21 +95,21 @@ const ReviewCard = ({ review, delay, className = "" }) => (
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className={`group relative rounded-3xl p-7 transition-all duration-300 ${review.featured
-            ? 'bg-white/[0.08] border border-white/15 hover:bg-white/[0.12] hover:border-white/20'
-            : 'bg-white/5 border border-white/10 hover:bg-white/[0.08]'
+            ? 'bg-[#1d7aa1] border border-[#2596be]/30 hover:bg-[#1a6e93]'
+            : 'bg-[#2596be] border border-[#2dd4bf]/15 hover:bg-[#218eaf]'
             } ${className}`}
     >
         {/* Decorative Quote */}
         <Quote
             size={review.featured ? 48 : 32}
-            className="absolute top-5 right-5 text-white/[0.04] group-hover:text-white/[0.08] transition-colors"
+            className="absolute top-5 right-5 text-white/[0.06] group-hover:text-white/[0.10] transition-colors"
         />
 
         {/* Header */}
         <div className="flex items-start gap-3.5 mb-5">
             <div className={`shrink-0 rounded-full flex items-center justify-center font-semibold ${review.featured
                 ? 'w-12 h-12 bg-gradient-to-br from-teal-400/25 to-teal-400/10 text-teal-300 text-base'
-                : 'w-10 h-10 bg-teal-400/15 text-teal-300 text-sm'
+                : 'w-10 h-10 bg-teal-400/20 text-teal-300 text-sm'
                 }`}>
                 {review.name.charAt(0)}
             </div>
@@ -118,19 +118,18 @@ const ReviewCard = ({ review, delay, className = "" }) => (
                 <div className="flex items-center gap-2 mt-1">
                     <Stars />
                     <span className="text-white/25 text-[11px]">·</span>
-                    <span className="text-white/30 text-xs">{review.time}</span>
+                    <span className="text-white/40 text-xs">{review.time}</span>
                 </div>
                 {review.badge && (
-                    <span className="inline-block mt-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-teal-300/60 bg-teal-400/5 px-2 py-0.5 rounded-full">
+                    <span className="inline-block mt-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-teal-300/70 bg-teal-400/10 px-2 py-0.5 rounded-full">
                         {review.badge}
                     </span>
                 )}
             </div>
-            <GoogleG />
         </div>
 
         {/* Quote Text */}
-        <p className={`font-light leading-relaxed ${review.featured ? 'text-white/70 text-[15px]' : 'text-white/60 text-sm'
+        <p className={`font-light leading-relaxed ${review.featured ? 'text-white/75 text-[15px]' : 'text-white/65 text-sm'
             }`}>
             "{review.text}"
         </p>
@@ -143,30 +142,11 @@ const Testimonials = () => {
     const withoutText = REVIEWS.filter(r => !r.text);
 
     return (
-        <section className="relative bg-[#1d7aa1] py-24 md:py-32 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
-            {/* Background */}
+        <section className="relative bg-white py-24 md:py-32 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            {/* Subtle Background Accents */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[30%] w-[50vw] h-[50vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-15%] right-[-5%] w-[40vw] h-[40vw] bg-[#196384]/30 rounded-full blur-[100px]" />
-
-                {/* Wave Tapestry */}
-                <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" fill="none">
-                    {/* Layered flowing curves */}
-                    <path d="M-50 150 C 250 50, 500 250, 750 150 S 1200 50, 1500 150" stroke="white" strokeWidth="0.7" />
-                    <path d="M-50 200 C 250 110, 500 300, 750 200 S 1200 110, 1500 200" stroke="white" strokeWidth="0.45" />
-                    <path d="M-50 240 C 250 160, 500 340, 750 240 S 1200 160, 1500 240" stroke="white" strokeWidth="0.25" />
-                    <path d="M-50 550 C 350 450, 650 650, 950 550 S 1300 450, 1500 550" stroke="white" strokeWidth="0.6" />
-                    <path d="M-50 600 C 350 510, 650 700, 950 600 S 1300 510, 1500 600" stroke="white" strokeWidth="0.35" />
-                    {/* Accent dots along curves */}
-                    <circle cx="250" cy="150" r="2.5" fill="white" opacity="0.4" />
-                    <circle cx="750" cy="150" r="2.5" fill="white" opacity="0.4" />
-                    <circle cx="1200" cy="150" r="2.5" fill="white" opacity="0.4" />
-                    <circle cx="350" cy="550" r="2.5" fill="white" opacity="0.4" />
-                    <circle cx="950" cy="550" r="2.5" fill="white" opacity="0.4" />
-                    {/* Soft corner arcs */}
-                    <path d="M1440 0 A 250 250 0 0 0 1190 0" stroke="white" strokeWidth="0.3" />
-                    <path d="M0 800 A 200 200 0 0 0 200 800" stroke="white" strokeWidth="0.3" />
-                </svg>
+                <div className="absolute top-[-20%] left-[30%] w-[50vw] h-[50vw] bg-[#2596be]/5 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-15%] right-[-5%] w-[40vw] h-[40vw] bg-teal-400/5 rounded-full blur-[100px]" />
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
@@ -177,7 +157,7 @@ const Testimonials = () => {
                             initial={{ opacity: 0, x: -10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
+                            className="text-[#2596be] font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                         >
                             Vlerësimet
                         </Motion.span>
@@ -186,7 +166,7 @@ const Testimonials = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-3xl md:text-5xl font-light tracking-tight text-white"
+                            className="text-3xl md:text-5xl font-light tracking-tight text-gray-900"
                         >
                             Çfarë thonë pacientët tanë
                         </Motion.h2>
@@ -198,15 +178,15 @@ const Testimonials = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 self-start md:self-auto"
+                        className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 self-start md:self-auto"
                     >
                         <GoogleG />
                         <div>
                             <div className="flex items-center gap-1.5">
-                                <span className="text-white font-medium text-lg">5.0</span>
+                                <span className="text-gray-900 font-medium text-lg">5.0</span>
                                 <Stars />
                             </div>
-                            <span className="text-white/30 text-xs">Google Reviews</span>
+                            <span className="text-gray-400 text-xs">Google Reviews</span>
                         </div>
                     </Motion.div>
                 </div>

@@ -205,7 +205,7 @@ const Navbar = () => {
                     </div>
                     <div>
                       <p className="text-[10px] text-white/30 uppercase tracking-[0.15em] font-bold">Lokacioni</p>
-                      <p className="text-white font-medium">Prishtinë, Kosovë</p>
+                      <p className="text-white font-medium">Gjilan, Kosovë</p>
                     </div>
                   </div>
                 </Motion.div>

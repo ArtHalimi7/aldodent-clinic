@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -43,6 +44,11 @@ export default function About() {
 
     return (
         <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <Helmet>
+                <title>Rreth Nesh — AldoDent | Klinikë Dentare Premium</title>
+                <meta name="description" content="Njohuni me ekipin tonë të specialistëve dentar, vlerat tona, dhe filozofinë që na bën klinikën më të besuar në Prishtinë." />
+                <link rel="canonical" href="https://aldodent.com/about" />
+            </Helmet>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">

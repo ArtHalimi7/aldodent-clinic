@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
 
@@ -166,6 +167,11 @@ export default function Booking() {
     /* ───── MAIN LAYOUT ───── */
     return (
         <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <Helmet>
+                <title>Rezervo Termin — AldoDent | Klinikë Dentare Premium</title>
+                <meta name="description" content="Rezervoni terminin tuaj online në AldoDent. Zgjidhni shërbimin, datën dhe orën që ju përshtaten më së miri." />
+                <link rel="canonical" href="https://aldodent.com/booking" />
+            </Helmet>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
