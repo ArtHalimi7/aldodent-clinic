@@ -26,17 +26,25 @@ const STEPS = [
 
 const SignatureProcess = () => {
     const containerRef = useRef(null);
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
         <section ref={containerRef} className="relative bg-[#2596be]" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {STEPS.map((step, index) => (
-                <Step key={index} step={step} index={index} total={STEPS.length} />
+                <Step key={index} step={step} index={index} total={STEPS.length} isMobile={isMobile} />
             ))}
         </section>
     );
 };
 
-const Step = ({ step, index, total }) => {
+const Step = ({ step, index, total, isMobile }) => {
     // Each step gets progressively darker
     const bgShades = ['bg-[#2596be]', 'bg-[#208bb3]', 'bg-[#1b7da0]', 'bg-[#166f8f]'];
 
@@ -70,8 +78,8 @@ const Step = ({ step, index, total }) => {
                 {/* Left: Big Number */}
                 <div className="relative flex items-center justify-center">
                     <Motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={isMobile ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                        whileInView={isMobile ? undefined : { opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                         className="relative flex items-center justify-center"
@@ -83,8 +91,8 @@ const Step = ({ step, index, total }) => {
                             {step.id}
                         </h2>
                         <Motion.div
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
+                            initial={isMobile ? { scale: 1 } : { scale: 0 }}
+                            whileInView={isMobile ? undefined : { scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full border border-white/5 -z-10"
@@ -95,8 +103,8 @@ const Step = ({ step, index, total }) => {
                 {/* Right: Content */}
                 <div className="flex flex-col justify-center space-y-8 relative z-20 items-center md:items-start text-center md:text-left">
                     <Motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={isMobile ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                        whileInView={isMobile ? undefined : { opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     >
@@ -105,8 +113,8 @@ const Step = ({ step, index, total }) => {
                                 Hapi {step.id}
                             </span>
                             <Motion.div
-                                initial={{ width: 0 }}
-                                whileInView={{ width: 60 }}
+                                initial={isMobile ? { width: 60 } : { width: 0 }}
+                                whileInView={isMobile ? undefined : { width: 60 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
                                 className="h-[1px] bg-white/20"

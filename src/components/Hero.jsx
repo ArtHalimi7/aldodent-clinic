@@ -3,6 +3,7 @@ import { motion as Motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 const ToothCanvas = lazy(() => import('./ToothModel'))
+import Lazy3DWrapper from './Lazy3DWrapper'
 import halftoneImg from '../assets/img/halftone.png'
 
 /* ─── Marquee / Ticker Strip ─── */
@@ -148,17 +149,21 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
-          className="w-full h-full relative z-20"
+          className="w-full h-full relative z-20 animate-float"
         >
-          <Suspense fallback={<CanvasSpinner />}>
-            <ToothCanvas />
-          </Suspense>
+          <Lazy3DWrapper placeholder={<CanvasSpinner />}>
+            <Suspense fallback={<CanvasSpinner />}>
+              <ToothCanvas />
+            </Suspense>
+          </Lazy3DWrapper>
         </Motion.div>
 
         {/* Halftone texture under the tooth */}
         <img
           src={halftoneImg}
           alt=""
+          width="1000"
+          height="1000"
           aria-hidden="true"
           className="absolute -bottom-6 lg:bottom-0 left-1/2 -translate-x-1/2 w-[140%] max-w-[700px] z-10 pointer-events-none select-none"
         />

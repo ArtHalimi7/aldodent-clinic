@@ -41,7 +41,7 @@ const Navbar = () => {
           {/* Logo — always white */}
           <Link to="/" className="z-50 relative flex items-center gap-2.5 group">
             <div className="h-12 w-12 flex items-center justify-center pointer-events-none">
-              <img src={logoWhite} alt="Aldo Dent" className="w-14 h-14 object-contain" />
+              <img src={logoWhite} alt="Aldo Dent" width="56" height="56" className="w-14 h-14 object-contain" />
             </div>
             <span className="text-xl font-medium tracking-tight text-white">
               Aldo Dent

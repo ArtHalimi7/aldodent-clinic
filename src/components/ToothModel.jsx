@@ -5,21 +5,11 @@ import { Suspense } from 'react'
 
 /* ─── The actual GLB mesh ─── */
 function Tooth() {
-    const group = useRef()
     const { scene } = useGLTF('/models/tooth.glb')
-
-    // Clone the scene so each Canvas instance gets its own independent copy
     const clonedScene = useMemo(() => scene.clone(true), [scene])
 
-    // Gentle floating bob
-    useFrame((state) => {
-        if (!group.current) return
-        const t = state.clock.getElapsedTime()
-        group.current.position.y = Math.sin(t * 0.6) * 0.08 + 0.2
-    })
-
     return (
-        <group ref={group} dispose={null}>
+        <group dispose={null}>
             <primitive
                 object={clonedScene}
                 scale={1.6}
@@ -63,15 +53,15 @@ export default function ToothCanvas() {
             camera={{ position: [0, 0.2, 5.5], fov: 65 }}
             dpr={[1, 1.5]}
             style={{ background: 'transparent' }}
+            frameloop="demand"
             gl={{ powerPreference: 'default', failIfMajorPerformanceCaveat: false }}
             onCreated={handleCreated}
         >
-            {/* Drag to rotate, auto-rotates when idle */}
+            {/* Controls - autoRotate removed to save performance */}
             <OrbitControls
+                makeDefault
                 enableZoom={false}
                 enablePan={false}
-                autoRotate
-                autoRotateSpeed={1.5}
                 minPolarAngle={Math.PI / 4}
                 maxPolarAngle={Math.PI / 1.5}
             />
@@ -92,5 +82,5 @@ export default function ToothCanvas() {
     )
 }
 
-// Preload for zero-delay experience
-useGLTF.preload('/models/tooth.glb')
+// Preload removed to allow lazy loading
+// useGLTF.preload('/models/tooth.glb')
