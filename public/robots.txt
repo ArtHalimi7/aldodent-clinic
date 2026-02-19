@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aldodent.com/sitemap.xml
+Sitemap: https://aldodent.netlify.app/sitemap.xml

@@ -43,7 +43,7 @@ export default function Contact() {
             <Helmet>
                 <title>Kontakti — AldoDent | Na Kontaktoni</title>
                 <meta name="description" content="Kontaktoni AldoDent për konsultë falas. Telefoni: 044 231 769, Email: dentaltourism.aldo@gmail.com. Klinikë dentare premium në Prishtinë." />
-                <link rel="canonical" href="https://aldodent.com/contact" />
+                <link rel="canonical" href="https://aldodent.netlify.app/contact" />
             </Helmet>
 
             {/* Background Glow */}

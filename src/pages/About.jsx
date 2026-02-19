@@ -47,7 +47,7 @@ export default function About() {
             <Helmet>
                 <title>Rreth Nesh — AldoDent | Klinikë Dentare Premium</title>
                 <meta name="description" content="Njohuni me ekipin tonë të specialistëve dentar, vlerat tona, dhe filozofinë që na bën klinikën më të besuar në Prishtinë." />
-                <link rel="canonical" href="https://aldodent.com/about" />
+                <link rel="canonical" href="https://aldodent.netlify.app/about" />
             </Helmet>
 
             {/* Background Glow */}

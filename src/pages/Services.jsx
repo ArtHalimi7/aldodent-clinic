@@ -138,7 +138,7 @@ export default function Services() {
             <Helmet>
                 <title>Shërbimet — AldoDent | Shërbime Dentare Premium</title>
                 <meta name="description" content="Kirurgji, implantologji, estetikë dentare, parodontologji, ortodonci, endodonci dhe mbushje estetike. Shërbime dentare premium në AldoDent Prishtinë." />
-                <link rel="canonical" href="https://aldodent.com/services" />
+                <link rel="canonical" href="https://aldodent.netlify.app/services" />
             </Helmet>
 
             {/* Background Glow */}

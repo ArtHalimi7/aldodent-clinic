@@ -73,7 +73,7 @@ export default function Gallery() {
             <Helmet>
                 <title>Galeria — AldoDent | Punimet Tona Dentare</title>
                 <meta name="description" content="Shikoni galerin e punimeve tona dentare: faseta, implante, zbardhje, ortodonci dhe më shumë. Rezultate reale nga pacientët tanë." />
-                <link rel="canonical" href="https://aldodent.com/gallery" />
+                <link rel="canonical" href="https://aldodent.netlify.app/gallery" />
             </Helmet>
 
             {/* Background Glow */}

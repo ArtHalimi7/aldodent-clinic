@@ -170,7 +170,7 @@ export default function Booking() {
             <Helmet>
                 <title>Rezervo Termin — AldoDent | Klinikë Dentare Premium</title>
                 <meta name="description" content="Rezervoni terminin tuaj online në AldoDent. Zgjidhni shërbimin, datën dhe orën që ju përshtaten më së miri." />
-                <link rel="canonical" href="https://aldodent.com/booking" />
+                <link rel="canonical" href="https://aldodent.netlify.app/booking" />
             </Helmet>
 
             {/* Background Glow */}

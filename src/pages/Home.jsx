@@ -10,7 +10,7 @@ const Home = () => {
       <Helmet>
         <title>AldoDent — Klinikë Dentare Premium në Prishtinë, Kosovë</title>
         <meta name="description" content="AldoDent ofron shërbime dentare premium në Prishtinë: implantologji, estetikë dentare, ortodonci, kirurgji orale. Rezervoni konsultën tuaj falas sot." />
-        <link rel="canonical" href="https://aldodent.com/" />
+        <link rel="canonical" href="https://aldodent.netlify.app/" />
       </Helmet>
       <Hero />
       <HorizontalParallax />
