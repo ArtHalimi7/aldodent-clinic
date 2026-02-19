@@ -108,7 +108,7 @@ const Hero = () => {
           </h1>
 
           {/* Subtext */}
-          <p className="text-white/60 text-lg md:text-xl lg:text-2xl font-light max-w-lg leading-relaxed">
+          <p className="text-white/60 text-lg md:text-xl lg:text-xl font-light max-w-lg leading-relaxed">
             Ne i japim përparësi kujdesit parandalues dhe krijojmë plane trajtimi të personalizuara që mbrojnë shëndetin tuaj oral dhe ju dhurojnë vetëbesim.
           </p>
 
