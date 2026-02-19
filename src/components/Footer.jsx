@@ -32,10 +32,23 @@ const SOCIALS = [
 
 const Footer = () => {
     return (
-        <footer className="bg-[#006b70] text-white relative overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <footer className="bg-[#196384] text-white relative overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {/* Background Glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute bottom-[-30%] left-[-10%] w-[50vw] h-[50vw] bg-[#009299]/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-30%] left-[-10%] w-[50vw] h-[50vw] bg-[#2596be]/10 rounded-full blur-[120px]" />
+
+                {/* Horizon Waves */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Bottom horizon lines */}
+                    <path d="M0 350 Q 360 300, 720 340 T 1440 320" stroke="white" strokeWidth="0.7" />
+                    <path d="M0 380 Q 360 340, 720 370 T 1440 355" stroke="white" strokeWidth="0.45" />
+                    <path d="M0 410 Q 360 380, 720 400 T 1440 390" stroke="white" strokeWidth="0.25" />
+                    {/* Top-right ring cluster */}
+                    <circle cx="1250" cy="80" r="50" stroke="white" strokeWidth="0.35" />
+                    <circle cx="1250" cy="80" r="80" stroke="white" strokeWidth="0.2" />
+                    {/* Subtle guide line */}
+                    <line x1="0" y1="150" x2="1440" y2="150" stroke="white" strokeWidth="0.1" strokeDasharray="6 14" />
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-20 pb-8">

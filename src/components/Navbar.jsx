@@ -31,8 +31,8 @@ const Navbar = () => {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-            ? 'bg-[#009299]/95 backdrop-blur-md shadow-lg shadow-black/5 py-5'
-            : 'bg-transparent py-5'
+          ? 'bg-[#2596be]/95 backdrop-blur-md shadow-lg shadow-black/5 py-5'
+          : 'bg-transparent py-5'
           }`}
         style={{ fontFamily: "'Outfit', sans-serif" }}
       >
@@ -75,7 +75,7 @@ const Navbar = () => {
             </a>
             <Link to="/booking">
               <button className={`px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${scrolled
-                ? 'bg-white text-[#009299] hover:bg-teal-50 shadow-black/10'
+                ? 'bg-white text-[#2596be] hover:bg-teal-50 shadow-black/10'
                 : 'bg-white/10 border border-white/20 text-white hover:bg-white/20 shadow-transparent'
                 }`}>
                 Rezervo
@@ -136,13 +136,13 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#007a80] z-50 md:hidden flex flex-col overflow-hidden"
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#1d7aa1] z-50 md:hidden flex flex-col overflow-hidden"
               style={{ fontFamily: "'Outfit', sans-serif" }}
             >
               {/* Sidebar Background Glow */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-30%] w-[300px] h-[300px] bg-teal-400/10 rounded-full blur-[80px]" />
-                <div className="absolute bottom-[-10%] left-[-20%] w-[250px] h-[250px] bg-[#006b70]/50 rounded-full blur-[60px]" />
+                <div className="absolute bottom-[-10%] left-[-20%] w-[250px] h-[250px] bg-[#196384]/50 rounded-full blur-[60px]" />
               </div>
 
               {/* Sidebar Content */}
@@ -209,7 +209,7 @@ const Navbar = () => {
                   transition={{ delay: 0.6 }}
                 >
                   <Link to="/booking" onClick={() => setIsOpen(false)}>
-                    <button className="w-full py-4 bg-white text-[#009299] font-medium rounded-2xl shadow-lg shadow-black/10 flex items-center justify-center gap-2.5 text-lg active:scale-[0.97] transition-transform">
+                    <button className="w-full py-4 bg-white text-[#2596be] font-medium rounded-2xl shadow-lg shadow-black/10 flex items-center justify-center gap-2.5 text-lg active:scale-[0.97] transition-transform">
                       <Calendar className="w-5 h-5" />
                       Rezervo Termin
                     </button>

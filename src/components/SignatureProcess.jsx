@@ -28,7 +28,7 @@ const SignatureProcess = () => {
     const containerRef = useRef(null);
 
     return (
-        <section ref={containerRef} className="relative bg-[#009299]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <section ref={containerRef} className="relative bg-[#2596be]" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {STEPS.map((step, index) => (
                 <Step key={index} step={step} index={index} total={STEPS.length} />
             ))}
@@ -38,16 +38,31 @@ const SignatureProcess = () => {
 
 const Step = ({ step, index, total }) => {
     // Each step gets progressively darker
-    const bgShades = ['bg-[#009299]', 'bg-[#008a90]', 'bg-[#007a80]', 'bg-[#006b70]'];
+    const bgShades = ['bg-[#2596be]', 'bg-[#208bb3]', 'bg-[#1b7da0]', 'bg-[#166f8f]'];
 
     return (
         <div
-            className={`sticky top-0 h-screen flex items-center justify-center overflow-hidden border-t border-white/5 ${bgShades[index] || 'bg-[#009299]'}`}
+            className={`sticky top-0 h-screen flex items-center justify-center overflow-hidden border-t border-white/5 ${bgShades[index] || 'bg-[#2596be]'}`}
         >
             {/* Background Glow */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-teal-400/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-white/[0.02] rounded-full blur-[100px]" />
+
+                {/* Radial Precision Pattern */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Concentric rings — center of gravity */}
+                    <circle cx="720" cy="450" r="150" stroke="white" strokeWidth="0.4" />
+                    <circle cx="720" cy="450" r="220" stroke="white" strokeWidth="0.3" />
+                    <circle cx="720" cy="450" r="300" stroke="white" strokeWidth="0.2" />
+                    <circle cx="720" cy="450" r="400" stroke="white" strokeWidth="0.15" strokeDasharray="8 12" />
+                    {/* Guide curves sweeping across */}
+                    <path d="M0 350 Q 360 250, 720 350 T 1440 300" stroke="white" strokeWidth="0.6" />
+                    <path d="M0 550 Q 360 650, 720 550 T 1440 600" stroke="white" strokeWidth="0.6" />
+                    {/* Cross-hair markers */}
+                    <line x1="720" y1="300" x2="720" y2="600" stroke="white" strokeWidth="0.15" strokeDasharray="4 8" />
+                    <line x1="570" y1="450" x2="870" y2="450" stroke="white" strokeWidth="0.15" strokeDasharray="4 8" />
+                </svg>
             </div>
 
             <div className="container mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -63,7 +78,7 @@ const Step = ({ step, index, total }) => {
                     >
                         <h2
                             className="text-[25vw] md:text-[20vw] leading-none font-light select-none text-transparent"
-                            style={{ WebkitTextStroke: '1px #5eead4' }}
+                            style={{ WebkitTextStroke: '1px #9dd4eb' }}
                         >
                             {step.id}
                         </h2>

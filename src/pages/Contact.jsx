@@ -38,12 +38,34 @@ export default function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-[#009299] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#006b70]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+
+                {/* Connection Network */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Organic flow curves */}
+                    <path d="M0 200 C 200 150, 400 250, 600 180 S 1000 250, 1440 200" stroke="white" strokeWidth="0.7" />
+                    <path d="M0 240 C 200 200, 400 290, 600 220 S 1000 290, 1440 245" stroke="white" strokeWidth="0.4" />
+                    <path d="M0 600 C 300 550, 600 650, 900 580 S 1200 650, 1440 600" stroke="white" strokeWidth="0.6" />
+                    <path d="M0 640 C 300 600, 600 690, 900 620 S 1200 690, 1440 645" stroke="white" strokeWidth="0.35" />
+                    {/* Network nodes */}
+                    <circle cx="300" cy="200" r="3" fill="white" opacity="0.5" />
+                    <circle cx="600" cy="180" r="3" fill="white" opacity="0.5" />
+                    <circle cx="1000" cy="220" r="3" fill="white" opacity="0.5" />
+                    <circle cx="450" cy="600" r="3" fill="white" opacity="0.5" />
+                    <circle cx="900" cy="580" r="3" fill="white" opacity="0.5" />
+                    {/* Connecting threads between nodes */}
+                    <line x1="300" y1="200" x2="600" y2="180" stroke="white" strokeWidth="0.2" strokeDasharray="4 8" />
+                    <line x1="600" y1="180" x2="1000" y2="220" stroke="white" strokeWidth="0.2" strokeDasharray="4 8" />
+                    <line x1="450" y1="600" x2="900" y2="580" stroke="white" strokeWidth="0.2" strokeDasharray="4 8" />
+                    {/* Corner arc accent */}
+                    <path d="M0 0 A 200 200 0 0 1 200 0" stroke="white" strokeWidth="0.3" />
+                    <path d="M0 0 A 300 300 0 0 1 300 0" stroke="white" strokeWidth="0.2" />
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -94,7 +116,7 @@ export default function Contact() {
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                                    className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 text-[#009299]"
+                                    className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 text-[#2596be]"
                                 >
                                     <Check size={40} />
                                 </motion.div>
@@ -176,7 +198,7 @@ export default function Contact() {
 
                                 <button
                                     type="submit"
-                                    className="bg-white text-[#009299] px-8 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all shadow-lg shadow-black/10"
+                                    className="bg-white text-[#2596be] px-8 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all shadow-lg shadow-black/10"
                                 >
                                     Dërgo Mesazhin
                                     <Send size={16} />

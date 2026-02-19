@@ -117,12 +117,33 @@ export default function Services() {
     };
 
     return (
-        <div className="min-h-screen bg-[#009299] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#006b70]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+
+                {/* Structured Mesh & Flow */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.05]" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Horizontal flow bands */}
+                    <path d="M0 250 Q 360 200, 720 250 T 1440 230" stroke="white" strokeWidth="0.7" />
+                    <path d="M0 280 Q 360 240, 720 280 T 1440 265" stroke="white" strokeWidth="0.4" />
+                    <path d="M0 650 Q 400 600, 800 650 T 1440 630" stroke="white" strokeWidth="0.6" />
+                    <path d="M0 680 Q 400 640, 800 680 T 1440 665" stroke="white" strokeWidth="0.35" />
+                    {/* Vertical rhythm guides */}
+                    <line x1="360" y1="0" x2="360" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="6 12" />
+                    <line x1="720" y1="0" x2="720" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="6 12" />
+                    <line x1="1080" y1="0" x2="1080" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="6 12" />
+                    {/* Anchor circles at intersections */}
+                    <circle cx="360" cy="250" r="4" stroke="white" strokeWidth="0.5" />
+                    <circle cx="720" cy="250" r="4" stroke="white" strokeWidth="0.5" />
+                    <circle cx="720" cy="650" r="4" stroke="white" strokeWidth="0.5" />
+                    <circle cx="1080" cy="650" r="4" stroke="white" strokeWidth="0.5" />
+                    {/* Large decorative arc */}
+                    <path d="M1200 0 A 300 300 0 0 1 1440 300" stroke="white" strokeWidth="0.3" />
+                    <path d="M1250 0 A 250 250 0 0 1 1440 250" stroke="white" strokeWidth="0.2" />
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -210,7 +231,7 @@ export default function Services() {
                         <p className="text-white/50 font-light">Konsulta e parë është falas. Rezervoni online tani.</p>
                     </div>
                     <Link to="/booking">
-                        <button className="bg-white text-[#009299] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
+                        <button className="bg-white text-[#2596be] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
                             Rezervo Termin
                             <ArrowRight size={18} />
                         </button>

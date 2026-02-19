@@ -42,12 +42,30 @@ export default function About() {
     const [expandedMember, setExpandedMember] = useState(null);
 
     return (
-        <div className="min-h-screen bg-[#009299] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#006b70]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+
+                {/* Contour Map Overlay */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Sweeping contour lines */}
+                    <path d="M0 300 Q 360 200, 720 280 T 1440 220" stroke="white" strokeWidth="0.8" />
+                    <path d="M0 340 Q 360 250, 720 320 T 1440 270" stroke="white" strokeWidth="0.6" />
+                    <path d="M0 380 Q 360 300, 720 360 T 1440 320" stroke="white" strokeWidth="0.4" />
+                    <path d="M0 700 Q 400 580, 800 680 T 1440 600" stroke="white" strokeWidth="0.7" />
+                    <path d="M0 740 Q 400 630, 800 720 T 1440 650" stroke="white" strokeWidth="0.5" />
+                    <path d="M0 780 Q 400 680, 800 760 T 1440 700" stroke="white" strokeWidth="0.3" />
+                    {/* Concentric elevation rings — top right */}
+                    <circle cx="1200" cy="150" r="60" stroke="white" strokeWidth="0.5" />
+                    <circle cx="1200" cy="150" r="100" stroke="white" strokeWidth="0.35" />
+                    <circle cx="1200" cy="150" r="140" stroke="white" strokeWidth="0.2" />
+                    {/* Small detail cluster — bottom left */}
+                    <circle cx="200" cy="1000" r="40" stroke="white" strokeWidth="0.4" />
+                    <circle cx="200" cy="1000" r="70" stroke="white" strokeWidth="0.25" />
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -216,7 +234,7 @@ export default function About() {
                         <p className="text-white/50 font-light">Rezervoni konsultën tuaj falas sot.</p>
                     </div>
                     <Link to="/booking">
-                        <button className="bg-white text-[#009299] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
+                        <button className="bg-white text-[#2596be] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
                             Rezervo Termin
                             <ArrowRight size={18} />
                         </button>

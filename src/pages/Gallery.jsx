@@ -68,12 +68,28 @@ export default function Gallery() {
         : PROJECTS.filter(p => p.category === activeFilter);
 
     return (
-        <div className="min-h-screen bg-[#009299] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
 
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#006b70]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+
+                {/* Flowing Wave System */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Cascading S-curves */}
+                    <path d="M-50 200 C 200 100, 400 300, 600 200 S 1000 100, 1500 200" stroke="white" strokeWidth="0.8" />
+                    <path d="M-50 260 C 200 160, 400 360, 600 260 S 1000 160, 1500 260" stroke="white" strokeWidth="0.5" />
+                    <path d="M-50 310 C 200 210, 400 410, 600 310 S 1000 210, 1500 310" stroke="white" strokeWidth="0.3" />
+                    <path d="M-50 700 C 300 600, 500 800, 700 700 S 1100 600, 1500 700" stroke="white" strokeWidth="0.7" />
+                    <path d="M-50 760 C 300 660, 500 860, 700 760 S 1100 660, 1500 760" stroke="white" strokeWidth="0.4" />
+                    {/* Fine dot grid — gallery mood */}
+                    {[200, 400, 600, 800, 1000, 1200].map(x =>
+                        [100, 300, 500, 700, 900, 1100].map(y => (
+                            <circle key={`${x}-${y}`} cx={x} cy={y} r="1.5" fill="white" opacity="0.3" />
+                        ))
+                    )}
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -118,7 +134,7 @@ export default function Gallery() {
                             onClick={() => setActiveFilter(cat)}
                             className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200
                                 ${activeFilter === cat
-                                    ? 'bg-white text-[#009299]'
+                                    ? 'bg-white text-[#2596be]'
                                     : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
                                 }`}
                         >
@@ -186,7 +202,7 @@ export default function Gallery() {
                         <p className="text-white/50 font-light">Konsulta e parë është falas. Rezervoni online tani.</p>
                     </div>
                     <Link to="/booking">
-                        <button className="bg-white text-[#009299] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
+                        <button className="bg-white text-[#2596be] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
                             Rezervo Termin
                             <ArrowRight size={18} />
                         </button>

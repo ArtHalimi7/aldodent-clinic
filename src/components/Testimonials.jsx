@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -95,8 +95,8 @@ const ReviewCard = ({ review, delay, className = "" }) => (
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className={`group relative rounded-3xl p-7 transition-all duration-300 ${review.featured
-                ? 'bg-white/[0.08] border border-white/15 hover:bg-white/[0.12] hover:border-white/20'
-                : 'bg-white/5 border border-white/10 hover:bg-white/[0.08]'
+            ? 'bg-white/[0.08] border border-white/15 hover:bg-white/[0.12] hover:border-white/20'
+            : 'bg-white/5 border border-white/10 hover:bg-white/[0.08]'
             } ${className}`}
     >
         {/* Decorative Quote */}
@@ -108,8 +108,8 @@ const ReviewCard = ({ review, delay, className = "" }) => (
         {/* Header */}
         <div className="flex items-start gap-3.5 mb-5">
             <div className={`shrink-0 rounded-full flex items-center justify-center font-semibold ${review.featured
-                    ? 'w-12 h-12 bg-gradient-to-br from-teal-400/25 to-teal-400/10 text-teal-300 text-base'
-                    : 'w-10 h-10 bg-teal-400/15 text-teal-300 text-sm'
+                ? 'w-12 h-12 bg-gradient-to-br from-teal-400/25 to-teal-400/10 text-teal-300 text-base'
+                : 'w-10 h-10 bg-teal-400/15 text-teal-300 text-sm'
                 }`}>
                 {review.name.charAt(0)}
             </div>
@@ -143,11 +143,30 @@ const Testimonials = () => {
     const withoutText = REVIEWS.filter(r => !r.text);
 
     return (
-        <section className="relative bg-[#008a90] py-24 md:py-32 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <section className="relative bg-[#1d7aa1] py-24 md:py-32 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {/* Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] left-[30%] w-[50vw] h-[50vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-15%] right-[-5%] w-[40vw] h-[40vw] bg-[#006b70]/30 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-15%] right-[-5%] w-[40vw] h-[40vw] bg-[#196384]/30 rounded-full blur-[100px]" />
+
+                {/* Wave Tapestry */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" fill="none">
+                    {/* Layered flowing curves */}
+                    <path d="M-50 150 C 250 50, 500 250, 750 150 S 1200 50, 1500 150" stroke="white" strokeWidth="0.7" />
+                    <path d="M-50 200 C 250 110, 500 300, 750 200 S 1200 110, 1500 200" stroke="white" strokeWidth="0.45" />
+                    <path d="M-50 240 C 250 160, 500 340, 750 240 S 1200 160, 1500 240" stroke="white" strokeWidth="0.25" />
+                    <path d="M-50 550 C 350 450, 650 650, 950 550 S 1300 450, 1500 550" stroke="white" strokeWidth="0.6" />
+                    <path d="M-50 600 C 350 510, 650 700, 950 600 S 1300 510, 1500 600" stroke="white" strokeWidth="0.35" />
+                    {/* Accent dots along curves */}
+                    <circle cx="250" cy="150" r="2.5" fill="white" opacity="0.4" />
+                    <circle cx="750" cy="150" r="2.5" fill="white" opacity="0.4" />
+                    <circle cx="1200" cy="150" r="2.5" fill="white" opacity="0.4" />
+                    <circle cx="350" cy="550" r="2.5" fill="white" opacity="0.4" />
+                    <circle cx="950" cy="550" r="2.5" fill="white" opacity="0.4" />
+                    {/* Soft corner arcs */}
+                    <path d="M1440 0 A 250 250 0 0 0 1190 0" stroke="white" strokeWidth="0.3" />
+                    <path d="M0 800 A 200 200 0 0 0 200 800" stroke="white" strokeWidth="0.3" />
+                </svg>
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">

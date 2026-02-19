@@ -56,13 +56,29 @@ const MarqueeStrip = () => (
 const Hero = () => {
   return (
     <section
-      className="relative w-full min-h-screen flex items-center justify-between px-6 md:px-12 lg:px-24 overflow-hidden bg-[#009299]"
+      className="relative w-full min-h-screen flex items-center justify-between px-6 md:px-12 lg:px-24 overflow-hidden bg-[#2596be]"
       style={{ fontFamily: "'Outfit', sans-serif" }}
     >
       {/* Background Glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#006b70]/30 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+
+        {/* Topographic Wave Field */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+          {/* Concentric arcs radiating from bottom-left */}
+          <path d="M-200 900 Q 100 600, 400 650 T 900 500" stroke="white" strokeWidth="0.8" />
+          <path d="M-200 950 Q 150 650, 500 700 T 1000 520" stroke="white" strokeWidth="0.6" />
+          <path d="M-200 1000 Q 200 700, 600 750 T 1100 540" stroke="white" strokeWidth="0.5" />
+          <path d="M-200 1050 Q 250 750, 700 800 T 1200 560" stroke="white" strokeWidth="0.4" />
+          {/* Floating contour rings */}
+          <circle cx="1100" cy="200" r="80" stroke="white" strokeWidth="0.5" />
+          <circle cx="1100" cy="200" r="120" stroke="white" strokeWidth="0.3" />
+          <circle cx="1100" cy="200" r="160" stroke="white" strokeWidth="0.2" />
+          {/* Subtle diagonal rhythm lines */}
+          <line x1="600" y1="0" x2="800" y2="900" stroke="white" strokeWidth="0.2" strokeDasharray="8 16" />
+          <line x1="900" y1="0" x2="1100" y2="900" stroke="white" strokeWidth="0.15" strokeDasharray="8 16" />
+        </svg>
       </div>
 
       <div className="max-w-4xl w-full relative z-10 pt-16 lg:pt-0 lg:-translate-y-4">
@@ -99,7 +115,7 @@ const Hero = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group px-6 py-3 lg:px-8 lg:py-4 bg-white text-[#009299] text-base lg:text-lg font-medium rounded-full flex items-center justify-center gap-2 lg:gap-3 transition-colors hover:bg-teal-50 shadow-lg shadow-black/10 w-auto"
+                className="group px-6 py-3 lg:px-8 lg:py-4 bg-white text-[#2596be] text-base lg:text-lg font-medium rounded-full flex items-center justify-center gap-2 lg:gap-3 transition-colors hover:bg-teal-50 shadow-lg shadow-black/10 w-auto"
               >
                 Rezervo Termin
                 <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform group-hover:translate-x-0.5" />
