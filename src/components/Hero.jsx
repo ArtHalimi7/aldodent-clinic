@@ -165,7 +165,6 @@ const Hero = () => {
           width="1000"
           height="1000"
           aria-hidden="true"
-          fetchPriority="high"
           className="absolute -bottom-6 lg:bottom-0 left-1/2 -translate-x-1/2 w-[140%] max-w-[700px] z-10 pointer-events-none select-none"
         />
       </div>
