@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send, Check } from 'lucide-react';
 
 /* ───────────────────────── DATA ───────────────────────── */
@@ -72,54 +72,54 @@ export default function Contact() {
 
                 {/* Page Title */}
                 <div className="mb-14">
-                    <motion.span
+                    <Motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                     >
                         Na Kontaktoni
-                    </motion.span>
-                    <motion.h1
+                    </Motion.span>
+                    <Motion.h1
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-light tracking-tight mb-4"
                     >
                         Jemi Këtu për Ju
-                    </motion.h1>
-                    <motion.p
+                    </Motion.h1>
+                    <Motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         className="text-white/50 max-w-2xl text-lg font-light"
                     >
                         Keni pyetje ose dëshironi të mësoni më shumë për shërbimet tona? Na kontaktoni dhe do t'ju përgjigjemi sa më shpejt.
-                    </motion.p>
+                    </Motion.p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
 
                     {/* Contact Form */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-10"
                     >
                         {isSubmitted ? (
-                            <motion.div
+                            <Motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 className="flex flex-col items-center justify-center py-16 text-center"
                             >
-                                <motion.div
+                                <Motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
                                     className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 text-[#2596be]"
                                 >
                                     <Check size={40} />
-                                </motion.div>
+                                </Motion.div>
                                 <h3 className="text-2xl font-light mb-3">Mesazhi u dërgua!</h3>
                                 <p className="text-white/50 mb-8 max-w-sm">Faleminderit {formData.name}. Do t'ju kontaktojmë së shpejti.</p>
                                 <button
@@ -128,7 +128,7 @@ export default function Contact() {
                                 >
                                     Dërgo mesazh tjetër
                                 </button>
-                            </motion.div>
+                            </Motion.div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-5">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -205,10 +205,10 @@ export default function Contact() {
                                 </button>
                             </form>
                         )}
-                    </motion.div>
+                    </Motion.div>
 
                     {/* Sidebar Info */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
@@ -259,7 +259,7 @@ export default function Contact() {
                                 title="Lokacioni"
                             />
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 </div>
             </div>
         </div>

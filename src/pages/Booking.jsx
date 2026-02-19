@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
 
 /* ───────────────────────── DATA ───────────────────────── */
@@ -134,14 +134,14 @@ export default function Booking() {
     if (step === 4) {
         return (
             <div className="min-h-screen bg-[#2596be] text-white flex items-center justify-center px-6" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} className="text-center max-w-md">
-                    <motion.div
+                <Motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} className="text-center max-w-md">
+                    <Motion.div
                         initial={{ scale: 0 }} animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
                         className="w-28 h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-10 text-[#2596be] shadow-xl shadow-black/10"
                     >
                         <Check size={56} strokeWidth={2.5} />
-                    </motion.div>
+                    </Motion.div>
                     <h1 className="text-4xl md:text-5xl font-light mb-4">Termini u Konfirmua!</h1>
                     <p className="text-white/70 text-lg font-light mb-3">
                         Faleminderit <span className="text-white font-medium">{formData.firstName}</span>. Kërkesa juaj u regjistrua me sukses.
@@ -159,7 +159,7 @@ export default function Booking() {
                     >
                         Rezervo një termin tjetër
                     </button>
-                </motion.div>
+                </Motion.div>
             </div>
         );
     }
@@ -178,21 +178,21 @@ export default function Booking() {
 
                 {/* Page Title */}
                 <div className="mb-12">
-                    <motion.span
+                    <Motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                     >
                         Rezervo Online
-                    </motion.span>
-                    <motion.h1
+                    </Motion.span>
+                    <Motion.h1
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-light tracking-tight"
                     >
                         Cakto Terminin Tuaj
-                    </motion.h1>
+                    </Motion.h1>
                 </div>
 
                 {/* Stepper */}
@@ -219,7 +219,7 @@ export default function Booking() {
 
                     {/* ── STEP 1: SERVICE ── */}
                     {step === 0 && (
-                        <motion.div key="s0" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                        <Motion.div key="s0" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
                             <h2 className="text-2xl font-light mb-2">Zgjidhni shërbimin</h2>
                             <p className="text-white/50 mb-8 text-sm">Klikoni mbi shërbimin që dëshironi të rezervoni.</p>
 
@@ -246,12 +246,12 @@ export default function Booking() {
                                     </button>
                                 ))}
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     )}
 
                     {/* ── STEP 2: DATE & TIME ── */}
                     {step === 1 && (
-                        <motion.div key="s1" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                        <Motion.div key="s1" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
                             <h2 className="text-2xl font-light mb-2">Zgjidhni datën dhe orën</h2>
                             <p className="text-white/50 mb-8 text-sm">E diela nuk është e disponueshme.</p>
 
@@ -296,17 +296,17 @@ export default function Booking() {
                             </div>
 
                             {formData.date && (
-                                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white/60 text-sm mt-6">
+                                <Motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white/60 text-sm mt-6">
                                     Keni zgjedhur: <span className="text-white font-medium">{formatDate(formData.date)}</span>
                                     {formData.time && <> në orën <span className="text-white font-medium">{formData.time}</span></>}
-                                </motion.p>
+                                </Motion.p>
                             )}
-                        </motion.div>
+                        </Motion.div>
                     )}
 
                     {/* ── STEP 3: DETAILS ── */}
                     {step === 2 && (
-                        <motion.div key="s2" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                        <Motion.div key="s2" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
                             <h2 className="text-2xl font-light mb-2">Plotësoni të dhënat tuaja</h2>
                             <p className="text-white/50 mb-8 text-sm">Fushat me * janë të detyrueshme.</p>
 
@@ -371,12 +371,12 @@ export default function Booking() {
                                     />
                                 </div>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     )}
 
                     {/* ── STEP 4: REVIEW ── */}
                     {step === 3 && (
-                        <motion.div key="s3" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                        <Motion.div key="s3" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
                             <h2 className="text-2xl font-light mb-2">Rishikoni dhe konfirmoni</h2>
                             <p className="text-white/50 mb-8 text-sm">Sigurohuni që të dhënat janë të sakta para konfirmimit.</p>
 
@@ -429,7 +429,7 @@ export default function Booking() {
                                     )}
                                 </div>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     )}
 
                 </AnimatePresence>

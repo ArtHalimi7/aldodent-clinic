@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const REVIEWS = [
@@ -70,7 +70,7 @@ const Stars = ({ count = 5 }) => (
 
 /* ── Small avatar-only cards for text-less reviews ── */
 const MiniReview = ({ review, delay }) => (
-    <motion.div
+    <Motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -84,12 +84,12 @@ const MiniReview = ({ review, delay }) => (
             <span className="text-white text-sm font-medium block truncate">{review.name}</span>
             <Stars />
         </div>
-    </motion.div>
+    </Motion.div>
 );
 
 /* ── Full Review Card ── */
 const ReviewCard = ({ review, delay, className = "" }) => (
-    <motion.div
+    <Motion.div
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -134,7 +134,7 @@ const ReviewCard = ({ review, delay, className = "" }) => (
             }`}>
             "{review.text}"
         </p>
-    </motion.div>
+    </Motion.div>
 );
 
 /* ── Main Section ── */
@@ -173,15 +173,15 @@ const Testimonials = () => {
                 {/* Header Row */}
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
                     <div>
-                        <motion.span
+                        <Motion.span
                             initial={{ opacity: 0, x: -10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                         >
                             Vlerësimet
-                        </motion.span>
-                        <motion.h2
+                        </Motion.span>
+                        <Motion.h2
                             initial={{ opacity: 0, y: 15 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -189,11 +189,11 @@ const Testimonials = () => {
                             className="text-3xl md:text-5xl font-light tracking-tight text-white"
                         >
                             Çfarë thonë pacientët tanë
-                        </motion.h2>
+                        </Motion.h2>
                     </div>
 
                     {/* Google Rating Badge */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -208,7 +208,7 @@ const Testimonials = () => {
                             </div>
                             <span className="text-white/30 text-xs">Google Reviews</span>
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 </div>
 
                 {/* Bento Grid */}

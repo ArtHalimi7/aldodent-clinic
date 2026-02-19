@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -72,33 +72,33 @@ export default function About() {
 
                 {/* Page Title */}
                 <div className="mb-14">
-                    <motion.span
+                    <Motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                     >
                         Rreth Nesh
-                    </motion.span>
-                    <motion.h1
+                    </Motion.span>
+                    <Motion.h1
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-light tracking-tight mb-4"
                     >
                         Trashëgimia e Përsosmërisë
-                    </motion.h1>
-                    <motion.p
+                    </Motion.h1>
+                    <Motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         className="text-white/50 max-w-2xl text-lg font-light"
                     >
                         Një hapësirë ku arti dhe shkenca takohen për të kuruar jo vetëm buzëqeshje, por edhe besim. Mirësevini në standardin e ri të stomatologjisë.
-                    </motion.p>
+                    </Motion.p>
                 </div>
 
                 {/* Stats Row */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -110,10 +110,10 @@ export default function About() {
                             <span className="text-xs text-white/40 font-medium uppercase tracking-wider">{stat.label}</span>
                         </div>
                     ))}
-                </motion.div>
+                </Motion.div>
 
                 {/* Philosophy */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -129,10 +129,10 @@ export default function About() {
                             Përkushtimi ynë ndaj ekselencës fillon me dëgjimin e nevojave tuaja dhe përfundon me një buzëqeshje që rrezaton vetëbesim. Përdorim teknologjitë më të fundit për të garantuar trajtime pa dhimbje dhe rezultate të qëndrueshme.
                         </p>
                     </div>
-                </motion.div>
+                </Motion.div>
 
                 {/* Values */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -154,10 +154,10 @@ export default function About() {
                             </div>
                         ))}
                     </div>
-                </motion.div>
+                </Motion.div>
 
                 {/* Team */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -189,7 +189,7 @@ export default function About() {
 
                                 <AnimatePresence>
                                     {expandedMember === i && (
-                                        <motion.div
+                                        <Motion.div
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: "auto", opacity: 1 }}
                                             exit={{ height: 0, opacity: 0 }}
@@ -214,16 +214,16 @@ export default function About() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </motion.div>
+                                        </Motion.div>
                                     )}
                                 </AnimatePresence>
                             </div>
                         ))}
                     </div>
-                </motion.div>
+                </Motion.div>
 
                 {/* CTA */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -239,7 +239,7 @@ export default function About() {
                             <ArrowRight size={18} />
                         </button>
                     </Link>
-                </motion.div>
+                </Motion.div>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion as Motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import heroImg from '../assets/img/heroimg.png'
@@ -19,7 +19,7 @@ const MARQUEE_ITEMS = [
 const MarqueeStrip = () => (
   <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 bg-white/[0.03] backdrop-blur-sm">
     <div className="flex overflow-hidden">
-      <motion.div
+      <Motion.div
         className="flex shrink-0 gap-8 py-4 px-4"
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
@@ -33,8 +33,8 @@ const MarqueeStrip = () => (
             <span className="w-1 h-1 rounded-full bg-teal-400/60" />
           </span>
         ))}
-      </motion.div>
-      <motion.div
+      </Motion.div>
+      <Motion.div
         className="flex shrink-0 gap-8 py-4 px-4"
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
@@ -48,7 +48,7 @@ const MarqueeStrip = () => (
             <span className="w-1 h-1 rounded-full bg-teal-400/60" />
           </span>
         ))}
-      </motion.div>
+      </Motion.div>
     </div>
   </div>
 )
@@ -84,19 +84,19 @@ const Hero = () => {
       <div className="max-w-4xl w-full relative z-10 pt-16 lg:pt-0 lg:-translate-y-4">
 
         {/* Content — centered on mobile, left-aligned on desktop */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <motion.span
+          <Motion.span
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
             className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs"
           >
             Aldo Dent Clinic
-          </motion.span>
+          </Motion.span>
 
           {/* Main Headline */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-white leading-[1.1] lg:leading-[1.05] tracking-tight">
@@ -112,30 +112,30 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className="flex flex-row justify-center lg:justify-start gap-3 mt-4 w-full lg:w-auto">
             <Link to="/booking">
-              <motion.button
+              <Motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="group px-6 py-3 lg:px-8 lg:py-4 bg-white text-[#2596be] text-base lg:text-lg font-medium rounded-full flex items-center justify-center gap-2 lg:gap-3 transition-colors hover:bg-teal-50 shadow-lg shadow-black/10 w-auto"
               >
                 Rezervo Termin
                 <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform group-hover:translate-x-0.5" />
-              </motion.button>
+              </Motion.button>
             </Link>
 
             <Link to="/contact">
-              <motion.button
+              <Motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-6 py-3 lg:px-8 lg:py-4 border border-white/20 text-white text-base lg:text-lg font-medium rounded-full flex items-center justify-center gap-2 lg:gap-3 transition-colors hover:bg-white/10 w-auto"
               >
                 Na Kontaktoni
-              </motion.button>
+              </Motion.button>
             </Link>
           </div>
-        </motion.div>
+        </Motion.div>
 
         {/* Mobile Image — visible only on mobile/tablet, centered */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -146,11 +146,11 @@ const Hero = () => {
             alt="Aldo Dent Smile"
             className="w-full max-w-md h-auto object-contain drop-shadow-2xl"
           />
-        </motion.div>
+        </Motion.div>
       </div>
 
       {/* Right Side Image */}
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -161,7 +161,7 @@ const Hero = () => {
           alt="Aldo Dent Smile"
           className="w-full h-full object-contain object-bottom scale-110 translate-y-10 origin-bottom"
         />
-      </motion.div>
+      </Motion.div>
 
       {/* Top-right gradient */}
       <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>

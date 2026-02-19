@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -96,33 +96,33 @@ export default function Gallery() {
 
                 {/* Page Title */}
                 <div className="mb-14">
-                    <motion.span
+                    <Motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                     >
                         Portfolio
-                    </motion.span>
-                    <motion.h1
+                    </Motion.span>
+                    <Motion.h1
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-light tracking-tight mb-4"
                     >
                         Kryeveprat Dentare
-                    </motion.h1>
-                    <motion.p
+                    </Motion.h1>
+                    <Motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         className="text-white/50 max-w-2xl text-lg font-light"
                     >
                         Një koleksion i transformimeve që ripërcaktojnë standardet e estetikës dhe funksionit.
-                    </motion.p>
+                    </Motion.p>
                 </div>
 
                 {/* Filter Tabs */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -141,13 +141,13 @@ export default function Gallery() {
                             {cat}
                         </button>
                     ))}
-                </motion.div>
+                </Motion.div>
 
                 {/* Gallery Grid */}
-                <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <AnimatePresence mode="popLayout">
                         {filtered.map((project, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={project.title}
                                 layout
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -170,13 +170,13 @@ export default function Gallery() {
                                         <p className="text-sm text-white/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 line-clamp-2">{project.description}</p>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </AnimatePresence>
-                </motion.div>
+                </Motion.div>
 
                 {/* Stats */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -188,10 +188,10 @@ export default function Gallery() {
                             <span className="text-xs text-white/40 font-medium uppercase tracking-wider">{stat.label}</span>
                         </div>
                     ))}
-                </motion.div>
+                </Motion.div>
 
                 {/* CTA */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -207,7 +207,7 @@ export default function Gallery() {
                             <ArrowRight size={18} />
                         </button>
                     </Link>
-                </motion.div>
+                </Motion.div>
             </div>
         </div>
     );

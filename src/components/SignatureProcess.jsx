@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 const STEPS = [
     {
@@ -69,7 +69,7 @@ const Step = ({ step, index, total }) => {
 
                 {/* Left: Big Number */}
                 <div className="relative flex items-center justify-center">
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
@@ -82,19 +82,19 @@ const Step = ({ step, index, total }) => {
                         >
                             {step.id}
                         </h2>
-                        <motion.div
+                        <Motion.div
                             initial={{ scale: 0 }}
                             whileInView={{ scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full border border-white/5 -z-10"
                         />
-                    </motion.div>
+                    </Motion.div>
                 </div>
 
                 {/* Right: Content */}
                 <div className="flex flex-col justify-center space-y-8 relative z-20 items-center md:items-start text-center md:text-left">
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
@@ -104,7 +104,7 @@ const Step = ({ step, index, total }) => {
                             <span className="text-xs uppercase tracking-[0.3em] font-bold px-4 py-2 rounded-full bg-white/5 border border-white/10 text-teal-300">
                                 Hapi {step.id}
                             </span>
-                            <motion.div
+                            <Motion.div
                                 initial={{ width: 0 }}
                                 whileInView={{ width: 60 }}
                                 viewport={{ once: true }}
@@ -126,7 +126,7 @@ const Step = ({ step, index, total }) => {
                                 <span className="text-teal-300">{index + 1} / {total}</span>
                             </div>
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 </div>
 
             </div>

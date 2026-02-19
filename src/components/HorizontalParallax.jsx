@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
+import { motion as Motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import { mdiTooth } from '@mdi/js';
 
 
@@ -116,7 +116,7 @@ export const HorizontalParallax = () => {
 
                 {/* Section Header */}
                 <div className="absolute top-12 left-6 md:left-12 z-20">
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -124,10 +124,10 @@ export const HorizontalParallax = () => {
                     >
                         <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#2596be]">Ekspertiza Jonë</span>
                         <div className="h-[1px] w-12 bg-[#2596be]" />
-                    </motion.div>
+                    </Motion.div>
                 </div>
 
-                <motion.div
+                <Motion.div
                     ref={scrollRef}
                     style={{ x: smoothX, willChange: "transform" }}
                     className="flex items-center pl-[10vw]"
@@ -144,7 +144,7 @@ export const HorizontalParallax = () => {
 
                             {/* Image Container with Parallax Internal */}
                             <div className="relative h-[80%] w-full overflow-hidden z-10">
-                                <motion.div
+                                <Motion.div
                                     className="absolute inset-0 bg-cover bg-center"
                                     style={{
                                         backgroundImage: `url(${service.image})`,
@@ -178,7 +178,7 @@ export const HorizontalParallax = () => {
                         </div>
                     </div>
 
-                </motion.div>
+                </Motion.div>
 
                 {/* Tooth Drawing Scroll Animation - Dark Layer (Base) */}
                 <div className="absolute bottom-12 left-0 right-0 flex justify-center pointer-events-none z-30">
@@ -190,7 +190,7 @@ export const HorizontalParallax = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         />
-                        <motion.path
+                        <Motion.path
                             d={toothIcon}
                             className="stroke-[#2596be] fill-[#2596be]"
                             strokeWidth="1.5"
@@ -202,7 +202,7 @@ export const HorizontalParallax = () => {
                 </div>
 
                 {/* Tooth Drawing Scroll Animation - White Layer (Clipped Overlay) */}
-                <motion.div
+                <Motion.div
                     className="absolute bottom-12 left-0 right-0 flex justify-center pointer-events-none z-40"
                     style={{ clipPath }}
                 >
@@ -214,7 +214,7 @@ export const HorizontalParallax = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         />
-                        <motion.path
+                        <Motion.path
                             d={toothIcon}
                             className="stroke-white fill-white"
                             strokeWidth="1.5"
@@ -223,7 +223,7 @@ export const HorizontalParallax = () => {
                             style={{ pathLength: scrollYProgress, fillOpacity: scrollYProgress }}
                         />
                     </svg>
-                </motion.div>
+                </Motion.div>
             </div>
         </section >
     );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -76,7 +76,7 @@ function ServiceCategory({ category, isOpen, onToggle }) {
 
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <Motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -100,7 +100,7 @@ function ServiceCategory({ category, isOpen, onToggle }) {
                                 </div>
                             ))}
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 )}
             </AnimatePresence>
         </div>
@@ -150,33 +150,33 @@ export default function Services() {
 
                 {/* Page Title */}
                 <div className="mb-14">
-                    <motion.span
+                    <Motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="text-teal-300 font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                     >
                         Ekspertiza Jonë
-                    </motion.span>
-                    <motion.h1
+                    </Motion.span>
+                    <Motion.h1
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-light tracking-tight mb-4"
                     >
                         Shërbimet Tona
-                    </motion.h1>
-                    <motion.p
+                    </Motion.h1>
+                    <Motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         className="text-white/50 max-w-2xl text-lg font-light"
                     >
                         Ne kombinojmë teknologjinë më të fundit me pasionin për detajet për të ofruar trajtime që tejkalojnë pritshmëritë tuaja.
-                    </motion.p>
+                    </Motion.p>
                 </div>
 
                 {/* Service Categories */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -190,10 +190,10 @@ export default function Services() {
                             onToggle={() => handleToggle(cat.id)}
                         />
                     ))}
-                </motion.div>
+                </Motion.div>
 
                 {/* Process Section */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -217,10 +217,10 @@ export default function Services() {
                             </div>
                         ))}
                     </div>
-                </motion.div>
+                </Motion.div>
 
                 {/* CTA */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -236,7 +236,7 @@ export default function Services() {
                             <ArrowRight size={18} />
                         </button>
                     </Link>
-                </motion.div>
+                </Motion.div>
             </div>
         </div>
     );

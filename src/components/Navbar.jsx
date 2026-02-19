@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Calendar, Phone, MapPin, ArrowRight, Instagram, Facebook } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import logoWhite from '../assets/img/logowhite.png'
@@ -91,7 +91,7 @@ const Navbar = () => {
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
-                <motion.div
+                <Motion.div
                   key="close"
                   initial={{ rotate: -90, opacity: 0 }}
                   animate={{ rotate: 0, opacity: 1 }}
@@ -99,9 +99,9 @@ const Navbar = () => {
                   transition={{ duration: 0.2 }}
                 >
                   <X size={24} />
-                </motion.div>
+                </Motion.div>
               ) : (
-                <motion.div
+                <Motion.div
                   key="menu"
                   initial={{ rotate: 90, opacity: 0 }}
                   animate={{ rotate: 0, opacity: 1 }}
@@ -109,7 +109,7 @@ const Navbar = () => {
                   transition={{ duration: 0.2 }}
                 >
                   <Menu size={24} />
-                </motion.div>
+                </Motion.div>
               )}
             </AnimatePresence>
           </button>
@@ -121,7 +121,7 @@ const Navbar = () => {
         {isOpen && (
           <>
             {/* Overlay */}
-            <motion.div
+            <Motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -131,7 +131,7 @@ const Navbar = () => {
             />
 
             {/* Panel */}
-            <motion.div
+            <Motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -150,7 +150,7 @@ const Navbar = () => {
                 {/* Nav Links */}
                 <div className="flex flex-col gap-1">
                   {navLinks.map((link, i) => (
-                    <motion.div
+                    <Motion.div
                       key={link.name}
                       initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -167,7 +167,7 @@ const Navbar = () => {
                         <span className="text-2xl font-light">{link.name}</span>
                         <ArrowRight size={18} className="text-white/20 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
                       </Link>
-                    </motion.div>
+                    </Motion.div>
                   ))}
                 </div>
 
@@ -175,7 +175,7 @@ const Navbar = () => {
                 <div className="flex-1" />
 
                 {/* Contact Info */}
-                <motion.div
+                <Motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
@@ -200,10 +200,10 @@ const Navbar = () => {
                       <p className="text-white font-medium">Prishtinë, Kosovë</p>
                     </div>
                   </div>
-                </motion.div>
+                </Motion.div>
 
                 {/* CTA Button */}
-                <motion.div
+                <Motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
@@ -214,10 +214,10 @@ const Navbar = () => {
                       Rezervo Termin
                     </button>
                   </Link>
-                </motion.div>
+                </Motion.div>
 
                 {/* Socials */}
-                <motion.div
+                <Motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
@@ -230,9 +230,9 @@ const Navbar = () => {
                     <Facebook size={16} />
                   </a>
                   <span className="ml-auto text-[10px] text-white/20 uppercase tracking-widest">© Aldo Dent</span>
-                </motion.div>
+                </Motion.div>
               </div>
-            </motion.div>
+            </Motion.div>
           </>
         )}
       </AnimatePresence>
