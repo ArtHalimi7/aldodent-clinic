@@ -8,7 +8,7 @@ const SERVICES = [
     {
         title: "Implantologji",
         subtitle: "Digitale",
-        image: "https://images.unsplash.com/photo-1629909613638-0e4a1fad8f81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBkZW50YWwlMjBjbGluaWMlMjBpbnRlcmlvciUyMG1pbmltYWxpc3QlMjBsdXh1cnklMjB3aGl0ZSUyMG1lZGljYWwlMjBhcmNoaXRlY3R1cmUlMjBzbWlsZSUyMGFlc3RoZXRpY3xlbnwxfHx8fDE3NzExNjYyNDV8MA&ixlib=rb-4.1.0&q=80&w=800",
+        image: "https://lh3.googleusercontent.com/p/AF1QipPjQPSHbuT8GtdsBhjBMqL-bTpOd77BZFov-uvZ=s1360-w1360-h1020-rw",
         description: "Saktësi absolute përmes planifikimit 3D dhe teknologjisë robotike.",
         id: "01"
     },

@@ -5,8 +5,8 @@ import { Phone, Mail, MapPin, Clock, Send, Check } from 'lucide-react';
 /* ───────────────────────── DATA ───────────────────────── */
 
 const CONTACT_INFO = [
-    { icon: <Phone size={20} />, label: "Telefoni", value: "+383 44 123 456", href: "tel:+38344123456" },
-    { icon: <Mail size={20} />, label: "Email", value: "info@aldodent.com", href: "mailto:info@aldodent.com" },
+    { icon: <Phone size={20} />, label: "Telefoni", value: "044 231 769", href: "tel:+38344231769" },
+    { icon: <Mail size={20} />, label: "Email", value: "dentaltourism.aldo@gmail.com", href: "mailto:dentaltourism.aldo@gmail.com" },
     { icon: <MapPin size={20} />, label: "Adresa", value: "Prishtinë, Kosovë", href: null },
 ];
 

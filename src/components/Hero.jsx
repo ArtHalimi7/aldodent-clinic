@@ -1,19 +1,18 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion as Motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import heroImg from '../assets/img/heroimg.png'
+import ToothCanvas from './ToothModel'
 
 /* ─── Marquee / Ticker Strip ─── */
 const MARQUEE_ITEMS = [
-  "Implantologji Dixhitale",
-  "Faseta E-MAX",
-  "Zbardhje me Laser",
-  "Ortodonci Invisalign",
-  "Kirurgji Orale",
-  "Smile Design",
-  "Stomatologji Pediatrike",
-  "Kontroll Falas",
+  "Kirurgji",
+  "Implantologji",
+  "Estetikë Dentare",
+  "Parodontologji",
+  "Ortodonci",
+  "Endodonci",
+  "Mbushje Estetike",
 ];
 
 const MarqueeStrip = () => (
@@ -53,10 +52,17 @@ const MarqueeStrip = () => (
   </div>
 )
 
+/* ─── Spinner shown while 3D canvas loads ─── */
+const CanvasSpinner = () => (
+  <div className="w-full h-full flex items-center justify-center">
+    <div className="w-10 h-10 rounded-full border-2 border-teal-400/40 border-t-teal-400 animate-spin" />
+  </div>
+)
+
 const Hero = () => {
   return (
     <section
-      className="relative w-full min-h-screen flex items-center justify-between px-6 md:px-12 lg:px-24 overflow-hidden bg-[#2596be]"
+      className="relative w-full min-h-screen flex flex-col lg:flex-row items-center px-6 md:px-12 lg:px-24 overflow-hidden bg-[#2596be]"
       style={{ fontFamily: "'Outfit', sans-serif" }}
     >
       {/* Background Glow */}
@@ -66,24 +72,21 @@ const Hero = () => {
 
         {/* Topographic Wave Field */}
         <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
-          {/* Concentric arcs radiating from bottom-left */}
           <path d="M-200 900 Q 100 600, 400 650 T 900 500" stroke="white" strokeWidth="0.8" />
           <path d="M-200 950 Q 150 650, 500 700 T 1000 520" stroke="white" strokeWidth="0.6" />
           <path d="M-200 1000 Q 200 700, 600 750 T 1100 540" stroke="white" strokeWidth="0.5" />
           <path d="M-200 1050 Q 250 750, 700 800 T 1200 560" stroke="white" strokeWidth="0.4" />
-          {/* Floating contour rings */}
           <circle cx="1100" cy="200" r="80" stroke="white" strokeWidth="0.5" />
           <circle cx="1100" cy="200" r="120" stroke="white" strokeWidth="0.3" />
           <circle cx="1100" cy="200" r="160" stroke="white" strokeWidth="0.2" />
-          {/* Subtle diagonal rhythm lines */}
           <line x1="600" y1="0" x2="800" y2="900" stroke="white" strokeWidth="0.2" strokeDasharray="8 16" />
           <line x1="900" y1="0" x2="1100" y2="900" stroke="white" strokeWidth="0.15" strokeDasharray="8 16" />
         </svg>
       </div>
 
-      <div className="max-w-4xl w-full relative z-10 pt-16 lg:pt-0 lg:-translate-y-4">
+      {/* ── Left Column: Text Content ── */}
+      <div className="max-w-4xl w-full lg:w-1/2 relative z-10 pt-36 lg:pt-0 lg:-translate-y-4">
 
-        {/* Content — centered on mobile, left-aligned on desktop */}
         <Motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -101,7 +104,7 @@ const Hero = () => {
           {/* Main Headline */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-white leading-[1.1] lg:leading-[1.05] tracking-tight">
             Partneri juaj për{' '}
-            <span className="font-medium text-teal-400">shëndetin dentar</span>
+            <span className="font-medium text-teal-400 lg:whitespace-nowrap">shëndetin dentar</span>
           </h1>
 
           {/* Subtext */}
@@ -133,35 +136,24 @@ const Hero = () => {
             </Link>
           </div>
         </Motion.div>
-
-        {/* Mobile Image — visible only on mobile/tablet, centered */}
-        <Motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="lg:hidden flex justify-center mt-8 sm:mt-12"
-        >
-          <img
-            src={heroImg}
-            alt="Aldo Dent Smile"
-            className="w-full max-w-md h-auto object-contain drop-shadow-2xl"
-          />
-        </Motion.div>
       </div>
 
-      {/* Right Side Image */}
-      <Motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-        className="hidden lg:block w-1/2 h-full absolute right-0 bottom-0 pointer-events-none z-10"
+      {/* ── Right Column: 3D Tooth Canvas ── */}
+      <div
+        className="relative w-full lg:w-1/2 z-10 mt-8 lg:mt-0"
+        style={{ height: 'clamp(300px, 50vw, 500px)' }}
       >
-        <img
-          src={heroImg}
-          alt="Aldo Dent Smile"
-          className="w-full h-full object-contain object-bottom scale-110 translate-y-10 origin-bottom"
-        />
-      </Motion.div>
+        <Motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.4 }}
+          className="w-full h-full"
+        >
+          <Suspense fallback={<CanvasSpinner />}>
+            <ToothCanvas />
+          </Suspense>
+        </Motion.div>
+      </div>
 
       {/* Top-right gradient */}
       <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>

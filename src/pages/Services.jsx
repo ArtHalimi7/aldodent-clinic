@@ -7,51 +7,67 @@ import { Link } from 'react-router-dom';
 
 const CATEGORIES = [
     {
-        id: 'general',
-        title: "Stomatologji e Përgjithshme",
+        id: 'kirurgji',
+        title: "Kirurgji",
         services: [
-            { name: "Kontroll Gjeneral", duration: "30 min", price: "Falas", desc: "Ekzaminim i plotë oral me plan trajtimi të personalizuar." },
-            { name: "Pastrim Profesional", duration: "45 min", price: "€30", desc: "Heqja e gurit dentar dhe lustrim profesional i dhëmbëve." },
-            { name: "Mbushje Estetike", duration: "30 min", price: "Nga €40", desc: "Restaurime me materiale kompozite që përputhen me ngjyrën natyrale." },
-            { name: "Trajtim i Kanalit", duration: "60–90 min", price: "Nga €80", desc: "Trajtim endodontik me teknika moderne pa dhimbje." },
+            { name: "Ekstraksione", duration: "30–60 min", price: "Nga €30", desc: "Heqje e dhëmbëve problematik ose dhëmbëve të mençurisë me teknika minimalisht invazive." },
+            { name: "Kirurgji Orale", duration: "60–90 min", price: "Sipas rastit", desc: "Ndërhyrje kirurgjikale të avancuara për raste komplekse të kavitetit oral." },
+            { name: "Sinus Lift", duration: "90 min", price: "Sipas rastit", desc: "Ngritja e sinusit maksilar për mundësimin e vendosjes së implanteve dentare." },
         ]
     },
     {
-        id: 'cosmetic',
-        title: "Estetikë Dentare",
-        services: [
-            { name: "Zbardhje Profesionale", duration: "60 min", price: "€120", desc: "Zbardhje me laser për rezultate të menjëhershme dhe të sigurta." },
-            { name: "Faseta Qeramike E-MAX", duration: "2 seanca", price: "Nga €200/copë", desc: "Fasetat më të holla në treg, për një buzëqeshje perfekte hollywoodiane." },
-            { name: "Bonding Dentar", duration: "45 min", price: "Nga €60", desc: "Riparimi i dhëmbëve të thyer ose me hapësira me rrëshirë kompozite." },
-            { name: "Digital Smile Design", duration: "45 min", price: "Falas", desc: "Planifikimi digjital i buzëqeshjes suaj të ardhshme para fillimit." },
-        ]
-    },
-    {
-        id: 'surgery',
-        title: "Kirurgji & Implantologji",
+        id: 'implantologji',
+        title: "Implantologji",
         services: [
             { name: "Konsultë për Implant", duration: "45 min", price: "Falas", desc: "Vlerësim me CBCT dhe plan trajtimi 3D për implante dentare." },
-            { name: "Implant Dentar", duration: "60 min", price: "Nga €500", desc: "Zëvendësim i dhëmbëve me implante titanium biokompatibile Zvicerane." },
-            { name: "Sinus Lift", duration: "90 min", price: "Sipas rastit", desc: "Ngritja e sinusit maksilar për mundësimin e vendosjes së implanteve." },
-            { name: "Ekstraksione", duration: "30–60 min", price: "Nga €30", desc: "Heqje e dhëmbëve problematik ose dhëmbëve të mençurisë." },
+            { name: "Implant Dentar", duration: "60–90 min", price: "Nga €500", desc: "Zëvendësim i dhëmbëve me implante titanium biokompatibile Zvicerane." },
+            { name: "All-on-4 / All-on-6", duration: "2–3 orë", price: "Sipas rastit", desc: "Zgjidhje e plotë protetike mbi 4 ose 6 implante për nofullën e plotë." },
         ]
     },
     {
-        id: 'ortho',
+        id: 'estetike',
+        title: "Estetikë: Kurora Zirkoni – Kurora Emax",
+        services: [
+            { name: "Kurora Zirkoni", duration: "2 seanca", price: "Nga €200/copë", desc: "Kurora me rezistencë të lartë dhe estetikë natyrale, ideale për dhëmbët e pasmë." },
+            { name: "Kurora E-max", duration: "2 seanca", price: "Nga €250/copë", desc: "Kurora porcelani me transparencë superiore, perfekte për dhëmbët e përparmë." },
+            { name: "Faseta Qeramike", duration: "2 seanca", price: "Nga €200/copë", desc: "Fasetat më të holla në treg, për një buzëqeshje perfekte hollywoodiane." },
+            { name: "Digital Smile Design", duration: "45 min", price: "Falas", desc: "Planifikimi digjital i buzëqeshjes suaj të ardhshme para fillimit të trajtimit." },
+        ]
+    },
+    {
+        id: 'parodontologji',
+        title: "Parodontologji",
+        services: [
+            { name: "Pastrim Profesional", duration: "45 min", price: "€30", desc: "Heqja e gurit dentar dhe lustrim profesional i dhëmbëve." },
+            { name: "Trajtim Parodontal", duration: "45–60 min", price: "Nga €50", desc: "Trajtim i thellë i mishrave të dhëmbëve dhe pastrimi nën-gingival." },
+            { name: "Kirurgji Parodontale", duration: "60–90 min", price: "Sipas rastit", desc: "Ndërhyrje kirurgjikale për rastet e avancuara të sëmundjeve parodontale." },
+        ]
+    },
+    {
+        id: 'ortodonci',
         title: "Ortodonci",
         services: [
             { name: "Konsultë Ortodoncie", duration: "30 min", price: "Falas", desc: "Vlerësim i okluzionit dhe planifikimi i drejtimit të dhëmbëve." },
-            { name: "Aparate Fikse", duration: "12–24 muaj", price: "Nga €800", desc: "Aparate metalike ose qeramike për drejtim preciz." },
+            { name: "Aparate Fikse", duration: "12–24 muaj", price: "Nga €800", desc: "Aparate metalike ose qeramike për drejtim preciz të dhëmbëve." },
             { name: "Invisalign / Aligners", duration: "6–18 muaj", price: "Nga €1200", desc: "Aligners transparentë, krejtësisht të padukshëm dhe komfortabël." },
         ]
     },
     {
-        id: 'kids',
-        title: "Për Fëmijë",
+        id: 'endodonci',
+        title: "Endodonci",
         services: [
-            { name: "Kontroll për Fëmijë", duration: "20 min", price: "€20", desc: "Kontroll i butë dhe miqësor me këshilla për prindërit." },
-            { name: "Fluorizim", duration: "15 min", price: "€15", desc: "Aplikim i fluorit për forcimin e smaltit të dhëmbëve." },
-            { name: "Mbyllje e Çarjeve", duration: "20 min", price: "€25", desc: "Mbrojtje parandaluese e sipërfaqes bërthamore të dhëmbëve." },
+            { name: "Trajtim i Kanalit", duration: "60–90 min", price: "Nga €80", desc: "Trajtim endodontik me teknika moderne pa dhimbje." },
+            { name: "Ritrajtim Endodontik", duration: "90 min", price: "Nga €120", desc: "Ritrajtimi i dhëmbëve me trajtime të mëparshme të pasuksesshme." },
+            { name: "Apikoektomi", duration: "60 min", price: "Nga €100", desc: "Heqje kirurgjikale e majës së rrënjës së dhëmbit të infektuar." },
+        ]
+    },
+    {
+        id: 'mbushje',
+        title: "Mbushje Estetike",
+        services: [
+            { name: "Mbushje Kompozite", duration: "30 min", price: "Nga €40", desc: "Restaurime me materiale kompozite që përputhen me ngjyrën natyrale të dhëmbit." },
+            { name: "Inlay / Onlay", duration: "2 seanca", price: "Nga €150", desc: "Restaurime indirekte qeramike për kariese të mëdha me precizion të lartë." },
+            { name: "Bonding Dentar", duration: "45 min", price: "Nga €60", desc: "Riparimi i dhëmbëve të thyer ose me hapësira me rrëshirë kompozite." },
         ]
     }
 ];
@@ -65,7 +81,7 @@ function ServiceCategory({ category, isOpen, onToggle }) {
         <div className="border-b border-white/10 last:border-b-0">
             <button
                 onClick={onToggle}
-                className="w-full flex items-center justify-between py-6 px-2 text-left group transition-colors hover:bg-white/[0.02]"
+                className="w-full flex items-center justify-between py-6 px-6 text-left group transition-colors hover:bg-white/[0.02]"
             >
                 <div className="flex items-center gap-6">
                     <h3 className="text-xl md:text-2xl font-light text-white group-hover:text-teal-300 transition-colors">{category.title}</h3>
@@ -83,7 +99,7 @@ function ServiceCategory({ category, isOpen, onToggle }) {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                     >
-                        <div className="pb-6 space-y-2 px-2">
+                        <div className="pb-6 space-y-2 px-6">
                             {category.services.map((srv, i) => (
                                 <div
                                     key={i}
@@ -110,7 +126,7 @@ function ServiceCategory({ category, isOpen, onToggle }) {
 /* ───────────────────── MAIN COMPONENT ─────────────────── */
 
 export default function Services() {
-    const [openCategory, setOpenCategory] = useState('general');
+    const [openCategory, setOpenCategory] = useState('kirurgji');
 
     const handleToggle = (id) => {
         setOpenCategory(openCategory === id ? null : id);
@@ -180,7 +196,7 @@ export default function Services() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm"
+                    className="bg-white/[0.08] border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm"
                 >
                     {CATEGORIES.map((cat) => (
                         <ServiceCategory

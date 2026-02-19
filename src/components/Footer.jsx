@@ -16,11 +16,13 @@ const FOOTER_LINKS = [
     {
         title: "Shërbime",
         links: [
+            { name: "Kirurgji", to: "/services" },
             { name: "Implantologji", to: "/services" },
-            { name: "Estetikë Dentare", to: "/services" },
+            { name: "Estetikë", to: "/services" },
+            { name: "Parodontologji", to: "/services" },
             { name: "Ortodonci", to: "/services" },
-            { name: "Kirurgji Orale", to: "/services" },
-            { name: "Për Fëmijë", to: "/services" },
+            { name: "Endodonci", to: "/services" },
+            { name: "Mbushje Estetike", to: "/services" },
         ]
     }
 ];
@@ -61,13 +63,13 @@ const Footer = () => {
                             Klinika dentare ku arti takohet me shkencën. Buzëqeshja juaj, misioni ynë.
                         </p>
                         <div className="space-y-3">
-                            <a href="tel:+38344123456" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
+                            <a href="tel:+38344231769" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
                                 <Phone size={15} />
-                                +383 44 123 456
+                                044 231 769
                             </a>
-                            <a href="mailto:info@aldodent.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
+                            <a href="mailto:dentaltourism.aldo@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
                                 <Mail size={15} />
-                                info@aldodent.com
+                                dentaltourism.aldo@gmail.com
                             </a>
                             <span className="flex items-center gap-3 text-white/60 text-sm">
                                 <MapPin size={15} />

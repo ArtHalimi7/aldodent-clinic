@@ -5,14 +5,13 @@ import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
 /* ───────────────────────── DATA ───────────────────────── */
 
 const SERVICES = [
-    { id: 'checkup', title: "Konsultë e Përgjithshme", duration: "30 min", price: "Falas" },
-    { id: 'cleaning', title: "Pastrim Profesional", duration: "45 min", price: "€30" },
-    { id: 'whitening', title: "Zbardhje me Laser", duration: "60 min", price: "€120" },
-    { id: 'veneers', title: "Faseta Qeramike", duration: "90 min", price: "Nga €200" },
-    { id: 'implant', title: "Konsultë për Implant", duration: "45 min", price: "Falas" },
-    { id: 'ortho', title: "Konsultë Ortodoncie", duration: "30 min", price: "Falas" },
-    { id: 'surgery', title: "Kirurgji Orale", duration: "Variabile", price: "Sipas rastit" },
-    { id: 'kids', title: "Stomatologji për Fëmijë", duration: "30 min", price: "€20" },
+    { id: 'kirurgji', title: "Kirurgji", duration: "30–60 min", price: "Sipas rastit" },
+    { id: 'implantologji', title: "Implantologji", duration: "45–90 min", price: "Nga €500" },
+    { id: 'estetike', title: "Estetikë: Kurora Zirkoni – Kurora Emax", duration: "2 seanca", price: "Nga €200/copë" },
+    { id: 'parodontologji', title: "Parodontologji", duration: "30–60 min", price: "Nga €40" },
+    { id: 'ortodonci', title: "Ortodonci", duration: "30 min konsultë", price: "Falas konsulta" },
+    { id: 'endodonci', title: "Endodonci", duration: "60–90 min", price: "Nga €80" },
+    { id: 'mbushje', title: "Mbushje Estetike", duration: "30 min", price: "Nga €40" },
 ];
 
 const STEP_LABELS = ["Shërbimi", "Data & Ora", "Të Dhënat", "Konfirmimi"];

@@ -67,11 +67,11 @@ const Navbar = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-6">
             <a
-              href="tel:+38344123456"
+              href="tel:+38344231769"
               className="text-sm font-medium flex items-center gap-2 text-white/70 hover:text-white transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>+383 44 123 456</span>
+              <span>044 231 769</span>
             </a>
             <Link to="/booking">
               <button className={`px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${scrolled
@@ -145,6 +145,14 @@ const Navbar = () => {
                 <div className="absolute bottom-[-10%] left-[-20%] w-[250px] h-[250px] bg-[#196384]/50 rounded-full blur-[60px]" />
               </div>
 
+              {/* Close Button */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="absolute top-6 right-6 z-20 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                <X size={24} />
+              </button>
+
               {/* Sidebar Content */}
               <div className="relative z-10 flex flex-col h-full px-8 pt-28 pb-8">
                 {/* Nav Links */}
@@ -181,13 +189,13 @@ const Navbar = () => {
                   transition={{ delay: 0.5 }}
                   className="space-y-5 mb-6"
                 >
-                  <a href="tel:+38344123456" className="flex items-center gap-4 group">
+                  <a href="tel:+38344231769" className="flex items-center gap-4 group">
                     <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-teal-300 group-hover:bg-white/15 transition-colors">
                       <Phone size={18} />
                     </div>
                     <div>
                       <p className="text-[10px] text-white/30 uppercase tracking-[0.15em] font-bold">Na Telefononi</p>
-                      <p className="text-white font-medium">+383 44 123 456</p>
+                      <p className="text-white font-medium">044 231 769</p>
                     </div>
                   </a>
 
