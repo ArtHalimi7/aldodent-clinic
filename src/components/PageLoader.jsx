@@ -62,7 +62,7 @@ export default function PageLoader({ children }) {
                         initial={{ y: 0 }}
                         exit={{ y: '-100%' }}
                         transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#2596be]"
+                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1e3a8a]"
                     >
                         <div className="absolute w-[400px] h-[400px] bg-teal-300/10 rounded-full blur-[120px]" />
 
@@ -92,7 +92,7 @@ export default function PageLoader({ children }) {
             {routeWipe && (
                 <Motion.div
                     key="route-wipe"
-                    className="fixed inset-0 z-[9998] flex items-center justify-center bg-[#2596be]"
+                    className="fixed inset-0 z-[9998] flex items-center justify-center bg-[#1e3a8a]"
                     initial={false}
                     animate={{
                         y: wipePhase === 'cover' ? '0%' : '-100%',

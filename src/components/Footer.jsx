@@ -34,10 +34,10 @@ const SOCIALS = [
 
 const Footer = () => {
     return (
-        <footer className="bg-[#196384] text-white relative overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <footer className="bg-[#172554] text-white relative overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {/* Background Glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute bottom-[-30%] left-[-10%] w-[50vw] h-[50vw] bg-[#2596be]/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-30%] left-[-10%] w-[50vw] h-[50vw] bg-[#1e3a8a]/10 rounded-full blur-[120px]" />
 
                 {/* Horizon Waves */}
                 <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMid slice" fill="none">

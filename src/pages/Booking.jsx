@@ -74,7 +74,7 @@ function MiniCalendar({ selected, onSelect }) {
                         onClick={() => onSelect(new Date(viewYear, viewMonth, day))}
                         className={`aspect-square rounded-full text-sm font-medium flex items-center justify-center transition-all
                             ${isDisabled(day) ? 'text-white/15 cursor-not-allowed' : 'hover:bg-white/10 cursor-pointer'}
-                            ${isSelected(day) ? 'bg-white text-[#2596be] hover:bg-white' : ''}
+                            ${isSelected(day) ? 'bg-white text-[#1e3a8a] hover:bg-white' : ''}
                         `}
                     >
                         {day}
@@ -133,12 +133,12 @@ export default function Booking() {
     /* ───── SUCCESS SCREEN ───── */
     if (step === 4) {
         return (
-            <div className="min-h-screen bg-[#2596be] text-white flex items-center justify-center px-6" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            <div className="min-h-screen bg-[#1e3a8a] text-white flex items-center justify-center px-6" style={{ fontFamily: "'Outfit', sans-serif" }}>
                 <Motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} className="text-center max-w-md">
                     <Motion.div
                         initial={{ scale: 0 }} animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                        className="w-28 h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-10 text-[#2596be] shadow-xl shadow-black/10"
+                        className="w-28 h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-10 text-[#1e3a8a] shadow-xl shadow-black/10"
                     >
                         <Check size={56} strokeWidth={2.5} />
                     </Motion.div>
@@ -166,7 +166,7 @@ export default function Booking() {
 
     /* ───── MAIN LAYOUT ───── */
     return (
-        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#1e3a8a] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <Helmet>
                 <title>Rezervo Termin — AldoDent | Klinikë Dentare Premium</title>
                 <meta name="description" content="Rezervoni terminin tuaj online në AldoDent. Zgjidhni shërbimin, datën dhe orën që ju përshtaten më së miri." />
@@ -176,7 +176,7 @@ export default function Booking() {
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#172554]/30 rounded-full blur-[120px]" />
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -206,7 +206,7 @@ export default function Booking() {
                         <React.Fragment key={i}>
                             <div className="flex items-center gap-3">
                                 <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 shrink-0
-                                    ${i < step ? 'bg-white text-[#2596be]' : i === step ? 'bg-white text-[#2596be] ring-4 ring-white/20' : 'bg-white/10 text-white/40'}
+                                    ${i < step ? 'bg-white text-[#1e3a8a]' : i === step ? 'bg-white text-[#1e3a8a] ring-4 ring-white/20' : 'bg-white/10 text-white/40'}
                                 `}>
                                     {i < step ? <Check size={16} strokeWidth={3} /> : i + 1}
                                 </div>
@@ -235,17 +235,17 @@ export default function Booking() {
                                         onClick={() => setFormData({ ...formData, service: srv.id })}
                                         className={`w-full text-left px-6 py-5 rounded-2xl border transition-all duration-200 flex items-center justify-between group
                                             ${formData.service === srv.id
-                                                ? 'bg-white text-[#2596be] border-white'
+                                                ? 'bg-white text-[#1e3a8a] border-white'
                                                 : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
                                             }`}
                                     >
                                         <div>
                                             <h3 className="text-lg font-medium">{srv.title}</h3>
-                                            <span className={`text-sm ${formData.service === srv.id ? 'text-[#2596be]/60' : 'text-white/40'}`}>
+                                            <span className={`text-sm ${formData.service === srv.id ? 'text-[#1e3a8a]/60' : 'text-white/40'}`}>
                                                 {srv.duration}
                                             </span>
                                         </div>
-                                        <span className={`text-sm font-medium ${formData.service === srv.id ? 'text-[#2596be]' : 'text-white/60'}`}>
+                                        <span className={`text-sm font-medium ${formData.service === srv.id ? 'text-[#1e3a8a]' : 'text-white/60'}`}>
                                             {srv.price}
                                         </span>
                                     </button>
@@ -278,7 +278,7 @@ export default function Booking() {
                                                 key={t}
                                                 onClick={() => setFormData({ ...formData, time: t })}
                                                 className={`py-2.5 rounded-xl text-sm font-medium transition-all
-                                                    ${formData.time === t ? 'bg-white text-[#2596be]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
+                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
                                             >
                                                 {t}
                                             </button>
@@ -291,7 +291,7 @@ export default function Booking() {
                                                 key={t}
                                                 onClick={() => setFormData({ ...formData, time: t })}
                                                 className={`py-2.5 rounded-xl text-sm font-medium transition-all
-                                                    ${formData.time === t ? 'bg-white text-[#2596be]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
+                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
                                             >
                                                 {t}
                                             </button>
@@ -451,7 +451,7 @@ export default function Booking() {
                     <button
                         onClick={step === 3 ? handleSubmit : goNext}
                         disabled={!canProceed()}
-                        className="bg-white text-[#2596be] px-10 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-black/10 text-sm"
+                        className="bg-white text-[#1e3a8a] px-10 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-black/10 text-sm"
                     >
                         {step === 3 ? "Konfirmo Terminin" : "Vazhdo"}
                         <ChevronRight size={18} />

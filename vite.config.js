@@ -9,7 +9,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-anim': ['framer-motion', 'gsap'],
           'vendor-ui': ['lucide-react', '@mdi/js', '@mdi/react'],
         }

@@ -74,8 +74,8 @@ export const HorizontalParallax = () => {
             {/* MOBILE LAYOUT (Static Vertical Cards) */}
             <div className="md:hidden py-20 px-6 space-y-24">
                 <div className="flex items-center gap-4 mb-12">
-                    <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#2596be]">Ekspertiza Jonë</span>
-                    <div className="h-[1px] w-12 bg-[#2596be]" />
+                    <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#1e3a8a]">Ekspertiza Jonë</span>
+                    <div className="h-[1px] w-12 bg-[#1e3a8a]" />
                 </div>
 
                 {SERVICES.map((service, index) => (
@@ -89,23 +89,23 @@ export const HorizontalParallax = () => {
                         </div>
                         <div className="relative z-10">
                             <h3 className="text-4xl font-serif text-[#2D2D2D] mb-3">
-                                {service.title} <span className="italic text-[#2596be] block">{service.subtitle}</span>
+                                {service.title} <span className="italic text-[#1e3a8a] block">{service.subtitle}</span>
                             </h3>
                             <p className="text-lg font-light text-[#2D2D2D]/70 leading-relaxed">
                                 {service.description}
                             </p>
-                            <div className="absolute -top-16 right-0 text-8xl font-serif text-[#2596be]/5 select-none -z-10">
+                            <div className="absolute -top-16 right-0 text-8xl font-serif text-[#1e3a8a]/5 select-none -z-10">
                                 {service.id}
                             </div>
                         </div>
                     </div>
                 ))}
 
-                <div className="pt-12 text-center border-t border-[#2596be]/10">
+                <div className="pt-12 text-center border-t border-[#1e3a8a]/10">
                     <h2 className="text-5xl leading-tight font-serif mb-8 text-[#2D2D2D]">
-                        Perfeksioni <br /> <span className="italic text-[#2596be]">është Standard.</span>
+                        Perfeksioni <br /> <span className="italic text-[#1e3a8a]">është Standard.</span>
                     </h2>
-                    <button className="px-8 py-4 border border-[#2596be]/20 rounded-full hover:bg-[#2596be] hover:text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold text-[#2596be]">
+                    <button className="px-8 py-4 border border-[#1e3a8a]/20 rounded-full hover:bg-[#1e3a8a] hover:text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold text-[#1e3a8a]">
                         Shih të gjitha shërbimet
                     </button>
                 </div>
@@ -122,8 +122,8 @@ export const HorizontalParallax = () => {
                         viewport={{ once: true }}
                         className="flex items-center gap-4"
                     >
-                        <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#2596be]">Ekspertiza Jonë</span>
-                        <div className="h-[1px] w-12 bg-[#2596be]" />
+                        <span className="text-xs font-bold tracking-[0.3em] uppercase text-[#1e3a8a]">Ekspertiza Jonë</span>
+                        <div className="h-[1px] w-12 bg-[#1e3a8a]" />
                     </Motion.div>
                 </div>
 
@@ -138,7 +138,7 @@ export const HorizontalParallax = () => {
                             className="group relative h-[70vh] w-[85vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0 mr-[10vw] flex flex-col justify-end pb-12"
                         >
                             {/* Number Background */}
-                            <div className="absolute -top-20 -left-10 text-[15vw] font-serif leading-none text-[#2596be] drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)] select-none z-0 mix-blend-multiply opacity-10">
+                            <div className="absolute -top-20 -left-10 text-[15vw] font-serif leading-none text-[#1e3a8a] drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)] select-none z-0 mix-blend-multiply opacity-10">
                                 {service.id}
                             </div>
 
@@ -155,9 +155,9 @@ export const HorizontalParallax = () => {
                             </div>
 
                             {/* Content */}
-                            <div className="relative z-20 mt-8 pl-4 border-l-2 border-[#2596be]/20 group-hover:border-[#2596be] transition-colors duration-500">
+                            <div className="relative z-20 mt-8 pl-4 border-l-2 border-[#1e3a8a]/20 group-hover:border-[#1e3a8a] transition-colors duration-500">
                                 <h3 className="text-4xl md:text-6xl font-serif text-[#2D2D2D] mb-4">
-                                    {service.title} <span className="italic text-[#2596be]">{service.subtitle}</span>
+                                    {service.title} <span className="italic text-[#1e3a8a]">{service.subtitle}</span>
                                 </h3>
                                 <p className="text-lg font-light text-[#2D2D2D]/70 max-w-sm">
                                     {service.description}
@@ -167,12 +167,12 @@ export const HorizontalParallax = () => {
                     ))}
 
                     {/* Final Statement */}
-                    <div className="flex-shrink-0 w-[100vw] h-screen flex items-center justify-center bg-[#2596be] text-white ml-[-10vw]">
+                    <div className="flex-shrink-0 w-[100vw] h-screen flex items-center justify-center bg-[#1e3a8a] text-white ml-[-10vw]">
                         <div className="text-center px-6">
                             <h2 className="text-[10vw] leading-[0.9] font-serif mb-8">
                                 Perfeksioni <br /> <span className="italic text-teal-300">është Standard.</span>
                             </h2>
-                            <button className="px-12 py-4 border border-white/20 rounded-full hover:bg-white hover:text-[#2596be] transition-all duration-500 uppercase tracking-widest text-sm font-bold">
+                            <button className="px-12 py-4 border border-white/20 rounded-full hover:bg-white hover:text-[#1e3a8a] transition-all duration-500 uppercase tracking-widest text-sm font-bold">
                                 Shih të gjitha shërbimet
                             </button>
                         </div>
@@ -185,14 +185,14 @@ export const HorizontalParallax = () => {
                     <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="overflow-visible">
                         <path
                             d={toothIcon}
-                            className="stroke-[#2596be]/20"
+                            className="stroke-[#1e3a8a]/20"
                             strokeWidth="1"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         />
                         <Motion.path
                             d={toothIcon}
-                            className="stroke-[#2596be] fill-[#2596be]"
+                            className="stroke-[#1e3a8a] fill-[#1e3a8a]"
                             strokeWidth="1.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"

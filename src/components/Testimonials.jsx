@@ -75,7 +75,7 @@ const MiniReview = ({ review, delay }) => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay }}
-        className="flex items-center gap-3 px-5 py-4 bg-[#1d7aa1] border border-[#2596be]/30 rounded-2xl"
+        className="flex items-center gap-3 px-5 py-4 bg-[#1d4ed8] border border-[#1e3a8a]/30 rounded-2xl"
     >
         <div className="w-9 h-9 rounded-full bg-teal-400/20 flex items-center justify-center text-teal-300 font-semibold text-sm shrink-0">
             {review.name.charAt(0)}
@@ -95,8 +95,8 @@ const ReviewCard = ({ review, delay, className = "" }) => (
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className={`group relative rounded-3xl p-7 transition-all duration-300 ${review.featured
-            ? 'bg-[#1d7aa1] border border-[#2596be]/30 hover:bg-[#1a6e93]'
-            : 'bg-[#2596be] border border-[#2dd4bf]/15 hover:bg-[#218eaf]'
+            ? 'bg-[#1d4ed8] border border-[#1e3a8a]/30 hover:bg-[#1e40af]'
+            : 'bg-[#1e3a8a] border border-[#2dd4bf]/15 hover:bg-[#2563eb]'
             } ${className}`}
     >
         {/* Decorative Quote */}
@@ -145,7 +145,7 @@ const Testimonials = () => {
         <section className="relative bg-white py-24 md:py-32 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {/* Subtle Background Accents */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[30%] w-[50vw] h-[50vw] bg-[#2596be]/5 rounded-full blur-[120px]" />
+                <div className="absolute top-[-20%] left-[30%] w-[50vw] h-[50vw] bg-[#1e3a8a]/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-15%] right-[-5%] w-[40vw] h-[40vw] bg-teal-400/5 rounded-full blur-[100px]" />
             </div>
 
@@ -157,7 +157,7 @@ const Testimonials = () => {
                             initial={{ opacity: 0, x: -10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="text-[#2596be] font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
+                            className="text-[#1e3a8a] font-bold tracking-[0.2em] uppercase text-xs mb-3 block"
                         >
                             Vlerësimet
                         </Motion.span>

@@ -43,7 +43,7 @@ export default function About() {
     const [expandedMember, setExpandedMember] = useState(null);
 
     return (
-        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#1e3a8a] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <Helmet>
                 <title>Rreth Nesh — AldoDent | Klinikë Dentare Premium</title>
                 <meta name="description" content="Njohuni me ekipin tonë të specialistëve dentar, vlerat tona, dhe filozofinë që na bën klinikën më të besuar në Prishtinë." />
@@ -53,7 +53,7 @@ export default function About() {
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#172554]/30 rounded-full blur-[120px]" />
 
                 {/* Contour Map Overlay */}
                 <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" fill="none">
@@ -240,7 +240,7 @@ export default function About() {
                         <p className="text-white/50 font-light">Rezervoni konsultën tuaj falas sot.</p>
                     </div>
                     <Link to="/booking">
-                        <button className="bg-white text-[#2596be] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
+                        <button className="bg-white text-[#1e3a8a] px-10 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-teal-50 transition-all shadow-lg shadow-black/10 shrink-0">
                             Rezervo Termin
                             <ArrowRight size={18} />
                         </button>

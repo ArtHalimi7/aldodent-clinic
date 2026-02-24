@@ -39,7 +39,7 @@ export default function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-[#2596be] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <div className="min-h-screen bg-[#1e3a8a] text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <Helmet>
                 <title>Kontakti — AldoDent | Na Kontaktoni</title>
                 <meta name="description" content="Kontaktoni AldoDent për konsultë falas. Telefoni: 044 231 769, Email: dentaltourism.aldo@gmail.com. Klinikë dentare premium në Prishtinë." />
@@ -49,7 +49,7 @@ export default function Contact() {
             {/* Background Glow */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#196384]/30 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#172554]/30 rounded-full blur-[120px]" />
 
                 {/* Connection Network */}
                 <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
@@ -122,7 +122,7 @@ export default function Contact() {
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                                    className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 text-[#2596be]"
+                                    className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 text-[#1e3a8a]"
                                 >
                                     <Check size={40} />
                                 </Motion.div>
@@ -204,7 +204,7 @@ export default function Contact() {
 
                                 <button
                                     type="submit"
-                                    className="bg-white text-[#2596be] px-8 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all shadow-lg shadow-black/10"
+                                    className="bg-white text-[#1e3a8a] px-8 py-3.5 rounded-full font-medium flex items-center gap-2 hover:bg-teal-50 transition-all shadow-lg shadow-black/10"
                                 >
                                     Dërgo Mesazhin
                                     <Send size={16} />

@@ -35,7 +35,7 @@ const SignatureProcess = () => {
     }, []);
 
     return (
-        <section ref={containerRef} className="relative bg-[#2596be]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <section ref={containerRef} className="relative bg-[#1e3a8a]" style={{ fontFamily: "'Outfit', sans-serif" }}>
             {STEPS.map((step, index) => (
                 <Step key={index} step={step} index={index} total={STEPS.length} isMobile={isMobile} />
             ))}
@@ -45,11 +45,11 @@ const SignatureProcess = () => {
 
 const Step = ({ step, index, total, isMobile }) => {
     // Each step gets progressively darker
-    const bgShades = ['bg-[#2596be]', 'bg-[#208bb3]', 'bg-[#1b7da0]', 'bg-[#166f8f]'];
+    const bgShades = ['bg-[#1e3a8a]', 'bg-[#172554]', 'bg-[#0f172a]', 'bg-[#020617]'];
 
     return (
         <div
-            className={`sticky top-0 h-screen flex items-center justify-center overflow-hidden border-t border-white/5 ${bgShades[index] || 'bg-[#2596be]'}`}
+            className={`sticky top-0 h-screen flex items-center justify-center overflow-hidden border-t border-white/5 ${bgShades[index] || 'bg-[#1e3a8a]'}`}
         >
             {/* Background Glow */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">

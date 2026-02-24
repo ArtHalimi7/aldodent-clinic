@@ -19,7 +19,7 @@ function App() {
       <Router>
         <PageLoader>
           <Navbar />
-          <Suspense fallback={<div className="min-h-screen bg-[#2596be]" />}>
+          <Suspense fallback={<div className="min-h-screen bg-[#1e3a8a]" />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
