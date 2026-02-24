@@ -2,7 +2,7 @@ import React from 'react'
 import { motion as Motion } from 'framer-motion'
 import { MapPin, ArrowUpRight, Gem, Box } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import toothImg from '../assets/img/tooth.png'
+import toothImg from '../assets/img/tooth2.png'
 
 const CanvasSpinner = () => (
   <div className="w-full h-full flex items-center justify-center">
@@ -69,23 +69,21 @@ const Hero = () => {
         <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#172554]/30 rounded-full blur-[120px]" />
 
-        {/* Topographic Wave Field - Opacity softened to 0.05 */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.05]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
-          <path d="M-200 900 Q 100 600, 400 650 T 900 500" stroke="white" strokeWidth="0.8" />
-          <path d="M-200 950 Q 150 650, 500 700 T 1000 520" stroke="white" strokeWidth="0.6" />
-          <path d="M-200 1000 Q 200 700, 600 750 T 1100 540" stroke="white" strokeWidth="0.5" />
-          <path d="M-200 1050 Q 250 750, 700 800 T 1200 560" stroke="white" strokeWidth="0.4" />
-          <circle cx="1100" cy="200" r="80" stroke="white" strokeWidth="0.5" />
-          <circle cx="1100" cy="200" r="120" stroke="white" strokeWidth="0.3" />
-          <circle cx="1100" cy="200" r="160" stroke="white" strokeWidth="0.2" />
-          <line x1="600" y1="0" x2="800" y2="900" stroke="white" strokeWidth="0.2" strokeDasharray="8 16" />
-          <line x1="900" y1="0" x2="1100" y2="900" stroke="white" strokeWidth="0.15" strokeDasharray="8 16" />
+        {/* Topographic Wave Field */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.15]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+          <path d="M-200 900 Q 100 600, 400 650 T 900 500 T 1600 50" stroke="white" strokeWidth="0.8" />
+          <path d="M-200 950 Q 150 650, 500 700 T 1000 520 T 1700 0" stroke="white" strokeWidth="0.6" />
+          <path d="M-200 1000 Q 200 700, 600 750 T 1100 540 T 1800 -50" stroke="white" strokeWidth="0.5" />
+          <path d="M-200 1050 Q 250 750, 700 800 T 1200 560 T 1900 -100" stroke="white" strokeWidth="0.4" />
+          <line x1="600" y1="0" x2="800" y2="1200" stroke="white" strokeWidth="0.2" strokeDasharray="8 16" />
+          <line x1="900" y1="0" x2="1100" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="8 16" />
+          <line x1="1200" y1="0" x2="1400" y2="1200" stroke="white" strokeWidth="0.1" strokeDasharray="8 16" />
         </svg>
       </div>
 
       {/* ── Static Tooth Image (Optimized for LCP and Performance) ── */}
-      <div className="absolute top-[85%] sm:top-[85%] md:top-[75%] lg:top-[75%] xl:top-[75%] left-1/2 lg:left-[40%] xl:left-[35%] -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none transition-all duration-700">
-        <div className="w-[85vw] sm:w-[90vw] md:w-[85vw] max-w-[1100px] h-[50vh] sm:h-[60vh] md:h-[90vh]">
+      <div className="absolute top-[80%] sm:top-[80%] md:top-[75%] lg:top-[70%] xl:top-[68%] left-1/2 lg:left-[40%] xl:left-[35%] -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none transition-all duration-700">
+        <div className="w-[85vw] sm:w-[90vw] md:w-[85vw] lg:w-[70vw] xl:w-[60vw] max-w-[1100px] lg:max-w-[900px] xl:max-w-[800px] h-[50vh] sm:h-[60vh] md:h-[90vh] lg:h-[75vh] xl:h-[70vh]">
           <Motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -111,18 +109,8 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="hidden md:flex absolute top-[12%] md:top-[16%] left-0 w-full md:w-auto md:col-span-5 flex-col items-center md:items-start px-6 md:px-0 z-20"
+          className="hidden md:flex absolute top-[12%] md:top-[18%] lg:top-[17%] xl:top-[16%] left-0 w-full md:w-auto md:col-span-5 flex-col items-center md:items-start px-6 md:px-0 z-20"
         >
-          {/* Tag above Aldo Dent Clinic */}
-          <Motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 mb-4 md:mb-6 bg-white/5 border border-white/10 backdrop-blur-md rounded-full text-white/80 text-[10px] md:text-xs font-light shadow-lg"
-          >
-            <Gem className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" strokeWidth={1.5} /> Estetikë Dentare
-          </Motion.div>
-
           {/* Typography Hierarchy: Bolder, bigger */}
           <h2 className="text-[2.5rem] sm:text-4xl md:text-5xl lg:text-[4.5rem] font-bold text-teal-400 tracking-tight leading-tight mb-8 drop-shadow-sm whitespace-nowrap text-center md:text-left">
             Aldo Dent Clinic
@@ -148,16 +136,25 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="absolute bottom-auto top-[18%] sm:top-[20%] md:top-[24%] lg:top-[22%] left-0 md:left-auto right-0 md:right-[2rem] lg:right-[4rem] w-full md:w-auto md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left z-20 px-6 md:px-0"
         >
-          {/* Tag above "Partneri juaj..." */}
-          <Motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 mb-4 md:mb-6 bg-white/5 border border-white/10 backdrop-blur-md rounded-full text-white/80 text-[10px] md:text-xs font-light shadow-lg self-center md:self-end"
-          >
-            <Box className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" strokeWidth={1.5} /> Skanim 3D
-          </Motion.div>
-
+          {/* Tags above "Partneri juaj..." */}
+          <div className="flex items-center gap-3 mb-4 md:mb-6 self-center md:self-end">
+            <Motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/5 border border-white/10 backdrop-blur-md rounded-full text-white/80 text-[10px] md:text-xs font-light shadow-lg"
+            >
+              <Gem className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" strokeWidth={1.5} /> Estetikë Dentare
+            </Motion.div>
+            <Motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/5 border border-white/10 backdrop-blur-md rounded-full text-white/80 text-[10px] md:text-xs font-light shadow-lg"
+            >
+              <Box className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" strokeWidth={1.5} /> Skanim 3D
+            </Motion.div>
+          </div>
           {/* Typography Hierarchy: Dominant heading, tighter leading, increased spacing */}
           <h1 className="text-[3rem] sm:text-5xl md:text-5xl lg:text-[4.5rem] font-light text-white leading-[1.1] md:leading-tight tracking-tight z-10 drop-shadow-lg max-w-lg mb-4 md:mb-6 text-center md:text-left">
             Partneri juaj për<br />
@@ -189,7 +186,7 @@ const Hero = () => {
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 border border-white/20 backdrop-blur-md rounded-full shadow-lg text-white/90 text-[11px] md:text-sm font-medium z-10"
             >
-              <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" /> Gjilan, KS
+              <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" /> Gjilan, Kosovë
             </Motion.div>
           </div>
         </Motion.div>

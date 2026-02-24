@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Instagram, Facebook, ArrowUpRight } from 'lucide-react';
+import logoWhite from '../assets/img/logowhite.png';
 
 const FOOTER_LINKS = [
     {
@@ -55,23 +56,26 @@ const Footer = () => {
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pt-20 pb-8">
                 {/* Top section */}
-                <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-12 md:gap-8 pb-16 border-b border-white/10">
+                <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-12 md:gap-8 pb-16 border-b border-white/10 text-center md:text-left">
                     {/* Brand */}
-                    <div>
-                        <h3 className="text-2xl font-medium tracking-tight mb-4">Aldo Dent</h3>
+                    <div className="flex flex-col items-center md:items-start flex-1">
+                        <Link to="/" className="flex items-center gap-3 mb-6">
+                            <img src={logoWhite} alt="Aldo Dent Logo" className="h-10 md:h-12 w-auto object-contain drop-shadow-md" />
+                            <span className="text-xl md:text-2xl font-bold text-white drop-shadow-md">Aldo Dent</span>
+                        </Link>
                         <p className="text-white/40 font-light leading-relaxed max-w-xs mb-8 text-sm">
                             Klinika dentare ku arti takohet me shkencën. Buzëqeshja juaj, misioni ynë.
                         </p>
-                        <div className="space-y-3">
-                            <a href="tel:+38344231769" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
+                        <div className="space-y-3 w-full flex flex-col items-center md:items-start">
+                            <a href="tel:+38344231769" className="flex items-center justify-center md:justify-start gap-3 w-full text-white/60 hover:text-white transition-colors text-sm">
                                 <Phone size={15} />
                                 044 231 769
                             </a>
-                            <a href="mailto:dentaltourism.aldo@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors text-sm">
+                            <a href="mailto:dentaltourism.aldo@gmail.com" className="flex items-center justify-center md:justify-start gap-3 w-full text-white/60 hover:text-white transition-colors text-sm">
                                 <Mail size={15} />
                                 dentaltourism.aldo@gmail.com
                             </a>
-                            <span className="flex items-center gap-3 text-white/60 text-sm">
+                            <span className="flex items-center justify-center md:justify-start gap-3 w-full text-white/60 text-sm">
                                 <MapPin size={15} />
                                 Gjilan, Kosovë
                             </span>
@@ -80,9 +84,9 @@ const Footer = () => {
 
                     {/* Link Columns */}
                     {FOOTER_LINKS.map((col, i) => (
-                        <div key={i}>
+                        <div key={i} className="flex flex-col items-center md:items-start">
                             <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-teal-300 mb-6">{col.title}</h4>
-                            <ul className="space-y-3">
+                            <ul className="space-y-3 flex flex-col items-center md:items-start">
                                 {col.links.map((link, j) => (
                                     <li key={j}>
                                         <Link
@@ -100,10 +104,21 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
-                    <span className="text-white/30 text-xs">
-                        © {new Date().getFullYear()} Aldo Dent. Të gjitha të drejtat e rezervuara.
-                    </span>
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 pt-8 text-center md:text-left">
+                    <div className="flex flex-col gap-2 items-center md:items-start text-white/30 text-xs">
+                        <span>© {new Date().getFullYear()} Aldo Dent. Të gjitha të drejtat e rezervuara.</span>
+                        <span className="flex items-center opacity-80">
+                            Mundësuar nga
+                            <a
+                                href="https://arthalimi.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ml-1.5 font-bold text-[#ffffff] text-[15px] sm:text-sm hover:text-white transition-colors"
+                            >
+                                Art Halimi
+                            </a>
+                        </span>
+                    </div>
                     <div className="flex items-center gap-3">
                         {SOCIALS.map((s, i) => (
                             <a

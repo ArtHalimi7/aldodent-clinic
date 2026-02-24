@@ -43,6 +43,45 @@ const SignatureProcess = () => {
     );
 };
 
+const STEP_WAVES = [
+    {
+        paths: [
+            "M-200 800 Q 200 600, 500 700 T 1000 600 T 1600 400",
+            "M-200 850 Q 250 650, 600 750 T 1100 620 T 1700 350",
+            "M-200 900 Q 300 700, 700 800 T 1200 640 T 1800 300",
+            "M-200 950 Q 350 750, 800 850 T 1300 660 T 1900 250"
+        ],
+        lines: [500, 800, 1100]
+    },
+    {
+        paths: [
+            "M-200 700 Q 200 800, 600 650 T 1100 750 T 1600 500",
+            "M-200 750 Q 250 850, 650 700 T 1150 800 T 1700 450",
+            "M-200 800 Q 300 900, 700 750 T 1200 850 T 1800 400",
+            "M-200 850 Q 350 950, 750 800 T 1250 900 T 1900 350"
+        ],
+        lines: [400, 700, 1000, 1300]
+    },
+    {
+        paths: [
+            "M-200 300 Q 300 500, 700 400 T 1200 600 T 1600 800",
+            "M-200 350 Q 350 550, 750 450 T 1250 650 T 1700 850",
+            "M-200 400 Q 400 600, 800 500 T 1300 700 T 1800 900",
+            "M-200 450 Q 450 650, 850 550 T 1350 750 T 1900 950"
+        ],
+        lines: [600, 900, 1200]
+    },
+    {
+        paths: [
+            "M-200 850 Q 200 750, 500 850 T 900 750 T 1600 850",
+            "M-200 900 Q 250 800, 550 900 T 950 800 T 1700 900",
+            "M-200 950 Q 300 850, 600 950 T 1000 850 T 1800 950",
+            "M-200 1000 Q 350 900, 650 1000 T 1050 900 T 1900 1000"
+        ],
+        lines: [300, 600, 900, 1200]
+    }
+];
+
 const Step = ({ step, index, total, isMobile }) => {
     // Each step gets progressively darker
     const bgShades = ['bg-[#1e3a8a]', 'bg-[#172554]', 'bg-[#0f172a]', 'bg-[#020617]'];
@@ -56,19 +95,15 @@ const Step = ({ step, index, total, isMobile }) => {
                 <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-teal-400/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-white/[0.02] rounded-full blur-[100px]" />
 
-                {/* Radial Precision Pattern */}
+                {/* Topographic Wave Field */}
                 <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
-                    {/* Concentric rings — center of gravity */}
-                    <circle cx="720" cy="450" r="150" stroke="white" strokeWidth="0.4" />
-                    <circle cx="720" cy="450" r="220" stroke="white" strokeWidth="0.3" />
-                    <circle cx="720" cy="450" r="300" stroke="white" strokeWidth="0.2" />
-                    <circle cx="720" cy="450" r="400" stroke="white" strokeWidth="0.15" strokeDasharray="8 12" />
-                    {/* Guide curves sweeping across */}
-                    <path d="M0 350 Q 360 250, 720 350 T 1440 300" stroke="white" strokeWidth="0.6" />
-                    <path d="M0 550 Q 360 650, 720 550 T 1440 600" stroke="white" strokeWidth="0.6" />
-                    {/* Cross-hair markers */}
-                    <line x1="720" y1="300" x2="720" y2="600" stroke="white" strokeWidth="0.15" strokeDasharray="4 8" />
-                    <line x1="570" y1="450" x2="870" y2="450" stroke="white" strokeWidth="0.15" strokeDasharray="4 8" />
+                    <path d={STEP_WAVES[index]?.paths[0]} stroke="white" strokeWidth="0.8" />
+                    <path d={STEP_WAVES[index]?.paths[1]} stroke="white" strokeWidth="0.6" />
+                    <path d={STEP_WAVES[index]?.paths[2]} stroke="white" strokeWidth="0.5" />
+                    <path d={STEP_WAVES[index]?.paths[3]} stroke="white" strokeWidth="0.4" />
+                    {STEP_WAVES[index]?.lines.map((x, i) => (
+                        <line key={i} x1={x} y1="0" x2={x + 200} y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="8 16" />
+                    ))}
                 </svg>
             </div>
 
