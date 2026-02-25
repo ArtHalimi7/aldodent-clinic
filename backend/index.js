@@ -4,6 +4,7 @@ import { initDb } from './db.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import blockedTimeRoutes from './routes/blockedTimeRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
+import doctorRoutes from './routes/doctorRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/blocked-times', blockedTimeRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/doctors', doctorRoutes);
 
 const PORT = 5000;
 initDb().then(() => {

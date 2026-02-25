@@ -52,6 +52,16 @@ export async function initDb() {
             );
         `;
 
+        await sql`
+            CREATE TABLE IF NOT EXISTS doctors (
+                id VARCHAR(50) PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                role VARCHAR(255) NOT NULL,
+                avatar TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
         // Seeding initial services if table is empty
         const servicesCount = await sql`SELECT count(*) FROM services`;
         if (parseInt(servicesCount[0].count) === 0) {
@@ -72,6 +82,23 @@ export async function initDb() {
                 `;
             }
             console.log("Initial services seeded.");
+        }
+
+        // Seeding initial doctors if table is empty
+        const doctorsCount = await sql`SELECT count(*) FROM doctors`;
+        if (parseInt(doctorsCount[0].count) === 0) {
+            const initialDoctors = [
+                { id: 'dr-aldo', name: 'Dr. Aldo', role: 'Kryedoktor & Kirurg', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aldo' },
+                { id: 'dr-elena', name: 'Dr. Elena', role: 'Ortodonte', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
+            ];
+
+            for (const d of initialDoctors) {
+                await sql`
+                    INSERT INTO doctors (id, name, role, avatar)
+                    VALUES (${d.id}, ${d.name}, ${d.role}, ${d.avatar})
+                `;
+            }
+            console.log("Initial doctors seeded.");
         }
 
         console.log("Database tables initialized successfully (created if not existed).");

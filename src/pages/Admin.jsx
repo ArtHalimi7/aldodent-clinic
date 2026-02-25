@@ -12,6 +12,18 @@ import {
 const TIME_SLOTS_AM = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
 const TIME_SLOTS_PM = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"];
 
+const ALBANIAN_MONTHS = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
+const ALBANIAN_DAYS = ["E Diel", "E Hënë", "E Martë", "E Mërkurë", "E Enjte", "E Premte", "E Shtunë"];
+
+const formatAlbanianDate = (date) => {
+    if (!date) return "";
+    const dayName = ALBANIAN_DAYS[date.getDay()];
+    const day = date.getDate();
+    const monthName = ALBANIAN_MONTHS[date.getMonth()];
+    const year = date.getFullYear();
+    return `${dayName}, ${day} ${monthName} ${year}`;
+};
+
 const getDurationSlots = (time, serviceTitle) => {
     let slots = 1;
     const title = serviceTitle.toLowerCase();
@@ -101,13 +113,11 @@ function MiniCalendar({ selected, onSelect }) {
 }
 
 // MOCK DATA
-const DOCTORS = [
-    { id: 'dr-aldo', name: 'Dr. Aldo', role: 'Kryedoktor & Kirurg', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aldo' },
-    { id: 'dr-elena', name: 'Dr. Elena', role: 'Ortodonte', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
-];
+// DOCTORS moved to server side
 
 export default function Admin() {
-    const [selectedDoc, setSelectedDoc] = useState(DOCTORS[0].id);
+    const [doctors, setDoctors] = useState([]);
+    const [selectedDoc, setSelectedDoc] = useState('');
     const [activeTab, setActiveTab] = useState('calendar');
     const [selectedApt, setSelectedApt] = useState(null);
 
@@ -118,18 +128,24 @@ export default function Admin() {
 
     const fetchData = useCallback(async () => {
         try {
-            const [aptRes, blockRes, servRes] = await Promise.all([
+            const [aptRes, blockRes, servRes, docRes] = await Promise.all([
                 fetch('http://localhost:5000/api/appointments'),
                 fetch('http://localhost:5000/api/blocked-times'),
-                fetch('http://localhost:5000/api/services')
+                fetch('http://localhost:5000/api/services'),
+                fetch('http://localhost:5000/api/doctors')
             ]);
             if (aptRes.ok) setRawAppointments(await aptRes.json());
             if (blockRes.ok) setRawBlockedTimes(await blockRes.json());
             if (servRes.ok) setRawServices(await servRes.json());
+            if (docRes.ok) {
+                const docs = await docRes.json();
+                setDoctors(docs);
+                if (!selectedDoc && docs.length > 0) setSelectedDoc(docs[0].id);
+            }
         } catch (error) {
             console.error("Backend jo i disponueshëm", error);
         }
-    }, []);
+    }, [selectedDoc]);
 
     useEffect(() => {
         const initLoad = async () => {
@@ -235,7 +251,7 @@ export default function Admin() {
     // PAUZA FORM STATE
     const [showPauseSuccess, setShowPauseSuccess] = useState(false);
     const [pauzaForm, setPauzaForm] = useState({
-        doctor_id: DOCTORS[0].id,
+        doctor_id: doctors[0]?.id || '',
         startDate: null, // Change to Date object for MiniCalendar
         startTime: '',
         endTime: '',
@@ -247,7 +263,7 @@ export default function Admin() {
     const [bookingStep, setBookingStep] = useState(0);
     const [bookingData, setBookingData] = useState({
         service: null,
-        doctorId: DOCTORS[0].id,
+        doctorId: doctors[0]?.id || '',
         date: null,
         time: '',
         firstName: '',
@@ -277,7 +293,7 @@ export default function Admin() {
                 setShowBookingModal(false);
                 setBookingStep(0);
                 setBookingData({
-                    service: null, doctorId: DOCTORS[0].id, date: null, time: '',
+                    service: null, doctorId: doctors[0]?.id || '', date: null, time: '',
                     firstName: '', lastName: '', phone: '', email: '', notes: ''
                 });
                 fetchData();
@@ -370,7 +386,7 @@ export default function Admin() {
             if (res.ok) {
                 setShowPauseSuccess(true);
                 fetchData();
-                setPauzaForm({ doctor_id: DOCTORS[0].id, startDate: null, startTime: '', endTime: '', reason: '' });
+                setPauzaForm({ doctor_id: doctors[0]?.id || '', startDate: null, startTime: '', endTime: '', reason: '' });
             }
         } catch (error) {
             console.error(error);
@@ -427,7 +443,7 @@ export default function Admin() {
         const endBlanksCount = totalSlots % 7 === 0 ? 0 : 7 - (totalSlots % 7);
         const endBlanks = Array.from({ length: endBlanksCount }, (_, i) => i);
 
-        const currentMonthName = currentDate.toLocaleString('sq-AL', { month: 'long', year: 'numeric' });
+        const currentMonthName = `${ALBANIAN_MONTHS[month]} ${year}`;
 
         return { year, month, days, blanks, endBlanks, currentMonthName, startOffset };
     }, [currentDate]);
@@ -480,7 +496,7 @@ export default function Admin() {
         { id: 'settings', icon: Settings, label: 'Setimet' },
     ];
 
-    const currentDoctor = DOCTORS.find(d => d.id === selectedDoc);
+    const currentDoctor = doctors.find(d => d.id === selectedDoc);
 
     // Unique Patients Logic
     const uniquePatients = useMemo(() => {
@@ -574,7 +590,7 @@ export default function Admin() {
                     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                         <div>
                             <h1 className="text-2xl md:text-3xl font-medium text-white mb-1 tracking-tight">Paneli i Administrimit</h1>
-                            <p className="text-white/60 text-sm font-light capitalize">{new Date().toLocaleDateString('sq-AL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p className="text-white/60 text-sm font-light capitalize">{formatAlbanianDate(new Date())}</p>
                         </div>
 
                         <div className="flex items-center gap-6">
@@ -678,7 +694,7 @@ export default function Admin() {
                             >
                                 {/* Doctor Selector */}
                                 <div className="flex items-center gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-                                    {DOCTORS.map(doc => (
+                                    {doctors.map(doc => (
                                         <button
                                             key={doc.id}
                                             onClick={() => setSelectedDoc(doc.id)}
@@ -785,7 +801,7 @@ export default function Admin() {
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2" />
                                             <h3 className="text-teal-300 text-xs font-semibold mb-1 uppercase tracking-wider">Termine të Reja</h3>
                                             <div className="text-4xl font-light mb-5 tracking-tight">{APPOINTMENTS.length}</div>
-                                            <button 
+                                            <button
                                                 onClick={() => setShowBookingModal(true)}
                                                 className="w-full py-2.5 bg-white text-[#1e3a8a] border border-white/10 rounded-lg font-medium text-xs transition-colors hover:bg-teal-50 flex items-center justify-center gap-2 shadow-sm"
                                             >
@@ -817,7 +833,7 @@ export default function Admin() {
                                 <div className="space-y-6">
                                     {/* Monthly Grid */}
                                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-                                        <div className="flex items-center justify-between mb-8">
+                                        <div className="flex items-center justify-between mb-4">
                                             <h2 className="text-xl font-medium text-white capitalize">{calendarData.currentMonthName}</h2>
                                             <div className="flex items-center gap-1.5">
                                                 <button onClick={prevMonth} className="p-1.5 border border-white/10 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors"><ChevronLeft size={16} /></button>
@@ -829,12 +845,12 @@ export default function Admin() {
                                         {/* Real JavaScript Calendar Grid */}
                                         <div className="grid grid-cols-7 gap-px bg-white/10 border border-white/10 overflow-hidden rounded-xl">
                                             {['Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht', 'Die'].map(day => (
-                                                <div key={day} className="bg-[#1e3b8a]/80 py-3 text-center text-xs font-semibold text-white/60 uppercase tracking-wider">{day}</div>
+                                                <div key={day} className="bg-[#1e3b8a]/80 py-2.5 text-center text-xs font-semibold text-white/60 uppercase tracking-wider">{day}</div>
                                             ))}
 
                                             {/* Blank slots before 1st of month */}
                                             {calendarData.blanks.map((_, i) => (
-                                                <div key={`blank-${i}`} className="bg-white/[0.02] min-h-[100px] p-2" />
+                                                <div key={`blank-${i}`} className="bg-white/[0.01] aspect-square border-t border-l border-white/5" />
                                             ))}
 
                                             {/* Actual Days */}
@@ -859,29 +875,28 @@ export default function Admin() {
                                                         onClick={() => {
                                                             if (!isSunday) setSelectedCalendarDate(new Date(calendarData.year, calendarData.month, day))
                                                         }}
-                                                        className={`min-h-[100px] p-2 border-t border-l border-white/5 relative transition-colors
-                                                            ${isSunday ? 'bg-black/10 opacity-40 cursor-not-allowed' : 'bg-white/5 hover:bg-white/10 cursor-pointer group'}
-                                                            ${isSelected && !isSunday ? 'bg-white/[0.15] border-white/30 z-10' : ''}
+                                                        className={`aspect-square p-1 border-t border-l border-white/5 relative transition-all duration-300
+                                                            ${isSunday ? 'bg-black/10 opacity-30 cursor-not-allowed' : 'bg-white/[0.02] hover:bg-white/[0.08] cursor-pointer group'}
+                                                            ${isSelected && !isSunday ? 'bg-white/[0.12] z-10' : ''}
                                                         `}
                                                     >
-                                                        <span className={`text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full 
-                                                            ${isToday ? 'bg-teal-400 text-[#1e3a8a] shadow-lg shadow-teal-400/20' : 'text-white/80'}
-                                                            ${isSelected && !isToday ? 'bg-white text-[#1e3a8a]' : ''}
-                                                        `}>
-                                                            {day}
-                                                        </span>
+                                                        <div className="h-full flex flex-col items-center justify-center gap-2">
+                                                            <span className={`text-sm font-medium w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300
+                                                                ${isToday ? 'bg-teal-400 text-[#1e3a8a] shadow-[0_0_15px_rgba(45,212,191,0.3)]' : 'text-white/80'}
+                                                                ${isSelected && !isToday ? 'bg-white text-[#1e3a8a]' : ''}
+                                                                ${!isSunday && !isToday && !isSelected ? 'group-hover:bg-white/10 group-hover:text-white' : ''}
+                                                            `}>
+                                                                {day}
+                                                            </span>
 
-                                                        <div className="mt-2 space-y-1">
-                                                            {!isSunday && dayApts.length > 0 && (
-                                                                <div className="w-full bg-teal-400/20 border border-teal-400/30 rounded px-1.5 py-0.5 text-[9px] text-teal-300 truncate">
-                                                                    {`${dayApts.length} Termine`}
-                                                                </div>
-                                                            )}
-                                                            {!isSunday && dayBlocks.length > 0 && (
-                                                                <div className="w-full bg-red-400/20 border border-red-400/30 rounded px-1.5 py-0.5 text-[9px] text-red-300 truncate">
-                                                                    {`${dayBlocks.length} Pauzë`}
-                                                                </div>
-                                                            )}
+                                                            <div className="flex gap-1 justify-center items-center h-1.5">
+                                                                {!isSunday && dayApts.length > 0 && (
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.6)]" />
+                                                                )}
+                                                                {!isSunday && dayBlocks.length > 0 && (
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.6)]" />
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )
@@ -889,7 +904,7 @@ export default function Admin() {
 
                                             {/* Blank slots at the end to complete the grid */}
                                             {calendarData.endBlanks.map((_, i) => (
-                                                <div key={`end-blank-${i}`} className="bg-white/[0.02] min-h-[100px] p-2 border-t border-l border-white/5" />
+                                                <div key={`end-blank-${i}`} className="bg-white/[0.01] aspect-square border-t border-l border-white/5" />
                                             ))}
                                         </div>
                                     </div>
@@ -903,7 +918,7 @@ export default function Admin() {
                                             <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
                                                 <CalendarDays size={20} className="text-teal-400" />
                                                 <h3 className="text-lg font-medium text-white">
-                                                    Agjenda: {selectedCalendarDate.toLocaleDateString('sq-AL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                                                    Agjenda: {formatAlbanianDate(selectedCalendarDate)}
                                                 </h3>
                                             </div>
 
@@ -991,7 +1006,7 @@ export default function Admin() {
 
                                             {/* Doctor Selection (Pills) */}
                                             <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
-                                                {DOCTORS.map(doc => (
+                                                {doctors.map(doc => (
                                                     <button
                                                         key={doc.id}
                                                         onClick={() => setPauzaForm({ ...pauzaForm, doctor_id: doc.id })}
@@ -1390,8 +1405,8 @@ export default function Admin() {
                                 <div>
                                     <div className="text-[10px] uppercase font-semibold tracking-wider text-white/50 mb-2">Doktori</div>
                                     <div className="flex items-center gap-3">
-                                        <img src={DOCTORS.find(d => d.id === selectedApt.doctorId)?.avatar} alt="" width="24" height="24" className="w-6 h-6 rounded bg-white/10" />
-                                        <span className="text-sm text-white/90 font-medium">{DOCTORS.find(d => d.id === selectedApt.doctorId)?.name}</span>
+                                        <img src={doctors.find(d => d.id === selectedApt.doctorId)?.avatar} alt="" width="24" height="24" className="w-6 h-6 rounded bg-white/10" />
+                                        <span className="text-sm text-white/90 font-medium">{doctors.find(d => d.id === selectedApt.doctorId)?.name}</span>
                                     </div>
                                 </div>
 
@@ -1512,7 +1527,7 @@ export default function Admin() {
                                         {bookingStep === 1 && (
                                             <Motion.div key="b1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                                                 <div className="flex gap-4 mb-4 overflow-x-auto pb-2 custom-scrollbar">
-                                                    {DOCTORS.map(doc => (
+                                                    {doctors.map(doc => (
                                                         <button
                                                             key={doc.id}
                                                             onClick={() => setBookingData({ ...bookingData, doctorId: doc.id, time: '' })}
@@ -1558,8 +1573,8 @@ export default function Admin() {
                                                                         disabled={isOccupied || !bookingData.date}
                                                                         onClick={() => setBookingData({ ...bookingData, time: t })}
                                                                         className={`py-2 rounded-lg text-xs font-medium transition-all
-                                                                            ${isOccupied ? 'bg-white/5 text-white/10 cursor-not-allowed line-through' : 
-                                                                              bookingData.time === t ? 'bg-white text-[#1e3a8a] shadow-lg scale-105' : 'bg-white/5 text-white/60 hover:bg-white/20'}`}
+                                                                            ${isOccupied ? 'bg-white/5 text-white/10 cursor-not-allowed line-through' :
+                                                                                bookingData.time === t ? 'bg-white text-[#1e3a8a] shadow-lg scale-105' : 'bg-white/5 text-white/60 hover:bg-white/20'}`}
                                                                     >
                                                                         {t}
                                                                     </button>
@@ -1572,9 +1587,9 @@ export default function Admin() {
                                                     <button onClick={() => setBookingStep(0)} className="text-white/40 hover:text-white flex items-center gap-2 text-sm transition-colors">
                                                         <ChevronLeft size={16} /> Mbrapa
                                                     </button>
-                                                    <button 
+                                                    <button
                                                         disabled={!bookingData.date || !bookingData.time}
-                                                        onClick={() => setBookingStep(2)} 
+                                                        onClick={() => setBookingStep(2)}
                                                         className={`px-8 py-3 rounded-xl font-bold text-sm transition-all
                                                             ${(!bookingData.date || !bookingData.time) ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white text-[#1e3a8a] hover:bg-teal-50 shadow-lg'}`}
                                                     >
@@ -1610,9 +1625,9 @@ export default function Admin() {
                                                     <button onClick={() => setBookingStep(1)} className="text-white/40 hover:text-white flex items-center gap-2 text-sm transition-colors">
                                                         <ChevronLeft size={16} /> Mbrapa
                                                     </button>
-                                                    <button 
+                                                    <button
                                                         disabled={!bookingData.firstName || !bookingData.lastName || !bookingData.phone}
-                                                        onClick={handleManualBooking} 
+                                                        onClick={handleManualBooking}
                                                         className={`px-8 py-3 rounded-xl font-bold text-sm transition-all
                                                             ${(!bookingData.firstName || !bookingData.lastName || !bookingData.phone) ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-teal-400 text-[#00122e] hover:bg-teal-300 shadow-lg'}`}
                                                     >

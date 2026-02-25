@@ -7,10 +7,7 @@ import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
 
 /* ───────────────────────── DATA ───────────────────────── */
 
-const DOCTORS = [
-    { id: 'dr-aldo', name: 'Dr. Aldo', role: 'Kryedoktor & Kirurg', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aldo' },
-    { id: 'dr-elena', name: 'Dr. Elena', role: 'Ortodonte', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
-];
+// DOCTORS moved to server side
 
 const STEP_LABELS = ["Shërbimi", "Data & Ora", "Të Dhënat", "Konfirmimi"];
 
@@ -88,9 +85,10 @@ export default function Booking() {
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
     const [services, setServices] = useState([]);
+    const [doctors, setDoctors] = useState([]);
     const [formData, setFormData] = useState({
         service: null,
-        doctorId: DOCTORS[0].id,
+        doctorId: '',
         date: null,
         time: '',
         firstName: '',
@@ -171,6 +169,19 @@ export default function Booking() {
             }
         };
 
+        const fetchDoctors = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/doctors');
+                if (res.ok) {
+                    const data = await res.json();
+                    setDoctors(data);
+                    if (data.length > 0) {
+                        setFormData(prev => ({ ...prev, doctorId: data[0].id }));
+                    }
+                }
+            } catch (err) { console.error("Failed to fetch doctors", err); }
+        };
+
         const fetchServices = async () => {
             try {
                 const res = await fetch('http://localhost:5000/api/services');
@@ -180,6 +191,7 @@ export default function Booking() {
 
         fetchSchedule();
         fetchServices();
+        fetchDoctors();
     }, []);
 
     // Automatic scroll to top on step change
@@ -405,7 +417,7 @@ export default function Booking() {
 
                             {/* DOCTOR SELECTOR */}
                             <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-                                {DOCTORS.map(doc => (
+                                {doctors.map(doc => (
                                     <button
                                         key={doc.id}
                                         onClick={() => setFormData({ ...formData, doctorId: doc.id, time: '' })}
