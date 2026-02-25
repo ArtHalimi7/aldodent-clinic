@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
 
 /* ───────────────────────── DATA ───────────────────────── */
 
-const SERVICES = [
-    { id: 'kirurgji', title: "Kirurgji", duration: "30–60 min", price: "Sipas rastit" },
-    { id: 'implantologji', title: "Implantologji", duration: "45–90 min", price: "Nga €500" },
-    { id: 'estetike', title: "Estetikë: Kurora Zirkoni – Kurora Emax", duration: "2 seanca", price: "Nga €200/copë" },
-    { id: 'parodontologji', title: "Parodontologji", duration: "30–60 min", price: "Nga €40" },
-    { id: 'ortodonci', title: "Ortodonci", duration: "30 min konsultë", price: "Falas konsulta" },
-    { id: 'endodonci', title: "Endodonci", duration: "60–90 min", price: "Nga €80" },
-    { id: 'mbushje', title: "Mbushje Estetike", duration: "30 min", price: "Nga €40" },
+/* ───────────────────────── DATA ───────────────────────── */
+
+const DOCTORS = [
+    { id: 'dr-aldo', name: 'Dr. Aldo', role: 'Kryedoktor & Kirurg', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aldo' },
+    { id: 'dr-elena', name: 'Dr. Elena', role: 'Ortodonte', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
 ];
 
 const STEP_LABELS = ["Shërbimi", "Data & Ora", "Të Dhënat", "Konfirmimi"];
@@ -90,8 +87,10 @@ function MiniCalendar({ selected, onSelect }) {
 export default function Booking() {
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
+    const [services, setServices] = useState([]);
     const [formData, setFormData] = useState({
         service: null,
+        doctorId: DOCTORS[0].id,
         date: null,
         time: '',
         firstName: '',
@@ -101,18 +100,162 @@ export default function Booking() {
         notes: ''
     });
 
+    const getDurationSlots = (timeStr, serviceTitle) => {
+        let slotsNum = 1;
+        if (serviceTitle.includes("30–60") || serviceTitle.includes("30-60")) slotsNum = 2;
+        else if (serviceTitle.includes("45–90") || serviceTitle.includes("60–90") || serviceTitle.includes("60-90")) slotsNum = 3;
+        else if (serviceTitle.includes("2 seanca")) slotsNum = 2;
+        else if (serviceTitle.includes("60 min") || serviceTitle.includes("60")) slotsNum = 2;
+
+        const [h, m] = timeStr.split(':').map(Number);
+        let currentTotalMinutes = h * 60 + m;
+
+        const occupied = [];
+        for (let i = 0; i < slotsNum; i++) {
+            let hr = Math.floor(currentTotalMinutes / 60);
+            let min = currentTotalMinutes % 60;
+            occupied.push(`${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}`);
+            currentTotalMinutes += 30;
+        }
+        return occupied;
+    };
+
+    // Fetch and store booked slots to prevent double booking
+    const [bookedSlots, setBookedSlots] = useState([]);
+
+    useEffect(() => {
+        const fetchSchedule = async () => {
+            try {
+                const [aptRes, blockRes] = await Promise.all([
+                    fetch('http://localhost:5000/api/appointments'),
+                    fetch('http://localhost:5000/api/blocked-times')
+                ]);
+                let slots = [];
+                if (aptRes.ok) {
+                    const apts = await aptRes.json();
+                    apts.forEach(a => {
+                        const dateStr = String(a.date).split('T')[0];
+                        const docId = a.doctor_id || 'dr-aldo';
+                        const occupiedTimes = getDurationSlots(a.time, a.service);
+                        occupiedTimes.forEach(t => {
+                            slots.push(`${dateStr}_${docId}_${t}`);
+                        });
+                    });
+                }
+                if (blockRes.ok) {
+                    const blocks = await blockRes.json();
+                    blocks.forEach(b => {
+                        const dateStr = String(b.date).split('T')[0];
+                        const docId = b.doctor_id || 'dr-aldo';
+
+                        const timeParts = b.time.split(' - ');
+                        if (timeParts.length === 2) {
+                            let curr = timeParts[0].trim();
+                            const end = timeParts[1].trim();
+                            while (curr < end) {
+                                slots.push(`${dateStr}_${docId}_${curr}`);
+                                let [h, m] = curr.split(':').map(Number);
+                                let mins = h * 60 + m + 30;
+                                let hr = Math.floor(mins / 60);
+                                let min = mins % 60;
+                                curr = `${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+                            }
+                        } else {
+                            slots.push(`${dateStr}_${docId}_${b.time.split(' - ')[0].trim()}`);
+                        }
+                    });
+                }
+                setBookedSlots(slots);
+            } catch (err) {
+                console.error("Failed to fetch schedule", err);
+            }
+        };
+
+        const fetchServices = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/services');
+                if (res.ok) setServices(await res.json());
+            } catch (err) { console.error("Failed to fetch services", err); }
+        };
+
+        fetchSchedule();
+        fetchServices();
+    }, []);
+
+    // Automatic scroll to top on step change
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [step]);
+
     const goNext = () => { setDirection(1); setStep(s => Math.min(s + 1, 3)); };
     const goBack = () => { setDirection(-1); setStep(s => Math.max(s - 1, 0)); };
-    const handleSubmit = () => { setDirection(1); setStep(4); };
+    const handleSubmit = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/api/appointments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    patient_name: `${formData.firstName} ${formData.lastName}`,
+                    patient_phone: formData.phone,
+                    patient_email: formData.email,
+                    service: services.find(s => s.id === formData.service || s.slug === formData.service)?.title || formData.service,
+                    date: formData.date ? `${formData.date.getFullYear()}-${String(formData.date.getMonth() + 1).padStart(2, '0')}-${String(formData.date.getDate()).padStart(2, '0')}` : '',
+                    time: formData.time,
+                    doctor_id: formData.doctorId,
+                    notes: formData.notes
+                })
+            });
+            if (res.ok) {
+                setDirection(1);
+                setStep(4);
+            } else {
+                alert("Pati një gabim gjatë rezervimit. Ju lutem provoni përsëri.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Sistemi nuk u lidh me serverin.");
+        }
+    };
 
     const canProceed = () => {
         if (step === 0) return !!formData.service;
-        if (step === 1) return !!formData.date && !!formData.time;
-        if (step === 2) return !!formData.firstName && !!formData.lastName && !!formData.phone;
+        if (step === 1) {
+            if (!formData.date || !formData.time || !formData.doctorId) return false;
+
+            const dateStr = `${formData.date.getFullYear()}-${String(formData.date.getMonth() + 1).padStart(2, '0')}-${String(formData.date.getDate()).padStart(2, '0')}`;
+
+            const isBooked = (() => {
+                const selectedSrv = services.find(s => s.slug === formData.service || s.id === formData.service);
+                const neededSlots = getDurationSlots(formData.time, selectedSrv?.title || '').length;
+                let [h, m] = formData.time.split(':').map(Number);
+                let currentTotalMinutes = h * 60 + m;
+                for (let i = 0; i < neededSlots; i++) {
+                    let hr = Math.floor(currentTotalMinutes / 60);
+                    let min = currentTotalMinutes % 60;
+                    let checkTime = `${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+                    if (bookedSlots.includes(`${dateStr}_${formData.doctorId}_${checkTime}`)) return true;
+                    if (currentTotalMinutes >= 17 * 60 + 30) return true; // Past closing time
+                    currentTotalMinutes += 30;
+                }
+                return false;
+            })();
+
+            const now = new Date();
+            const isToday = formData.date.toDateString() === now.toDateString();
+            const isPast = isToday && parseInt(formData.time.replace(':', '')) <= (now.getHours() * 100 + now.getMinutes());
+
+            return !isBooked && !isPast;
+        }
+        if (step === 2) {
+            const isNameValid = formData.firstName.trim().length >= 2 && formData.lastName.trim().length >= 2;
+            const isPhoneValid = /^\+?[\d\s-]{8,}$/.test(formData.phone.trim());
+            const isEmailValid = !formData.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
+            return isNameValid && isPhoneValid && isEmailValid;
+        }
         return true;
     };
 
-    const selectedService = SERVICES.find(s => s.id === formData.service);
+    const selectedService = services.find(s => s.slug === formData.service || s.id === formData.service);
 
     const formatDate = (d) => {
         if (!d) return '';
@@ -229,23 +372,23 @@ export default function Booking() {
                             <p className="text-white/50 mb-8 text-sm">Klikoni mbi shërbimin që dëshironi të rezervoni.</p>
 
                             <div className="space-y-2">
-                                {SERVICES.map((srv) => (
+                                {services.map((srv) => (
                                     <button
                                         key={srv.id}
-                                        onClick={() => setFormData({ ...formData, service: srv.id })}
+                                        onClick={() => setFormData({ ...formData, service: srv.slug })}
                                         className={`w-full text-left px-6 py-5 rounded-2xl border transition-all duration-200 flex items-center justify-between group
-                                            ${formData.service === srv.id
+                                            ${formData.service === srv.slug
                                                 ? 'bg-white text-[#1e3a8a] border-white'
                                                 : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
                                             }`}
                                     >
                                         <div>
                                             <h3 className="text-lg font-medium">{srv.title}</h3>
-                                            <span className={`text-sm ${formData.service === srv.id ? 'text-[#1e3a8a]/60' : 'text-white/40'}`}>
+                                            <span className={`text-sm ${formData.service === srv.slug ? 'text-[#1e3a8a]/70' : 'text-white/40'}`}>
                                                 {srv.duration}
                                             </span>
                                         </div>
-                                        <span className={`text-sm font-medium ${formData.service === srv.id ? 'text-[#1e3a8a]' : 'text-white/60'}`}>
+                                        <span className={`text-sm font-medium ${formData.service === srv.slug ? 'text-[#1e3a8a]' : 'text-white/60'}`}>
                                             {srv.price}
                                         </span>
                                     </button>
@@ -257,46 +400,114 @@ export default function Booking() {
                     {/* ── STEP 2: DATE & TIME ── */}
                     {step === 1 && (
                         <Motion.div key="s1" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
-                            <h2 className="text-2xl font-light mb-2">Zgjidhni datën dhe orën</h2>
-                            <p className="text-white/50 mb-8 text-sm">E diela nuk është e disponueshme.</p>
+                            <h2 className="text-2xl font-light mb-2">Zgjidhni doktorin, datën dhe orën</h2>
+                            <p className="text-white/50 mb-8 text-sm">Zgjidhni me kë dëshironi të bëni vizitën.</p>
+
+                            {/* DOCTOR SELECTOR */}
+                            <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+                                {DOCTORS.map(doc => (
+                                    <button
+                                        key={doc.id}
+                                        onClick={() => setFormData({ ...formData, doctorId: doc.id, time: '' })}
+                                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all min-w-[200px]
+                                            ${formData.doctorId === doc.id ? 'bg-white/10 border-teal-400/50' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                                    >
+                                        <img src={doc.avatar} alt={doc.name} className="w-10 h-10 rounded-full bg-black/20" />
+                                        <div className="text-left">
+                                            <div className="font-medium text-sm text-white">{doc.name}</div>
+                                            <div className="text-xs text-white/50">{doc.role}</div>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Calendar */}
                                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                                     <MiniCalendar
                                         selected={formData.date}
-                                        onSelect={(d) => setFormData({ ...formData, date: d })}
+                                        onSelect={(d) => setFormData({ ...formData, date: d, time: '' })}
                                     />
                                 </div>
 
                                 {/* Time Slots */}
                                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                    <p className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-4">Paradite</p>
-                                    <div className="grid grid-cols-3 gap-2 mb-6">
-                                        {TIME_SLOTS_AM.map(t => (
-                                            <button
-                                                key={t}
-                                                onClick={() => setFormData({ ...formData, time: t })}
-                                                className={`py-2.5 rounded-xl text-sm font-medium transition-all
-                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
-                                            >
-                                                {t}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-4">Pasdite</p>
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {TIME_SLOTS_PM.map(t => (
-                                            <button
-                                                key={t}
-                                                onClick={() => setFormData({ ...formData, time: t })}
-                                                className={`py-2.5 rounded-xl text-sm font-medium transition-all
-                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
-                                            >
-                                                {t}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    {(() => {
+                                        const dateStr = formData.date ? `${formData.date.getFullYear()}-${String(formData.date.getMonth() + 1).padStart(2, '0')}-${String(formData.date.getDate()).padStart(2, '0')}` : '';
+                                        const now = new Date();
+                                        const isToday = formData.date && formData.date.toDateString() === now.toDateString();
+
+                                        const checkSlotAvailability = (t) => {
+                                            if (!formData.date) return false;
+                                            const selectedSrv = services.find(s => s.slug === formData.service || s.id === formData.service);
+                                            const neededSlots = getDurationSlots(t, selectedSrv?.title || '').length;
+
+                                            let [h, m] = t.split(':').map(Number);
+                                            let currentTotalMinutes = h * 60 + m;
+
+                                            for (let i = 0; i < neededSlots; i++) {
+                                                let hr = Math.floor(currentTotalMinutes / 60);
+                                                let min = currentTotalMinutes % 60;
+                                                let checkTime = `${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+
+                                                if (bookedSlots.includes(`${dateStr}_${formData.doctorId}_${checkTime}`)) {
+                                                    return true; // Overlaps with existing booking
+                                                }
+                                                if (currentTotalMinutes >= 17 * 60 + 30) {
+                                                    return true; // Exceeds closing time
+                                                }
+                                                currentTotalMinutes += 30;
+                                            }
+                                            return false;
+                                        };
+
+                                        return (
+                                            <>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-4">Paradite</p>
+                                                <div className="grid grid-cols-3 gap-2 mb-6">
+                                                    {TIME_SLOTS_AM.map(t => {
+                                                        const isSlotBooked = checkSlotAvailability(t);
+                                                        const isPast = isToday && parseInt(t.replace(':', '')) <= (now.getHours() * 100 + now.getMinutes());
+                                                        const isDisabled = isSlotBooked || isPast;
+
+                                                        return (
+                                                            <button
+                                                                key={t}
+                                                                disabled={isDisabled}
+                                                                onClick={() => setFormData({ ...formData, time: t })}
+                                                                className={`py-2.5 rounded-xl text-sm font-medium transition-all
+                                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}
+                                                                    ${isDisabled ? 'opacity-30 cursor-not-allowed hover:bg-white/5 line-through decoration-white/20' : ''}`}
+                                                            >
+                                                                {t}
+                                                            </button>
+                                                        )
+                                                    })}
+                                                </div>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-4">Pasdite</p>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {TIME_SLOTS_PM.map(t => {
+                                                        const isSlotBooked = checkSlotAvailability(t);
+                                                        const isPast = isToday && parseInt(t.replace(':', '')) <= (now.getHours() * 100 + now.getMinutes());
+                                                        const isDisabled = isSlotBooked || isPast;
+
+                                                        return (
+                                                            <button
+                                                                key={t}
+                                                                disabled={isDisabled}
+                                                                onClick={() => setFormData({ ...formData, time: t })}
+                                                                className={`py-2.5 rounded-xl text-sm font-medium transition-all
+                                                                    ${formData.time === t ? 'bg-white text-[#1e3a8a]' : 'bg-white/5 text-white/70 hover:bg-white/10'}
+                                                                    ${isDisabled ? 'opacity-30 cursor-not-allowed hover:bg-white/5 line-through decoration-white/20' : ''}`}
+                                                            >
+                                                                {t}
+                                                            </button>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             </div>
 
