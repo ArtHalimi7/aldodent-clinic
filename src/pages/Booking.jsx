@@ -81,6 +81,8 @@ function MiniCalendar({ selected, onSelect }) {
 
 /* ───────────────────── MAIN COMPONENT ─────────────────── */
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function Booking() {
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
@@ -125,8 +127,8 @@ export default function Booking() {
         const fetchSchedule = async () => {
             try {
                 const [aptRes, blockRes] = await Promise.all([
-                    fetch('http://localhost:5000/api/appointments'),
-                    fetch('http://localhost:5000/api/blocked-times')
+                    fetch(`${API_URL}/api/appointments`),
+                    fetch(`${API_URL}/api/blocked-times`)
                 ]);
                 let slots = [];
                 if (aptRes.ok) {
@@ -171,7 +173,7 @@ export default function Booking() {
 
         const fetchDoctors = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/doctors');
+                const res = await fetch(`${API_URL}/api/doctors`);
                 if (res.ok) {
                     const data = await res.json();
                     setDoctors(data);
@@ -184,7 +186,7 @@ export default function Booking() {
 
         const fetchServices = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/services');
+                const res = await fetch(`${API_URL}/api/services`);
                 if (res.ok) setServices(await res.json());
             } catch (err) { console.error("Failed to fetch services", err); }
         };
@@ -203,7 +205,7 @@ export default function Booking() {
     const goBack = () => { setDirection(-1); setStep(s => Math.max(s - 1, 0)); };
     const handleSubmit = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/appointments', {
+            const res = await fetch(`${API_URL}/api/appointments`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
