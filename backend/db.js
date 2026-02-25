@@ -9,9 +9,13 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 // eslint-disable-next-line no-undef
 const connectionString = process.env.DATABASE_URL;
-const sql = postgres(connectionString);
+const sql = postgres(connectionString, {
+    ssl: 'require',
+    connect_timeout: 10,
+});
 
 export async function initDb() {
+    console.log("Starting database initialization...");
     try {
         await sql`
             CREATE TABLE IF NOT EXISTS appointments (
@@ -62,9 +66,14 @@ export async function initDb() {
             );
         `;
 
+        console.log("Database tables created or already exist.");
+
         // Seeding initial services if table is empty
         const servicesCount = await sql`SELECT count(*) FROM services`;
+        console.log(`Current services count: ${servicesCount[0].count}`);
+
         if (parseInt(servicesCount[0].count) === 0) {
+            console.log("Seeding initial services...");
             const initialServices = [
                 { slug: 'kirurgji', title: "Kirurgji", duration: "30–60 min", price: "Sipas rastit" },
                 { slug: 'implantologji', title: "Implantologji", duration: "45–90 min", price: "Nga €500" },
@@ -86,7 +95,10 @@ export async function initDb() {
 
         // Seeding initial doctors if table is empty
         const doctorsCount = await sql`SELECT count(*) FROM doctors`;
+        console.log(`Current doctors count: ${doctorsCount[0].count}`);
+
         if (parseInt(doctorsCount[0].count) === 0) {
+            console.log("Seeding initial doctors...");
             const initialDoctors = [
                 { id: 'dr-aldo', name: 'Dr. Aldo', role: 'Kryedoktor & Kirurg', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aldo' },
                 { id: 'dr-elena', name: 'Dr. Elena', role: 'Ortodonte', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
@@ -101,7 +113,7 @@ export async function initDb() {
             console.log("Initial doctors seeded.");
         }
 
-        console.log("Database tables initialized successfully (created if not existed).");
+        console.log("Database initialized successfully.");
     } catch (err) {
         console.error("Error initializing database tables:", err);
     }
