@@ -183,6 +183,10 @@ export default function About() {
                                         <img
                                             src={member.img}
                                             alt={member.name}
+                                            width="56"
+                                            height="56"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-14 h-14 rounded-full object-cover border-2 border-white/10"
                                         />
                                         <div>
@@ -206,6 +210,10 @@ export default function About() {
                                                 <img
                                                     src={member.img}
                                                     alt={member.name}
+                                                    width="200"
+                                                    height="266"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full aspect-[3/4] object-cover rounded-2xl hidden md:block"
                                                 />
                                                 <div>

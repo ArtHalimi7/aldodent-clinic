@@ -2,7 +2,7 @@ import React from 'react'
 import { motion as Motion } from 'framer-motion'
 import { MapPin, ArrowUpRight, Gem, Box } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import toothImg from '../assets/img/tooth2.png'
+import toothImg from '../assets/img/tooth.webp'
 
 const CanvasSpinner = () => (
   <div className="w-full h-full flex items-center justify-center">
@@ -93,6 +93,9 @@ const Hero = () => {
             <img
               src={toothImg}
               alt="Aldo Dent 3D Tooth"
+              width="800"
+              height="800"
+              decoding="async"
               className="w-full h-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
               // Hint to the browser that this is the most important image to load
               fetchPriority="high"

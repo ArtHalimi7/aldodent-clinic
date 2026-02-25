@@ -84,6 +84,10 @@ export const HorizontalParallax = () => {
                             <img
                                 src={service.image}
                                 alt={service.title}
+                                width="400"
+                                height="500"
+                                loading="lazy"
+                                decoding="async"
                                 className="absolute inset-0 w-full h-full object-cover"
                             />
                         </div>
