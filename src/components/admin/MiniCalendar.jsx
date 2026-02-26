@@ -9,7 +9,7 @@ export default function MiniCalendar({ selected, onSelect }) {
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     const firstDay = new Date(viewYear, viewMonth, 1).getDay();
     const monthNames = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
-    const dayNames = ["Di", "Hë", "Ma", "Më", "En", "Pr", "Sh"];
+    const dayNames = ["Hë", "Ma", "Më", "En", "Pr", "Sh", "Di"];
 
     const prevMonth = () => {
         if (viewMonth === 0) { setViewMonth(11); setViewYear(viewYear - 1); }
@@ -23,7 +23,7 @@ export default function MiniCalendar({ selected, onSelect }) {
     const isDisabled = (day) => {
         const d = new Date(viewYear, viewMonth, day);
         const now = new Date(); now.setHours(0, 0, 0, 0);
-        return d < now || d.getDay() === 0; // no past dates, no Sundays
+        return d < now; // no past dates
     };
 
     const isSelected = (day) => {

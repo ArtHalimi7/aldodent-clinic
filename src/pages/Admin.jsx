@@ -2,22 +2,24 @@ import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import {
-    Calendar, Users, Clock, Settings, LogOut,
-    Plus, ChevronRight, ChevronLeft, CalendarOff,
-    Search, Bell, CalendarDays, X, Stethoscope
+    Calendar as CalendarIcon, Users, Clock, LogOut,
+    Plus, Search, Bell, CalendarDays, Stethoscope, Menu,
+    LayoutDashboard, UserCircle, ChevronDown, ChevronRight, ChevronLeft, Coffee
 } from 'lucide-react';
 import { motion as Motion } from 'framer-motion';
 
 // Admin Sub-Components
+import OverviewTab from '../components/admin/OverviewTab';
 import DailyScheduleTab from '../components/admin/DailyScheduleTab';
 import MonthlyCalendarTab from '../components/admin/MonthlyCalendarTab';
 import PatientsTab from '../components/admin/PatientsTab';
 import TimeOffTab from '../components/admin/TimeOffTab';
 import ServicesTab from '../components/admin/ServicesTab';
-import SettingsTab from '../components/admin/SettingsTab';
 import AppointmentDetailsModal from '../components/admin/AppointmentDetailsModal';
 import ManualBookingModal from '../components/admin/ManualBookingModal';
 import PauseSuccessModal from '../components/admin/PauseSuccessModal';
+
+import logoUrl from '../assets/img/logowhite.png';
 
 const ALBANIAN_MONTHS = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
 const ALBANIAN_DAYS = ["E Diel", "E Hënë", "E Martë", "E Mërkurë", "E Enjte", "E Premte", "E Shtunë"];
@@ -56,8 +58,10 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 export default function Admin() {
     const [doctors, setDoctors] = useState([]);
     const [selectedDoc, setSelectedDoc] = useState('');
-    const [activeTab, setActiveTab] = useState('calendar');
+    const [activeTab, setActiveTab] = useState('overview'); // Default to overview
     const [selectedApt, setSelectedApt] = useState(null);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [globalSearch, setGlobalSearch] = useState('');
 
     // BACKEND STATE
     const [rawAppointments, setRawAppointments] = useState([]);
@@ -107,9 +111,8 @@ export default function Admin() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
     useEffect(() => {
-        if (rawAppointments.length === 0) return; // skip initial empty state
+        if (rawAppointments.length === 0) return;
 
-        // On very first load of the dashboard ever, just sync without alerting
         if (prevAptCountRef.current === -1) {
             localStorage.setItem('aldodent_last_apt_count', rawAppointments.length);
             prevAptCountRef.current = rawAppointments.length;
@@ -120,42 +123,34 @@ export default function Admin() {
             const newCount = rawAppointments.length - prevAptCountRef.current;
             setUnreadCount(prev => prev + newCount);
 
-            // Add the newest appointments to recent notifications
             const newAppointments = rawAppointments.slice(-newCount);
             setRecentNotifications(prev => {
                 const updated = [...newAppointments.reverse(), ...prev].slice(0, 10);
                 localStorage.setItem('aldodent_recent_notifs', JSON.stringify(updated));
                 return updated;
-            }); // Keep last 10
+            });
 
-            // Auto open the dropdown when a new booking arrives
             setShowNotifications(true);
 
-            // Try to play notification sound if enabled
             if (notificationsEnabled) {
                 try {
                     const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3');
-                    audio.volume = 0.4; // Softer, less loud
+                    audio.volume = 0.4;
                     audio.play().catch(e => console.log('Audio disabled by browser', e));
-                } catch {
-                    /* ignore error if audio fails */
-                }
+                } catch { }
             }
 
             localStorage.setItem('aldodent_last_apt_count', rawAppointments.length);
             prevAptCountRef.current = rawAppointments.length;
         } else if (rawAppointments.length < prevAptCountRef.current) {
-            // Count went down because an appointment was deleted
             localStorage.setItem('aldodent_last_apt_count', rawAppointments.length);
             prevAptCountRef.current = rawAppointments.length;
         }
     }, [rawAppointments, notificationsEnabled]);
 
-    // Normalize DB data to match the UI component structures
     const APPOINTMENTS = useMemo(() => {
         return rawAppointments.map(a => {
-            const d = new Date(a.date);
-            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const dateStr = typeof a.date === 'string' && a.date.includes('T') ? a.date.split('T')[0] : a.date;
             return {
                 id: a.id,
                 patient: a.patient_name,
@@ -172,8 +167,7 @@ export default function Admin() {
 
     const BLOCKED_TIMES = useMemo(() => {
         return rawBlockedTimes.map(b => {
-            const d = new Date(b.date);
-            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const dateStr = typeof b.date === 'string' && b.date.includes('T') ? b.date.split('T')[0] : b.date;
             return {
                 id: b.id,
                 type: b.type,
@@ -188,28 +182,12 @@ export default function Admin() {
 
     // PAUZA FORM STATE
     const [showPauseSuccess, setShowPauseSuccess] = useState(false);
-    const [pauzaForm, setPauzaForm] = useState({
-        doctor_id: doctors[0]?.id || '',
-        startDate: null,
-        startTime: '',
-        endTime: '',
-        reason: ''
-    });
+    const [pauzaForm, setPauzaForm] = useState({ doctor_id: doctors[0]?.id || '', startDate: null, startTime: '', endTime: '', reason: '' });
 
     // MANUAL BOOKING STATE
     const [showBookingModal, setShowBookingModal] = useState(false);
     const [bookingStep, setBookingStep] = useState(0);
-    const [bookingData, setBookingData] = useState({
-        service: null,
-        doctorId: doctors[0]?.id || '',
-        date: null,
-        time: '',
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        notes: ''
-    });
+    const [bookingData, setBookingData] = useState({ service: null, doctorId: doctors[0]?.id || '', date: null, time: '', firstName: '', lastName: '', phone: '', email: '', notes: '' });
 
     const handleManualBooking = async () => {
         try {
@@ -221,8 +199,7 @@ export default function Admin() {
                     patient_phone: bookingData.phone,
                     patient_email: bookingData.email,
                     service: rawServices.find(s => s.slug === bookingData.service || s.id === bookingData.service)?.title || bookingData.service,
-                    date: bookingData.date ? `${bookingData.date.getFullYear()} - ${String(bookingData.date.getMonth() + 1).padStart(2, '0')
-                        }-${String(bookingData.date.getDate()).padStart(2, '0')} ` : '',
+                    date: bookingData.date ? `${bookingData.date.getFullYear()}-${String(bookingData.date.getMonth() + 1).padStart(2, '0')}-${String(bookingData.date.getDate()).padStart(2, '0')}` : '',
                     time: bookingData.time,
                     doctor_id: bookingData.doctorId,
                     notes: bookingData.notes
@@ -231,17 +208,12 @@ export default function Admin() {
             if (res.ok) {
                 setShowBookingModal(false);
                 setBookingStep(0);
-                setBookingData({
-                    service: null, doctorId: doctors[0]?.id || '', date: null, time: '',
-                    firstName: '', lastName: '', phone: '', email: '', notes: ''
-                });
+                setBookingData({ service: null, doctorId: doctors[0]?.id || '', date: null, time: '', firstName: '', lastName: '', phone: '', email: '', notes: '' });
                 fetchData();
             } else {
                 alert("Gabim gjatë rezervimit.");
             }
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     // SERVICES FORM STATE
@@ -288,21 +260,12 @@ export default function Admin() {
 
     const handleDeleteService = async (id) => {
         if (!window.confirm("Jeni të sigurt?")) return;
-        try {
-            await fetch(`${API_URL}/api/services/${id}`, { method: 'DELETE' });
-            fetchData();
-        } catch (err) { console.error(err); }
+        try { await fetch(`${API_URL}/api/services/${id}`, { method: 'DELETE' }); fetchData(); } catch (err) { console.error(err); }
     };
 
     const handleSavePauza = async () => {
-        if (!pauzaForm.startDate || !pauzaForm.startTime || !pauzaForm.endTime) {
-            return alert("Plotësoni datën dhe orë!");
-        }
-
-        if (pauzaForm.startTime >= pauzaForm.endTime) {
-            return alert("Ora e përfundimit duhet të jetë pas orës së fillimit!");
-        }
-
+        if (!pauzaForm.startDate || !pauzaForm.startTime || !pauzaForm.endTime) return alert("Plotësoni datën dhe orë!");
+        if (pauzaForm.startTime >= pauzaForm.endTime) return alert("Ora e përfundimit duhet të jetë pas orës së fillimit!");
         try {
             const d = pauzaForm.startDate;
             const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -323,21 +286,13 @@ export default function Admin() {
                 fetchData();
                 setPauzaForm({ doctor_id: doctors[0]?.id || '', startDate: null, startTime: '', endTime: '', reason: '' });
             }
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     // APPOINTMENT MODAL ACTIONS
     const handleDeleteApt = async (id) => {
-        if (!window.confirm("Jeni të sigurt që doni ta fshini këtë termin?")) return;
-        try {
-            await fetch(`${API_URL}/api/appointments/${id}`, { method: 'DELETE' });
-            setSelectedApt(null);
-            fetchData();
-        } catch (err) {
-            console.error(err);
-        }
+        if (!window.confirm("Jeni të sigurt?")) return;
+        try { await fetch(`${API_URL}/api/appointments/${id}`, { method: 'DELETE' }); setSelectedApt(null); fetchData(); } catch (err) { console.error(err); }
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
@@ -350,11 +305,8 @@ export default function Admin() {
             });
             setSelectedApt(prev => prev ? { ...prev, status: newStatus } : null);
             fetchData();
-        } catch (err) {
-            console.error(err);
-        }
+        } catch (err) { console.error(err); }
     };
-
 
     // Calendar State
     const todayInit = new Date();
@@ -383,52 +335,20 @@ export default function Admin() {
         return { year, month, days, blanks, endBlanks, currentMonthName, startOffset };
     }, [currentDate]);
 
-    const prevMonth = () => {
-        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-        setSelectedCalendarDate(null);
-    };
+    const prevMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); setSelectedCalendarDate(null); };
+    const nextMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)); setSelectedCalendarDate(null); };
+    const resetToToday = () => { setCurrentDate(new Date()); setSelectedCalendarDate(null); };
 
-    const nextMonth = () => {
-        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-        setSelectedCalendarDate(null);
-    };
-
-    const resetToToday = () => {
-        setCurrentDate(new Date());
-        setSelectedCalendarDate(null);
-    };
-
-    // Calculate schedule for selected calendar date
     const selectedDateSchedule = useMemo(() => {
         if (!selectedCalendarDate) return [];
-
         const year = selectedCalendarDate.getFullYear();
         const month = String(selectedCalendarDate.getMonth() + 1).padStart(2, '0');
         const day = String(selectedCalendarDate.getDate()).padStart(2, '0');
         const dateStr = `${year}-${month}-${day}`;
-
         const dayApts = APPOINTMENTS.filter(a => a.doctorId === selectedDoc && a.date === dateStr).map(a => ({ ...a, itemType: 'appointment' }));
         const dayBlocks = BLOCKED_TIMES.filter(b => b.doctorId === selectedDoc && b.date === dateStr).map(b => ({ ...b, itemType: 'blocked' }));
-
-        return [...dayApts, ...dayBlocks].sort((a, b) => {
-            const timeA = a.time.split(' - ')[0];
-            const timeB = b.time.split(' - ')[0];
-            return timeA.localeCompare(timeB);
-        });
-
+        return [...dayApts, ...dayBlocks].sort((a, b) => a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0]));
     }, [selectedCalendarDate, selectedDoc, APPOINTMENTS, BLOCKED_TIMES]);
-
-    // Dock Items
-    const DOCK_ITEMS = [
-        { id: 'calendar', icon: Clock, label: 'Orari Ditor' },
-        { id: 'month-calendar', icon: CalendarDays, label: 'Kalendari Mujor' },
-        { id: 'patients', icon: Users, label: 'Pacientët' },
-        { id: 'time-off', icon: CalendarOff, label: 'Pushimet & Pauzat' },
-        { id: 'services', icon: Stethoscope, label: 'Shërbimet' },
-        { id: 'settings', icon: Settings, label: 'Setimet' },
-    ];
-
-    const currentDoctor = doctors.find(d => d.id === selectedDoc);
 
     // Unique Patients Logic
     const uniquePatients = useMemo(() => {
@@ -436,19 +356,11 @@ export default function Admin() {
         APPOINTMENTS.forEach(apt => {
             const key = `${apt.patient}-${apt.phone}`;
             if (!patientsMap.has(key)) {
-                patientsMap.set(key, {
-                    id: key,
-                    name: apt.patient,
-                    phone: apt.phone || 'N/A',
-                    appointmentsCount: 1,
-                    lastVisit: apt.date
-                });
+                patientsMap.set(key, { id: key, name: apt.patient, phone: apt.phone || 'N/A', appointmentsCount: 1, lastVisit: apt.date });
             } else {
                 const existing = patientsMap.get(key);
                 existing.appointmentsCount += 1;
-                if (apt.date > existing.lastVisit) {
-                    existing.lastVisit = apt.date;
-                }
+                if (apt.date > existing.lastVisit) existing.lastVisit = apt.date;
             }
         });
         return Array.from(patientsMap.values()).sort((a, b) => b.lastVisit.localeCompare(a.lastVisit));
@@ -465,225 +377,298 @@ export default function Admin() {
     const selectedDailySchedule = useMemo(() => {
         const dayApts = APPOINTMENTS.filter(a => a.doctorId === selectedDoc && a.date === selectedDailyDateStr).map(a => ({ ...a, itemType: 'appointment' }));
         const dayBlocks = BLOCKED_TIMES.filter(b => b.doctorId === selectedDoc && b.date === selectedDailyDateStr).map(b => ({ ...b, itemType: 'blocked' }));
-        return [...dayApts, ...dayBlocks].sort((a, b) => {
-            const timeA = a.time.split(' - ')[0];
-            const timeB = b.time.split(' - ')[0];
-            return timeA.localeCompare(timeB);
-        });
+        return [...dayApts, ...dayBlocks].sort((a, b) => a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0]));
     }, [selectedDailyDateStr, selectedDoc, APPOINTMENTS, BLOCKED_TIMES]);
 
+    const currentDoctor = doctors.find(d => d.id === selectedDoc);
+
+    // SIDEBAR ITEMS
+    const SIDEBAR_ITEMS = [
+        { id: 'overview', icon: LayoutDashboard, label: 'Pasqyra' },
+        { id: 'calendar', icon: Clock, label: 'Orari Ditor' },
+        { id: 'month-calendar', icon: CalendarDays, label: 'Kalendari' },
+        { id: 'patients', icon: Users, label: 'Pacientët' },
+        { id: 'services', icon: Stethoscope, label: 'Shërbimet' },
+        { id: 'time-off', icon: Coffee, label: 'Pauzat' },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#1e3a8a] text-white flex overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+        <div className="min-h-screen bg-[#1e3a8a] text-white flex overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <Helmet>
                 <title>Admin Dashboard — AldoDent</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
 
-            {/* Background Glow */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+            {/* Background Glows (Same as Services.jsx) */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-teal-400/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#172554]/30 rounded-full blur-[120px]" />
+                {/* Structured Mesh & Flow */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" fill="none">
+                    <path d="M0 250 Q 360 200, 720 250 T 1440 230" stroke="white" strokeWidth="0.7" />
+                    <path d="M0 650 Q 400 600, 800 650 T 1440 630" stroke="white" strokeWidth="0.6" />
+                    <line x1="360" y1="0" x2="360" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="6 12" />
+                    <line x1="1080" y1="0" x2="1080" y2="1200" stroke="white" strokeWidth="0.15" strokeDasharray="6 12" />
+                </svg>
             </div>
 
-            {/* ── MODERN DOCK (Bottom Centered) ── */}
-            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.3)] rounded-2xl p-1.5 flex flex-row gap-1 transition-all">
-                {DOCK_ITEMS.map((item) => (
+            {/* ── LEFT SIDEBAR (Modern SaaS Dark) ── */}
+            <aside className={`fixed top-0 left-0 h-full bg-[#1e3a8a]/80 backdrop-blur-xl border-r border-white/10 z-40 transition-all duration-300 ease-in-out flex flex-col pt-6 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
+                <div className="px-6 mb-8 flex items-center justify-between">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                        <img
+                            src={logoUrl}
+                            alt="AldoDent Logo"
+                            className={`h-9 w-auto object-contain transition-all duration-300 ${!sidebarOpen && 'object-left'}`}
+                            style={!sidebarOpen ? { width: '28px', objectPosition: '0% 50%' } : {}}
+                        />
+                        {sidebarOpen && <span className="font-light text-2xl text-white tracking-tight whitespace-nowrap">AldoDent</span>}
+                    </div>
+                </div>
+
+                <div className="px-4 mb-8">
                     <button
-                        key={item.id}
-                        onClick={() => {
-                            setActiveTab(item.id);
-                            if (item.id !== 'month-calendar') setSelectedCalendarDate(null);
-                        }}
-                        className={`relative group p-2.5 rounded-xl flex items-center justify-center transition-all duration-300 w-11 h-11
-                                ${activeTab === item.id ? 'bg-white text-[#1e3a8a] shadow-md scale-105' : 'text-white/40 hover:bg-white/10 hover:text-white'}
-                            `}
+                        onClick={() => setShowBookingModal(true)}
+                        className={`w-full bg-teal-400 hover:bg-teal-300 text-[#1e3a8a] rounded-2xl py-3.5 flex items-center justify-center font-semibold text-sm transition-all shadow-lg shadow-teal-400/20 ${!sidebarOpen ? 'px-0' : 'px-4 gap-2'}`}
                     >
-                        <item.icon size={18} strokeWidth={activeTab === item.id ? 2.5 : 2} />
-                        <span className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-white border border-white/10 text-[#1e3a8a] text-[11px] font-medium rounded-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all whitespace-nowrap shadow-xl">
-                            {item.label}
-                        </span>
+                        <Plus size={18} /> {sidebarOpen && <span className="uppercase tracking-widest font-bold text-xs">Shto Termin</span>}
                     </button>
-                ))}
-                <div className="w-[1px] h-6 bg-white/10 my-auto mx-1" />
-                <button className="relative group p-2.5 rounded-xl flex items-center justify-center text-white/40 hover:bg-red-500/20 hover:text-red-400 transition-all duration-300 w-11 h-11">
-                    <LogOut size={18} strokeWidth={2} />
-                    <span className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-red-500 text-white text-[11px] font-medium rounded-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all whitespace-nowrap shadow-xl">
-                        Dil
-                    </span>
-                </button>
-            </nav>
+                </div>
+
+                <nav className="flex-1 px-3 space-y-2 overflow-y-auto custom-scrollbar">
+                    {SIDEBAR_ITEMS.map((item) => {
+                        const isActive = activeTab === item.id;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => { setActiveTab(item.id); if (item.id !== 'month-calendar') setSelectedCalendarDate(null); }}
+                                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all
+                                        ${isActive
+                                        ? 'bg-white/10 text-teal-300 border border-white/5 font-medium shadow-inner'
+                                        : 'text-white/50 hover:bg-white/[0.05] hover:text-white font-light border border-transparent'}
+                                    `}
+                                title={!sidebarOpen ? item.label : ''}
+                            >
+                                <item.icon size={20} className={isActive ? 'text-teal-300' : 'text-white/40'} strokeWidth={isActive ? 2 : 1.5} />
+                                {sidebarOpen && <span className="text-sm whitespace-nowrap tracking-wide">{item.label}</span>}
+                            </button>
+                        );
+                    })}
+                </nav>
+
+                <div className="p-4 border-t border-white/5 mt-auto">
+                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-400/80 hover:bg-rose-500/10 hover:text-rose-400 font-light transition-all group">
+                        <LogOut size={20} className="text-rose-400/50 group-hover:text-rose-400 transition-colors" strokeWidth={1.5} />
+                        {sidebarOpen && <span className="text-sm whitespace-nowrap tracking-wide">Dil nga Sistemi</span>}
+                    </button>
+                </div>
+            </aside>
 
             {/* ── MAIN CONTENT AREA ── */}
-            <main className="flex-1 overflow-y-auto w-full h-screen relative z-10">
-                <div className="p-6 md:p-10 lg:p-12 pb-32 mb-8 md:mb-0 max-w-7xl mx-auto">
-                    {/* Header */}
-                    <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-medium text-white mb-1 tracking-tight">Paneli i Administrimit</h1>
-                            <p className="text-white/60 text-sm font-light capitalize">{formatAlbanianDate(new Date())}</p>
+            <main className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 relative z-10 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+
+                {/* Topbar Header */}
+                <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-30 backdrop-blur-sm">
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+                            <Menu size={20} strokeWidth={1.5} />
+                        </button>
+                        <div className="hidden md:flex items-center text-sm font-light text-white/40 tracking-wide uppercase">
+                            Menaxhimi <ChevronRight size={14} className="mx-3 text-white/20" />
+                            <span className="text-teal-300">{SIDEBAR_ITEMS.find(i => i.id === activeTab)?.label}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-6">
+                        {/* Global Search */}
+                        <div className="relative hidden lg:block">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={16} />
+                            <input
+                                type="text"
+                                placeholder="Kërko pacient..."
+                                value={globalSearch}
+                                onChange={(e) => {
+                                    setGlobalSearch(e.target.value);
+                                    if (e.target.value.trim() !== '' && activeTab !== 'patients') {
+                                        setActiveTab('patients');
+                                    }
+                                }}
+                                className="pl-11 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-teal-400/50 focus:border-teal-400/50 transition-all w-64 text-white placeholder-white/30 font-light"
+                            />
                         </div>
 
-                        <div className="flex items-center gap-6">
+                        {/* Notifications */}
+                        <div className="relative">
                             <button
-                                onClick={() => setShowBookingModal(true)}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-white text-[#1e3a8a] rounded-xl hover:bg-teal-50 transition-all shadow-lg font-semibold text-sm"
+                                onClick={() => { setShowNotifications(!showNotifications); setUnreadCount(0); }}
+                                className="relative p-2.5 border border-white/10 rounded-full text-white/50 hover:bg-white/10 hover:text-white transition-colors bg-white/5 shadow-inner"
                             >
-                                <Plus size={18} /> Shto Rezervim
+                                <Bell size={18} strokeWidth={1.5} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-4.5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full shadow-sm border-2 border-[#1e3a8a]">
+                                        {unreadCount}
+                                    </span>
+                                )}
                             </button>
 
-                            <div className="flex items-center gap-4">
-                                {/* Search */}
-                                <div className="relative hidden md:block">
-                                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" size={16} />
-                                    <input
-                                        type="text"
-                                        placeholder="Kërko pacient..."
-                                        className="pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-teal-400/50 focus:border-teal-400/30 transition-all w-64 text-white placeholder-white/30"
-                                    />
-                                </div>
-
-                                {/* Notifications */}
-                                <div className="relative">
-                                    <button
-                                        onClick={() => {
-                                            setShowNotifications(!showNotifications);
-                                            setUnreadCount(0);
-                                        }}
-                                        className={`relative p-2 border rounded-lg transition-colors
-                                                ${showNotifications ? 'bg-white/10 border-white/20 text-white' : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'}`}
+                            <AnimatePresence>
+                                {showNotifications && (
+                                    <Motion.div
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        className="absolute right-0 top-full mt-4 w-80 bg-[#1e3a8a]/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl z-50 overflow-hidden"
                                     >
-                                        <Bell size={18} />
-                                        {unreadCount > 0 && (
-                                            <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-4 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full shadow-lg border-2 border-[#1e3a8a]">
-                                                {unreadCount}
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    {/* Notifications Dropdown */}
-                                    <AnimatePresence>
-                                        {showNotifications && (
-                                            <Motion.div
-                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                transition={{ duration: 0.15 }}
-                                                className="absolute right-0 top-full mt-2 w-80 bg-[#1e3a8a] border border-white/20 rounded-xl shadow-2xl z-50 overflow-hidden"
-                                            >
-                                                <div className="p-3 border-b border-white/10 flex justify-between items-center bg-white/5">
-                                                    <h3 className="text-sm font-medium text-white">Njoftimet</h3>
-                                                    {recentNotifications.length > 0 && (
-                                                        <button onClick={() => {
-                                                            setRecentNotifications([]);
-                                                            localStorage.removeItem('aldodent_recent_notifs');
-                                                        }} className="text-[10px] text-white/50 hover:text-white uppercase tracking-wider font-semibold">Pastro Të Gjitha</button>
-                                                    )}
-                                                </div>
-                                                <div className="max-h-80 overflow-y-auto">
-                                                    {recentNotifications.length === 0 ? (
-                                                        <div className="p-6 text-center text-white/40 text-sm">Nuk ka njoftime të reja.</div>
-                                                    ) : (
-                                                        recentNotifications.map((notif, idx) => (
-                                                            <div key={idx} className="p-3 border-b border-white/5 hover:bg-white/5 transition-colors flex gap-3">
-                                                                <div className="w-8 h-8 rounded-full bg-teal-400/10 flex items-center justify-center text-teal-400 shrink-0 mt-0.5">
-                                                                    <Bell size={14} />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="text-sm font-medium text-white mb-0.5">Rezervim i ri!</div>
-                                                                    <div className="text-xs text-white/70 mb-1"><span className="text-teal-300">{notif.patient_name}</span> rezervoi <span className="text-white/90">{notif.service}</span></div>
-                                                                    <div className="text-[10px] text-white/40 flex items-center gap-2">
-                                                                        <span className="flex items-center gap-1"><Clock size={10} /> {notif.time}</span>
-                                                                        <span>•</span>
-                                                                        <span className="flex items-center gap-1"><CalendarDays size={10} /> {new Date(notif.date).toLocaleDateString()}</span>
-                                                                    </div>
-                                                                </div>
+                                        <div className="p-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                                            <h3 className="text-sm font-light text-white tracking-wider">Njoftimet</h3>
+                                            {recentNotifications.length > 0 && (
+                                                <button onClick={() => { setRecentNotifications([]); localStorage.removeItem('aldodent_recent_notifs'); }} className="text-[10px] text-white/40 hover:text-teal-300 uppercase tracking-widest font-medium transition-colors">Pastro</button>
+                                            )}
+                                        </div>
+                                        <div className="max-h-80 overflow-y-auto custom-scrollbar">
+                                            {recentNotifications.length === 0 ? (
+                                                <div className="p-8 text-center text-white/30 text-sm font-light">Nuk keni njoftime.</div>
+                                            ) : (
+                                                recentNotifications.map((notif, idx) => (
+                                                    <div key={idx} className="p-4 border-b border-white/5 hover:bg-white/5 transition-colors flex gap-4">
+                                                        <div className="w-10 h-10 rounded-full bg-teal-400/10 border border-teal-400/20 flex items-center justify-center text-teal-300 shrink-0">
+                                                            <Bell size={16} strokeWidth={1.5} />
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-sm font-medium text-white mb-1">Rezervim i ri</div>
+                                                            <div className="text-xs text-white/50 mb-2 font-light"><span className="text-teal-300 font-medium">{notif.patient_name}</span> rezervoi <span className="text-white/80">{notif.service}</span></div>
+                                                            <div className="text-[10px] text-white/30 flex items-center gap-3 font-medium uppercase tracking-wider">
+                                                                <span className="flex items-center gap-1.5"><Clock size={10} /> {notif.time}</span>
+                                                                <span className="flex items-center gap-1.5"><CalendarDays size={10} /> {new Date(notif.date).toLocaleDateString()}</span>
                                                             </div>
-                                                        ))
-                                                    )}
-                                                </div>
-                                            </Motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                {/* Profile Dropdown */}
-                                <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-1.5 pr-4 cursor-pointer hover:bg-white/10 transition-colors">
-                                    <img src={currentDoctor?.avatar} alt={currentDoctor?.name} width="28" height="28" className="w-7 h-7 rounded-md bg-white/10" />
-                                    <span className="text-sm font-medium text-white/90">{currentDoctor?.name}</span>
-                                </div>
-                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </Motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
-                    </header>
 
-                    {/* Content based on Active Tab */}
-                    <AnimatePresence mode="wait">
-                        {activeTab === 'calendar' && (
-                            <DailyScheduleTab
-                                doctors={doctors}
-                                selectedDoc={selectedDoc}
-                                setSelectedDoc={setSelectedDoc}
-                                selectedDailyDate={selectedDailyDate}
-                                setSelectedDailyDate={setSelectedDailyDate}
-                                selectedDailySchedule={selectedDailySchedule}
-                                APPOINTMENTS={APPOINTMENTS}
-                                setSelectedApt={setSelectedApt}
-                                setShowBookingModal={setShowBookingModal}
-                                setActiveTab={setActiveTab}
-                            />
+                        <div className="w-[1px] h-8 bg-white/10 mx-2" />
+
+                        {/* Profile Dropdown */}
+                        <div className="flex items-center gap-4 pl-2 cursor-pointer group">
+                            <div className="text-right hidden sm:block">
+                                <div className="text-sm font-medium text-white leading-tight group-hover:text-teal-300 transition-colors uppercase tracking-wider">{currentDoctor?.name || 'Administrator'}</div>
+                                <div className="text-xs text-white/40 font-light mt-1 tracking-wide">{currentDoctor?.role || 'Admin'}</div>
+                            </div>
+                            {currentDoctor?.avatar ? (
+                                <img src={currentDoctor.avatar} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-white/10 group-hover:border-teal-300 transition-colors" />
+                            ) : (
+                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover:border-teal-300 group-hover:text-teal-300 transition-colors">
+                                    <UserCircle size={22} strokeWidth={1.5} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </header>
+
+                {/* Tab Content Area */}
+                <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar relative z-10">
+                    <div className="max-w-7xl mx-auto">
+
+                        {/* Doctor Selector Header (if applicable for tab) */}
+                        {['calendar', 'month-calendar'].includes(activeTab) && (
+                            <div className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-full p-2 flex items-center gap-2 mb-8 w-fit shadow-inner">
+                                {doctors.map(doc => (
+                                    <button
+                                        key={doc.id}
+                                        onClick={() => setSelectedDoc(doc.id)}
+                                        className={`flex items-center gap-3 px-5 py-2.5 rounded-full transition-all text-sm font-medium
+                                            ${selectedDoc === doc.id
+                                                ? 'bg-teal-400/20 text-teal-300 border border-teal-400/30'
+                                                : 'text-white/50 hover:text-white hover:bg-white/5 border border-transparent'}`}
+                                    >
+                                        <img src={doc.avatar} alt="" className="w-6 h-6 rounded-full border border-white/20" />
+                                        <span className="font-light tracking-wide">{doc.name}</span>
+                                    </button>
+                                ))}
+                            </div>
                         )}
 
-                        {activeTab === 'month-calendar' && (
-                            <MonthlyCalendarTab
-                                calendarData={calendarData}
-                                selectedDoc={selectedDoc}
-                                prevMonth={prevMonth}
-                                nextMonth={nextMonth}
-                                resetToToday={resetToToday}
-                                APPOINTMENTS={APPOINTMENTS}
-                                BLOCKED_TIMES={BLOCKED_TIMES}
-                                selectedCalendarDate={selectedCalendarDate}
-                                setSelectedCalendarDate={setSelectedCalendarDate}
-                                selectedDateSchedule={selectedDateSchedule}
-                                setSelectedApt={setSelectedApt}
-                                currentDate={currentDate}
-                                formatAlbanianDate={formatAlbanianDate}
-                            />
-                        )}
+                        <AnimatePresence mode="wait">
+                            {activeTab === 'overview' && (
+                                <OverviewTab
+                                    APPOINTMENTS={APPOINTMENTS}
+                                    rawServices={rawServices}
+                                    doctors={doctors}
+                                    formatAlbanianDate={formatAlbanianDate}
+                                />
+                            )}
 
-                        {activeTab === 'patients' && (
-                            <PatientsTab uniquePatients={uniquePatients} />
-                        )}
+                            {activeTab === 'calendar' && (
+                                <DailyScheduleTab
+                                    doctors={doctors}
+                                    selectedDoc={selectedDoc}
+                                    setSelectedDoc={setSelectedDoc}
+                                    selectedDailyDate={selectedDailyDate}
+                                    setSelectedDailyDate={setSelectedDailyDate}
+                                    selectedDailySchedule={selectedDailySchedule}
+                                    APPOINTMENTS={APPOINTMENTS}
+                                    setSelectedApt={setSelectedApt}
+                                    setShowBookingModal={setShowBookingModal}
+                                    setActiveTab={setActiveTab}
+                                />
+                            )}
 
-                        {activeTab === 'time-off' && (
-                            <TimeOffTab
-                                doctors={doctors}
-                                pauzaForm={pauzaForm}
-                                setPauzaForm={setPauzaForm}
-                                handleSavePauza={handleSavePauza}
-                            />
-                        )}
+                            {activeTab === 'month-calendar' && (
+                                <MonthlyCalendarTab
+                                    calendarData={calendarData}
+                                    selectedDoc={selectedDoc}
+                                    prevMonth={prevMonth}
+                                    nextMonth={nextMonth}
+                                    resetToToday={resetToToday}
+                                    APPOINTMENTS={APPOINTMENTS}
+                                    BLOCKED_TIMES={BLOCKED_TIMES}
+                                    selectedCalendarDate={selectedCalendarDate}
+                                    setSelectedCalendarDate={setSelectedCalendarDate}
+                                    selectedDateSchedule={selectedDateSchedule}
+                                    setSelectedApt={setSelectedApt}
+                                    currentDate={currentDate}
+                                    formatAlbanianDate={formatAlbanianDate}
+                                />
+                            )}
 
-                        {activeTab === 'services' && (
-                            <ServicesTab
-                                rawServices={rawServices}
-                                newService={newService}
-                                setNewService={setNewService}
-                                editingService={editingService}
-                                handleAddService={handleAddService}
-                                startEditing={startEditing}
-                                cancelEditing={cancelEditing}
-                                handleDeleteService={handleDeleteService}
-                            />
-                        )}
+                            {activeTab === 'patients' && (
+                                <PatientsTab
+                                    uniquePatients={uniquePatients}
+                                    globalSearch={globalSearch}
+                                    setGlobalSearch={setGlobalSearch}
+                                    APPOINTMENTS={APPOINTMENTS}
+                                />
+                            )}
 
-                        {activeTab === 'settings' && (
-                            <SettingsTab
-                                notificationsEnabled={notificationsEnabled}
-                                setNotificationsEnabled={setNotificationsEnabled}
-                                currentDoctor={currentDoctor}
-                            />
-                        )}
-                    </AnimatePresence>
+                            {activeTab === 'time-off' && (
+                                <TimeOffTab
+                                    doctors={doctors}
+                                    pauzaForm={pauzaForm}
+                                    setPauzaForm={setPauzaForm}
+                                    handleSavePauza={handleSavePauza}
+                                    setActiveTab={setActiveTab}
+                                />
+                            )}
+
+                            {activeTab === 'services' && (
+                                <ServicesTab
+                                    rawServices={rawServices}
+                                    newService={newService}
+                                    setNewService={setNewService}
+                                    editingService={editingService}
+                                    handleAddService={handleAddService}
+                                    startEditing={startEditing}
+                                    cancelEditing={cancelEditing}
+                                    handleDeleteService={handleDeleteService}
+                                />
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </main>
 
