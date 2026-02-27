@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Calendar, Phone, MapPin, ArrowRight, Instagram, Facebook } from 'lucide-react'
+import { Menu, X, Calendar, Phone, MapPin, ArrowRight, Instagram, Facebook, ChevronDown } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import logoWhite from '../assets/img/logowhite.png'
 import { useAuth } from '../context/AuthContext'
@@ -19,6 +19,7 @@ const Navbar = () => {
 
   // Close sidebar on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false)
   }, [location])
 
@@ -78,18 +79,19 @@ const Navbar = () => {
 
             {user ? (
               <div className="flex items-center gap-4 border-l border-white/20 pl-6 group relative">
-                <span className="text-sm font-medium text-white cursor-pointer py-2 flex items-center gap-1">
-                  {user.name} <ChevronDown size={14} className="opacity-50" />
+                <span className="text-sm font-medium text-white cursor-pointer py-2 flex items-center gap-1 hover:text-teal-300 transition-colors">
+                  {user.name} <ChevronDown size={14} className="opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                 </span>
-                
+
                 {/* Hover Dropdown */}
-                <div className="absolute top-full left-6 mt-0 w-48 bg-white rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0">
+                <div className="absolute top-full -left-4 mt-2 w-48 bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl py-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 z-50">
                   {user.role === 'admin' && (
-                    <Link to="/admin" className="block px-4 py-2 text-sm text-[#1e3a8a] hover:bg-slate-50 font-medium">
-                      Dashboard
+                    <Link to="/admin" className="block px-5 py-2 text-sm font-semibold text-[#1e3a8a] hover:bg-[#1e3a8a]/5 hover:text-teal-600 transition-colors">
+                      Admin Dashboard
                     </Link>
                   )}
-                  <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-medium">
+                  {user.role === 'admin' && <div className="h-px bg-slate-100 my-1 mx-3" />}
+                  <button onClick={logout} className="w-full text-left px-5 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
                     Logout
                   </button>
                 </div>

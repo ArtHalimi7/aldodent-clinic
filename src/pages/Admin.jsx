@@ -7,6 +7,7 @@ import {
     LayoutDashboard, UserCircle, ChevronDown, ChevronRight, ChevronLeft, Coffee
 } from 'lucide-react';
 import { motion as Motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 // Admin Sub-Components
 import OverviewTab from '../components/admin/OverviewTab';
@@ -56,6 +57,7 @@ const getDurationSlots = (time, serviceTitle) => {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function Admin() {
+    const { token, user } = useAuth();
     const [doctors, setDoctors] = useState([]);
     const [selectedDoc, setSelectedDoc] = useState('');
     const [activeTab, setActiveTab] = useState('overview'); // Default to overview
@@ -71,7 +73,7 @@ export default function Admin() {
     const fetchData = useCallback(async () => {
         try {
             const [aptRes, blockRes, servRes, docRes] = await Promise.all([
-                fetch(`${API_URL}/api/appointments`),
+                fetch(`${API_URL}/api/appointments`, { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch(`${API_URL}/api/blocked-times`),
                 fetch(`${API_URL}/api/services`),
                 fetch(`${API_URL}/api/doctors`)
@@ -226,7 +228,7 @@ export default function Admin() {
             if (editingService) {
                 const res = await fetch(`${API_URL}/api/services/${editingService}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(newService)
                 });
                 if (res.ok) {
@@ -237,7 +239,7 @@ export default function Admin() {
             } else {
                 const res = await fetch(`${API_URL}/api/services`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(newService)
                 });
                 if (res.ok) {
@@ -260,7 +262,7 @@ export default function Admin() {
 
     const handleDeleteService = async (id) => {
         if (!window.confirm("Jeni të sigurt?")) return;
-        try { await fetch(`${API_URL}/api/services/${id}`, { method: 'DELETE' }); fetchData(); } catch (err) { console.error(err); }
+        try { await fetch(`${API_URL}/api/services/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); fetchData(); } catch (err) { console.error(err); }
     };
 
     const handleSavePauza = async () => {
@@ -272,7 +274,7 @@ export default function Admin() {
             const timeStr = `${pauzaForm.startTime} - ${pauzaForm.endTime}`;
             const res = await fetch(`${API_URL}/api/blocked-times`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({
                     doctor_id: pauzaForm.doctor_id,
                     date: dateStr,
@@ -292,7 +294,7 @@ export default function Admin() {
     // APPOINTMENT MODAL ACTIONS
     const handleDeleteApt = async (id) => {
         if (!window.confirm("Jeni të sigurt?")) return;
-        try { await fetch(`${API_URL}/api/appointments/${id}`, { method: 'DELETE' }); setSelectedApt(null); fetchData(); } catch (err) { console.error(err); }
+        try { await fetch(`${API_URL}/api/appointments/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); setSelectedApt(null); fetchData(); } catch (err) { console.error(err); }
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
@@ -300,7 +302,7 @@ export default function Admin() {
             const newStatus = currentStatus === 'confirmed' ? 'pending' : 'confirmed';
             await fetch(`${API_URL}/api/appointments/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ status: newStatus })
             });
             setSelectedApt(prev => prev ? { ...prev, status: newStatus } : null);
@@ -380,7 +382,7 @@ export default function Admin() {
         return [...dayApts, ...dayBlocks].sort((a, b) => a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0]));
     }, [selectedDailyDateStr, selectedDoc, APPOINTMENTS, BLOCKED_TIMES]);
 
-    const currentDoctor = doctors.find(d => d.id === selectedDoc);
+    // (Removed unused currentDoctor)
 
     // SIDEBAR ITEMS
     const SIDEBAR_ITEMS = [
@@ -413,7 +415,7 @@ export default function Admin() {
             </div>
 
             {/* ── LEFT SIDEBAR (Modern SaaS Dark) ── */}
-            <aside className={`fixed top-0 left-0 h-full bg-[#1e3a8a]/80 backdrop-blur-xl border-r border-white/10 z-40 transition-all duration-300 ease-in-out flex flex-col pt-6 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
+            <aside className={`fixed top-0 left-0 h-full bg-[#1e3a8a]/80 backdrop-blur-xl border-r border-white/10 z-40 transition-all duration-300 ease-in-out hidden md:flex flex-col pt-6 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
                 <div className="px-6 mb-8 flex items-center justify-between">
                     <div className="flex items-center gap-3 overflow-hidden">
                         <img
@@ -465,21 +467,30 @@ export default function Admin() {
             </aside>
 
             {/* ── MAIN CONTENT AREA ── */}
-            <main className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 relative z-10 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+            <main className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 relative z-10 ${sidebarOpen ? 'md:ml-64' : 'md:ml-20'} pb-24 md:pb-0`}>
 
                 {/* Topbar Header */}
-                <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-30 backdrop-blur-sm">
+                <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-4 md:px-8 shrink-0 z-30 backdrop-blur-sm">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+                        {/* Desktop Menu Toggle */}
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:block p-2 text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
                             <Menu size={20} strokeWidth={1.5} />
                         </button>
+                        
+                        {/* Desktop Breadcrumbs */}
                         <div className="hidden md:flex items-center text-sm font-light text-white/40 tracking-wide uppercase">
                             Menaxhimi <ChevronRight size={14} className="mx-3 text-white/20" />
                             <span className="text-teal-300">{SIDEBAR_ITEMS.find(i => i.id === activeTab)?.label}</span>
                         </div>
+
+                        {/* Mobile Logo */}
+                        <div className="flex md:hidden items-center gap-3">
+                            <img src={logoUrl} alt="AldoDent Logo" className="h-8 w-auto object-contain" />
+                            <span className="font-light text-xl text-white tracking-tight">AldoDent</span>
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3 md:gap-4 shrink-0">
                         {/* Global Search */}
                         <div className="relative hidden lg:block">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={16} />
@@ -517,7 +528,7 @@ export default function Admin() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute right-0 top-full mt-4 w-80 bg-[#1e3a8a]/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl z-50 overflow-hidden"
+                                        className="fixed left-4 right-4 top-24 md:absolute md:left-auto md:right-0 md:top-full md:mt-4 md:w-80 md:max-w-none bg-[#1e3a8a]/95 backdrop-blur-3xl border border-white/20 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden origin-top md:origin-top-right"
                                     >
                                         <div className="p-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                                             <h3 className="text-sm font-light text-white tracking-wider">Njoftimet</h3>
@@ -525,9 +536,14 @@ export default function Admin() {
                                                 <button onClick={() => { setRecentNotifications([]); localStorage.removeItem('aldodent_recent_notifs'); }} className="text-[10px] text-white/40 hover:text-teal-300 uppercase tracking-widest font-medium transition-colors">Pastro</button>
                                             )}
                                         </div>
-                                        <div className="max-h-80 overflow-y-auto custom-scrollbar">
+                                        <div className="max-h-[60vh] md:max-h-80 overflow-y-auto custom-scrollbar">
                                             {recentNotifications.length === 0 ? (
-                                                <div className="p-8 text-center text-white/30 text-sm font-light">Nuk keni njoftime.</div>
+                                                <div className="p-10 flex flex-col items-center justify-center text-center">
+                                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 text-white/20">
+                                                        <Bell size={24} />
+                                                    </div>
+                                                    <div className="text-white/40 text-sm font-light">Nuk keni asnjë njoftim të ri.</div>
+                                                </div>
                                             ) : (
                                                 recentNotifications.map((notif, idx) => (
                                                     <div key={idx} className="p-4 border-b border-white/5 hover:bg-white/5 transition-colors flex gap-4">
@@ -551,21 +567,55 @@ export default function Admin() {
                             </AnimatePresence>
                         </div>
 
-                        <div className="w-[1px] h-8 bg-white/10 mx-2" />
+                        <div className="w-[1px] h-6 bg-white/10 mx-1 md:mx-2" />
 
                         {/* Profile Dropdown */}
-                        <div className="flex items-center gap-4 pl-2 cursor-pointer group">
-                            <div className="text-right hidden sm:block">
-                                <div className="text-sm font-medium text-white leading-tight group-hover:text-teal-300 transition-colors uppercase tracking-wider">{currentDoctor?.name || 'Administrator'}</div>
-                                <div className="text-xs text-white/40 font-light mt-1 tracking-wide">{currentDoctor?.role || 'Admin'}</div>
-                            </div>
-                            {currentDoctor?.avatar ? (
-                                <img src={currentDoctor.avatar} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-white/10 group-hover:border-teal-300 transition-colors" />
-                            ) : (
-                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover:border-teal-300 group-hover:text-teal-300 transition-colors">
-                                    <UserCircle size={22} strokeWidth={1.5} />
-                                </div>
-                            )}
+                        <div className="flex items-center gap-2 md:gap-3 cursor-pointer group shrink-0">
+                            {(() => {
+                                const loggedInDoctor = doctors.find(d => 
+                                    d.name.toLowerCase() === (user?.name || '').toLowerCase() || 
+                                    d.name.toLowerCase().includes((user?.name || '').toLowerCase())
+                                );
+
+                                if (loggedInDoctor) {
+                                    return (
+                                        <>
+                                            <div className="text-right hidden sm:block">
+                                                <div className="text-sm font-medium text-white leading-tight group-hover:text-teal-300 transition-colors uppercase tracking-wider">
+                                                    Dr. {(loggedInDoctor.name || user?.name || '').replace(/^Dr\.\s*/i, '')}
+                                                </div>
+                                                <div className="text-xs text-white/40 font-light mt-1 tracking-wide">
+                                                    {loggedInDoctor.role || 'Kryedoktor & Kirurg'}
+                                                </div>
+                                            </div>
+                                            {loggedInDoctor.avatar ? (
+                                                <img src={loggedInDoctor.avatar} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-white/10 group-hover:border-teal-300 transition-colors" />
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover:border-teal-300 group-hover:text-teal-300 transition-colors">
+                                                    <UserCircle size={22} strokeWidth={1.5} />
+                                                </div>
+                                            )}
+                                        </>
+                                    );
+                                }
+
+                                // Non-doctor fallback
+                                return (
+                                    <>
+                                        <div className="text-right hidden sm:block">
+                                            <div className="text-sm font-medium text-white leading-tight group-hover:text-teal-300 transition-colors uppercase tracking-wider">
+                                                ADMIN
+                                            </div>
+                                            <div className="text-xs text-white/40 font-light mt-1 tracking-wide uppercase">
+                                                {user?.name || 'Administrator'}
+                                            </div>
+                                        </div>
+                                        <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover:border-teal-300 group-hover:text-teal-300 transition-colors">
+                                            <UserCircle size={22} strokeWidth={1.5} />
+                                        </div>
+                                    </>
+                                );
+                            })()}
                         </div>
                     </div>
                 </header>
@@ -670,6 +720,34 @@ export default function Admin() {
                         </AnimatePresence>
                     </div>
                 </div>
+
+                {/* ── MOBILE BOTTOM DOCK (Hidden on Desktop) ── */}
+                <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-[#1e3a8a]/90 backdrop-blur-2xl border border-white/20 rounded-3xl z-40 shadow-2xl shadow-black/50 p-2 flex items-center gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                    {SIDEBAR_ITEMS.map((item) => {
+                        const isActive = activeTab === item.id;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => { setActiveTab(item.id); if (item.id !== 'month-calendar') setSelectedCalendarDate(null); }}
+                                className={`flex-shrink-0 flex flex-col items-center justify-center p-2 rounded-2xl w-[4.5rem] h-[4.5rem] transition-all
+                                    ${isActive
+                                        ? 'bg-white/10 text-teal-300 border border-white/5 shadow-inner'
+                                        : 'text-white/50 hover:bg-white/[0.05] hover:text-white border border-transparent'}
+                                `}
+                            >
+                                <item.icon size={22} className={isActive ? 'text-teal-300' : 'text-white/40'} strokeWidth={isActive ? 2 : 1.5} />
+                                <span className={`text-[9px] mt-1.5 font-medium tracking-wide ${isActive ? 'text-teal-300' : 'text-white/50'}`}>{item.label}</span>
+                            </button>
+                        );
+                    })}
+                    <div className="w-[1px] h-10 bg-white/10 mx-1 shrink-0" />
+                    <button
+                        onClick={() => setShowBookingModal(true)}
+                        className="flex-shrink-0 flex flex-col items-center justify-center bg-teal-400 hover:bg-teal-300 text-[#1e3a8a] rounded-2xl w-[4.5rem] h-[4.5rem] shadow-lg shadow-teal-400/20 transition-all"
+                    >
+                        <Plus size={24} strokeWidth={2.5} />
+                    </button>
+                </nav>
             </main>
 
             {/* ── MODALS ── */}

@@ -26,7 +26,7 @@ export const requireRole = (role) => {
             return res.status(401).json({ error: 'Access denied. User not authenticated.' });
         }
 
-        if (req.user.role !== role && req.user.role !== 'admin') {
+        if (req.user.role !== role && req.user.role !== 'admin' && !(role === 'admin' && req.user.role === 'doctor')) {
             return res.status(403).json({ error: `Access denied. Requires ${role} role.` });
         }
 

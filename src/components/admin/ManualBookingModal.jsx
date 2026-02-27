@@ -37,8 +37,8 @@ export default function ManualBookingModal({
                             </button>
                         </div>
 
-                        {/* Sidebar Info */}
-                        <div className="bg-white/5 border-b lg:border-b-0 lg:border-r border-white/10 p-8 lg:p-10 flex flex-col lg:w-80 shrink-0 relative z-10 backdrop-blur-sm">
+                        {/* Sidebar Info (Hidden on Mobile) */}
+                        <div className="hidden lg:flex bg-white/5 border-b lg:border-b-0 lg:border-r border-white/10 p-8 lg:p-10 flex-col lg:w-80 shrink-0 relative z-10 backdrop-blur-sm">
                             <div className="mb-10 lg:mb-14">
                                 <div className="flex items-center gap-3 text-teal-300 mb-3 bg-teal-400/10 w-fit px-3 py-1.5 rounded-lg border border-teal-500/20">
                                     <Shield size={16} strokeWidth={2} />

@@ -33,6 +33,7 @@ export default function PageLoader({ children }) {
         window.scrollTo(0, 0)
 
         // Instantly show cover
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setWipePhase('cover')
         setRouteWipe(true)
 

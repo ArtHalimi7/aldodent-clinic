@@ -17,7 +17,7 @@ const ProtectedRoute = ({ requiredRole }) => {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    if (requiredRole && user.role !== requiredRole && user.role !== 'admin') {
+    if (requiredRole && user.role !== requiredRole && user.role !== 'admin' && !(requiredRole === 'admin' && user.role === 'doctor')) {
         // User does not have right role
         return <Navigate to="/" replace />;
     }

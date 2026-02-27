@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
@@ -26,7 +25,11 @@ const Login = () => {
         setIsLoading(false);
 
         if (result.success) {
-            navigate(from, { replace: true });
+            if (result.user && result.user.role === 'admin') {
+                navigate('/admin', { replace: true });
+            } else {
+                navigate(from, { replace: true });
+            }
         } else {
             setError(result.error || 'Failed to login');
         }

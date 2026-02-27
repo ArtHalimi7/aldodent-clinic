@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
 // Get current user (me)
 router.get('/me', verifyToken, async (req, res) => {
     try {
-        const users = await sql`SELECT id, name, surname, phone, email, role, created_at FROM users WHERE id = ${req.user.id}`;
+        const users = await sql`SELECT id, name, surname, phone, email, role, doctor_id, created_at FROM users WHERE id = ${req.user.id}`;
 
         if (users.length === 0) {
             return res.status(404).json({ error: 'User not found.' });

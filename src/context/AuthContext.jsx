@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         } else {
             setLoading(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     const fetchCurrentUser = async (authToken) => {
@@ -52,7 +54,7 @@ export const AuthProvider = ({ children }) => {
             setToken(data.token);
             setUser(data.user);
             localStorage.setItem('token', data.token);
-            return { success: true };
+            return { success: true, user: data.user };
         } else {
             return { success: false, error: data.error };
         }

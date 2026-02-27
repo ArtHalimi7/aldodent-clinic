@@ -26,6 +26,7 @@ export async function initDb() {
                 email VARCHAR(255) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
                 role VARCHAR(50) DEFAULT 'user',
+                doctor_id VARCHAR(50) REFERENCES doctors(id),
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         `;

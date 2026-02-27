@@ -42,7 +42,7 @@ export default function ServicesTab({
                                     <div className="w-12 h-12 rounded-2xl bg-white/5 text-teal-300 flex items-center justify-center font-bold border border-white/10 shrink-0 group-hover:scale-110 transition-transform">
                                         <Stethoscope size={24} strokeWidth={1.5} />
                                     </div>
-                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={() => startEditing(srv)}
                                             className="w-9 h-9 flex items-center justify-center text-white/40 hover:text-teal-300 hover:bg-teal-400/10 rounded-xl transition-all border border-transparent hover:border-teal-500/20"
@@ -80,7 +80,7 @@ export default function ServicesTab({
                 </div>
 
                 {/* Form Area */}
-                <div className="order-1 lg:order-2 h-fit sticky top-6 relative z-10">
+                <div className="order-1 lg:order-2 h-fit lg:sticky top-6 relative z-10 mb-8 lg:mb-0">
                     <div className="bg-white/5 border border-white/10 shadow-sm rounded-3xl p-8 backdrop-blur-sm">
                         <div className="mb-8 pb-6 border-b border-white/10 flex items-start gap-5">
                             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold shrink-0 shadow-inner
