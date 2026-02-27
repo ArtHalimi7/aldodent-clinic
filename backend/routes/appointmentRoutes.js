@@ -1,10 +1,12 @@
 import express from 'express';
 import sql from '../db.js';
+import { sendBookingConfirmation, sendBookingCancellation } from '../emailService.js';
+import { verifyToken, requireRole } from '../authMiddleware.js';
 
 const router = express.Router();
 
-// Get all appointments
-router.get('/', async (req, res) => {
+// Get all appointments (Admin only)
+router.get('/', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const appointments = await sql`SELECT * FROM appointments ORDER BY date ASC, time ASC`;
         res.json(appointments);
@@ -22,14 +24,18 @@ router.post('/', async (req, res) => {
             VALUES (${patient_name}, ${patient_phone}, ${patient_email}, ${service}, ${date}, ${time}, ${doctor_id}, ${notes})
             RETURNING *
         `;
+
+        // Send confirmation email asynchronously
+        sendBookingConfirmation(newApt[0]);
+
         res.status(201).json(newApt[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Update appointment status (confirm/pending)
-router.put('/:id', async (req, res) => {
+// Update appointment status (confirm/pending) (Admin only)
+router.put('/:id', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
@@ -43,11 +49,16 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete appointment
-router.delete('/:id', async (req, res) => {
+// Delete appointment (Admin only)
+router.delete('/:id', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { id } = req.params;
-        await sql`DELETE FROM appointments WHERE id = ${id}`;
+        const deletedApt = await sql`DELETE FROM appointments WHERE id = ${id} RETURNING *`;
+
+        if (deletedApt.length > 0) {
+            sendBookingCancellation(deletedApt[0]);
+        }
+
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });

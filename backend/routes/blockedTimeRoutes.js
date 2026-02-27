@@ -1,5 +1,6 @@
 import express from 'express';
 import sql from '../db.js';
+import { verifyToken, requireRole } from '../authMiddleware.js';
 
 const router = express.Router();
 
@@ -13,8 +14,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Create blocked time
-router.post('/', async (req, res) => {
+// Create blocked time (Admin only)
+router.post('/', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { doctor_id, date, time, type, title } = req.body;
         const newBlock = await sql`
@@ -28,8 +29,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Delete blocked time
-router.delete('/:id', async (req, res) => {
+// Delete blocked time (Admin only)
+router.delete('/:id', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { id } = req.params;
         await sql`DELETE FROM blocked_times WHERE id = ${id}`;

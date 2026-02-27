@@ -5,6 +5,8 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import PageLoader from './components/PageLoader'
 import { useLocation } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
@@ -14,6 +16,8 @@ const Services = lazy(() => import('./pages/Services'))
 const Booking = lazy(() => import('./pages/Booking'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Admin = lazy(() => import('./pages/Admin'))
+const Login = lazy(() => import('./pages/Login'))
+const Signup = lazy(() => import('./pages/Signup'))
 
 function Layout() {
   const location = useLocation()
@@ -30,7 +34,11 @@ function Layout() {
           <Route path="/services" element={<Services />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route element={<ProtectedRoute requiredRole="admin" />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
         </Routes>
       </Suspense>
       {!isAdmin && <Footer />}
@@ -41,9 +49,11 @@ function Layout() {
 function App() {
   return (
     <HelmetProvider>
-      <Router>
-        <Layout />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Layout />
+        </Router>
+      </AuthProvider>
     </HelmetProvider>
   )
 }

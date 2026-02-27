@@ -1,5 +1,6 @@
 import express from 'express';
 import sql from '../db.js';
+import { verifyToken, requireRole } from '../authMiddleware.js';
 
 const router = express.Router();
 
@@ -13,8 +14,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Create service
-router.post('/', async (req, res) => {
+// Create service (Admin only)
+router.post('/', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { title, duration, price } = req.body;
         // Generate a simple slug from title
@@ -31,8 +32,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update service (optional but good for future)
-router.put('/:id', async (req, res) => {
+// Update service (Admin only)
+router.put('/:id', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { id } = req.params;
         const { title, duration, price } = req.body;
@@ -51,8 +52,8 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete service
-router.delete('/:id', async (req, res) => {
+// Delete service (Admin only)
+router.delete('/:id', verifyToken, requireRole('admin'), async (req, res) => {
     try {
         const { id } = req.params;
         await sql`DELETE FROM services WHERE id = ${id}`;

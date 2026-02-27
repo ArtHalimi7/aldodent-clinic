@@ -18,6 +18,17 @@ export async function initDb() {
     console.log("Starting database initialization...");
     try {
         await sql`
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                password_hash VARCHAR(255) NOT NULL,
+                role VARCHAR(50) DEFAULT 'user',
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
+        await sql`
             CREATE TABLE IF NOT EXISTS appointments (
                 id SERIAL PRIMARY KEY,
                 patient_name VARCHAR(255) NOT NULL,
@@ -29,6 +40,7 @@ export async function initDb() {
                 doctor_id VARCHAR(50) NOT NULL,
                 status VARCHAR(50) DEFAULT 'pending',
                 notes TEXT,
+                user_id INTEGER REFERENCES users(id),
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         `;
@@ -111,6 +123,22 @@ export async function initDb() {
                 `;
             }
             console.log("Initial doctors seeded.");
+        }
+
+        // Seeding initial admin user if table is empty
+        const usersCount = await sql`SELECT count(*) FROM users`;
+        console.log(`Current users count: ${usersCount[0].count}`);
+
+        if (parseInt(usersCount[0].count) === 0) {
+            console.log("Seeding initial admin...");
+            // Password is '***REMOVED***' hashed with bcrypt (saltRounds: 10)
+            const defaultHashedPassword = '***REMOVED***';
+
+            await sql`
+                INSERT INTO users (name, email, password_hash, role)
+                VALUES ('Admin User', 'admin@aldodent.com', ${defaultHashedPassword}, 'admin')
+            `;
+            console.log("Initial admin seeded.");
         }
 
         console.log("Database initialized successfully.");

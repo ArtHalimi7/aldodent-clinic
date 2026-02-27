@@ -3,11 +3,13 @@ import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Calendar, Phone, MapPin, ArrowRight, Instagram, Facebook } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import logoWhite from '../assets/img/logowhite.png'
+import { useAuth } from '../context/AuthContext'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -73,6 +75,29 @@ const Navbar = () => {
               <Phone className="w-4 h-4" />
               <span>044 231 769</span>
             </a>
+
+            {user ? (
+              <div className="flex items-center gap-4 border-l border-white/20 pl-6">
+                {user.role === 'admin' && (
+                  <Link to="/admin" className="text-sm font-medium text-teal-300 hover:text-teal-200 transition-colors">
+                    Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={logout}
+                  className="text-sm font-medium text-white/70 hover:text-white transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4 border-l border-white/20 pl-6">
+                <Link to="/login" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+                  Login
+                </Link>
+              </div>
+            )}
+
             <Link to="/booking">
               <button className={`px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${scrolled
                 ? 'bg-white text-[#1e3a8a] hover:bg-teal-50 shadow-black/10'
@@ -215,9 +240,38 @@ const Navbar = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
+                  className="flex flex-col gap-3"
                 >
+                  {user ? (
+                    <>
+                      {user.role === 'admin' && (
+                        <Link to="/admin" onClick={() => setIsOpen(false)}>
+                          <button className="w-full py-3 bg-teal-500/20 text-teal-300 border border-teal-500/30 font-medium rounded-2xl flex items-center justify-center gap-2.5 text-lg">
+                            Admin Dashboard
+                          </button>
+                        </Link>
+                      )}
+                      <button onClick={() => { logout(); setIsOpen(false); }} className="w-full py-3 bg-red-500/20 text-red-300 border border-red-500/30 font-medium rounded-2xl flex items-center justify-center gap-2.5 text-lg">
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex gap-3">
+                      <Link to="/login" onClick={() => setIsOpen(false)} className="flex-1">
+                        <button className="w-full py-3 bg-white/10 text-white font-medium rounded-2xl flex items-center justify-center text-lg">
+                          Login
+                        </button>
+                      </Link>
+                      <Link to="/signup" onClick={() => setIsOpen(false)} className="flex-1">
+                        <button className="w-full py-3 bg-teal-500/20 text-teal-300 border border-teal-500/30 font-medium rounded-2xl flex items-center justify-center text-lg">
+                          Sign Up
+                        </button>
+                      </Link>
+                    </div>
+                  )}
+
                   <Link to="/booking" onClick={() => setIsOpen(false)}>
-                    <button className="w-full py-4 bg-white text-[#1e3a8a] font-medium rounded-2xl shadow-lg shadow-black/10 flex items-center justify-center gap-2.5 text-lg active:scale-[0.97] transition-transform">
+                    <button className="w-full py-4 mt-2 bg-white text-[#1e3a8a] font-medium rounded-2xl shadow-lg shadow-black/10 flex items-center justify-center gap-2.5 text-lg active:scale-[0.97] transition-transform">
                       <Calendar className="w-5 h-5" />
                       Rezervo Termin
                     </button>
