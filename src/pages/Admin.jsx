@@ -57,7 +57,7 @@ const getDurationSlots = (time, serviceTitle) => {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function Admin() {
-    const { token, user } = useAuth();
+    const { token, user, logout } = useAuth();
     const [doctors, setDoctors] = useState([]);
     const [selectedDoc, setSelectedDoc] = useState('');
     const [activeTab, setActiveTab] = useState('overview'); // Default to overview
@@ -459,7 +459,7 @@ export default function Admin() {
                 </nav>
 
                 <div className="p-4 border-t border-white/5 mt-auto">
-                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-400/80 hover:bg-rose-500/10 hover:text-rose-400 font-light transition-all group">
+                    <button onClick={logout} className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-400/80 hover:bg-rose-500/10 hover:text-rose-400 font-light transition-all group">
                         <LogOut size={20} className="text-rose-400/50 group-hover:text-rose-400 transition-colors" strokeWidth={1.5} />
                         {sidebarOpen && <span className="text-sm whitespace-nowrap tracking-wide">Dil nga Sistemi</span>}
                     </button>
@@ -476,7 +476,7 @@ export default function Admin() {
                         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:block p-2 text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
                             <Menu size={20} strokeWidth={1.5} />
                         </button>
-                        
+
                         {/* Desktop Breadcrumbs */}
                         <div className="hidden md:flex items-center text-sm font-light text-white/40 tracking-wide uppercase">
                             Menaxhimi <ChevronRight size={14} className="mx-3 text-white/20" />
@@ -572,8 +572,8 @@ export default function Admin() {
                         {/* Profile Dropdown */}
                         <div className="flex items-center gap-2 md:gap-3 cursor-pointer group shrink-0">
                             {(() => {
-                                const loggedInDoctor = doctors.find(d => 
-                                    d.name.toLowerCase() === (user?.name || '').toLowerCase() || 
+                                const loggedInDoctor = doctors.find(d =>
+                                    d.name.toLowerCase() === (user?.name || '').toLowerCase() ||
                                     d.name.toLowerCase().includes((user?.name || '').toLowerCase())
                                 );
 
