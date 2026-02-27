@@ -12,9 +12,9 @@ const JWT_SECRET = process.env.JWT_SECRET || '***REMOVED***';
 // Register (Signup)
 router.post('/signup', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, surname, phone, email, password } = req.body;
 
-        if (!name || !email || !password) {
+        if (!name || !surname || !phone || !email || !password) {
             return res.status(400).json({ error: 'Please provide all required fields.' });
         }
 
@@ -30,9 +30,9 @@ router.post('/signup', async (req, res) => {
 
         // Insert new user
         const newUser = await sql`
-            INSERT INTO users (name, email, password_hash)
-            VALUES (${name}, ${email}, ${passwordHash})
-            RETURNING id, name, email, role, created_at
+            INSERT INTO users (name, surname, phone, email, password_hash)
+            VALUES (${name}, ${surname}, ${phone}, ${email}, ${passwordHash})
+            RETURNING id, name, surname, phone, email, role, created_at
         `;
 
         // Generate JWT
@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
 // Get current user (me)
 router.get('/me', verifyToken, async (req, res) => {
     try {
-        const users = await sql`SELECT id, name, email, role, created_at FROM users WHERE id = ${req.user.id}`;
+        const users = await sql`SELECT id, name, surname, phone, email, role, created_at FROM users WHERE id = ${req.user.id}`;
 
         if (users.length === 0) {
             return res.status(404).json({ error: 'User not found.' });

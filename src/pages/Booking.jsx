@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Check, ChevronDown } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 /* ───────────────────────── DATA ───────────────────────── */
 
@@ -21,7 +22,7 @@ function MiniCalendar({ selected, onSelect }) {
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     const firstDay = new Date(viewYear, viewMonth, 1).getDay();
     const monthNames = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
-    const dayNames = ["Di", "Hë", "Ma", "Më", "En", "Pr", "Sh"];
+    const dayNames = ["Hë", "Ma", "Më", "En", "Pr", "Sh"];
 
     const prevMonth = () => {
         if (viewMonth === 0) { setViewMonth(11); setViewYear(viewYear - 1); }
@@ -35,7 +36,7 @@ function MiniCalendar({ selected, onSelect }) {
     const isDisabled = (day) => {
         const d = new Date(viewYear, viewMonth, day);
         const now = new Date(); now.setHours(0, 0, 0, 0);
-        return d < now || d.getDay() === 0; // no past dates, no Sundays
+        return d < now; // no past dates (Sundays skipped)
     };
 
     const isSelected = (day) => {
@@ -43,7 +44,14 @@ function MiniCalendar({ selected, onSelect }) {
         return selected.getDate() === day && selected.getMonth() === viewMonth && selected.getFullYear() === viewYear;
     };
 
-    const blanks = Array.from({ length: firstDay === 0 ? 6 : firstDay - 1 });
+    const startDayIndex = firstDay === 0 ? 0 : firstDay - 1;
+    const gridCells = Array.from({ length: startDayIndex }).fill(null);
+    for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(viewYear, viewMonth, day);
+        if (d.getDay() !== 0) {
+            gridCells.push(day);
+        }
+    }
 
     return (
         <div>
@@ -56,23 +64,24 @@ function MiniCalendar({ selected, onSelect }) {
                     <ChevronRight size={20} />
                 </button>
             </div>
-            <div className="grid grid-cols-7 gap-1 mb-2">
+            <div className="grid grid-cols-6 gap-1 mb-2">
                 {dayNames.map(d => <div key={d} className="text-center text-xs text-white/40 font-medium py-1">{d}</div>)}
             </div>
-            <div className="grid grid-cols-7 gap-1">
-                {blanks.map((_, i) => <div key={`b${i}`} />)}
-                {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
-                    <button
-                        key={day}
-                        disabled={isDisabled(day)}
-                        onClick={() => onSelect(new Date(viewYear, viewMonth, day))}
-                        className={`aspect-square rounded-full text-sm font-medium flex items-center justify-center transition-all
-                            ${isDisabled(day) ? 'text-white/15 cursor-not-allowed' : 'hover:bg-white/10 cursor-pointer'}
-                            ${isSelected(day) ? 'bg-white text-[#1e3a8a] hover:bg-white' : ''}
-                        `}
-                    >
-                        {day}
-                    </button>
+            <div className="grid grid-cols-6 gap-1">
+                {gridCells.map((day, i) => (
+                    day === null ? <div key={`b${i}`} /> : (
+                        <button
+                            key={day}
+                            disabled={isDisabled(day)}
+                            onClick={() => onSelect(new Date(viewYear, viewMonth, day))}
+                            className={`aspect-square rounded-full text-sm font-medium flex items-center justify-center transition-all
+                                ${isDisabled(day) ? 'text-white/15 cursor-not-allowed' : 'hover:bg-white/10 cursor-pointer'}
+                                ${isSelected(day) ? 'bg-white text-[#1e3a8a] hover:bg-white' : ''}
+                            `}
+                        >
+                            {day}
+                        </button>
+                    )
                 ))}
             </div>
         </div>
@@ -84,6 +93,7 @@ function MiniCalendar({ selected, onSelect }) {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function Booking() {
+    const { user } = useAuth();
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
     const [services, setServices] = useState([]);
@@ -99,6 +109,18 @@ export default function Booking() {
         email: '',
         notes: ''
     });
+
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                firstName: user.name || prev.firstName,
+                lastName: user.surname || prev.lastName,
+                phone: user.phone || prev.phone,
+                email: user.email || prev.email,
+            }));
+        }
+    }, [user]);
 
     const getDurationSlots = (timeStr, serviceTitle) => {
         let slotsNum = 1;

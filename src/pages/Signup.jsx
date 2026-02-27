@@ -6,6 +6,8 @@ import { User, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 
 const Signup = () => {
     const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -19,7 +21,7 @@ const Signup = () => {
         setError(null);
         setIsLoading(true);
 
-        const result = await signup(name, email, password);
+        const result = await signup(name, surname, phone, email, password);
         setIsLoading(false);
 
         if (result.success) {
@@ -63,17 +65,47 @@ const Signup = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-white/80 pl-1 block">Emri</label>
+                                <div className="relative group">
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-teal-300 transition-colors" />
+                                    <input
+                                        type="text"
+                                        required
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-teal-400/50 focus:bg-white/10 transition-all"
+                                        placeholder="Emri juaj"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-white/80 pl-1 block">Mbiemri</label>
+                                <div className="relative group">
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-teal-300 transition-colors" />
+                                    <input
+                                        type="text"
+                                        required
+                                        value={surname}
+                                        onChange={(e) => setSurname(e.target.value)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-teal-400/50 focus:bg-white/10 transition-all"
+                                        placeholder="Mbiemri juaj"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="space-y-1.5">
-                            <label className="text-sm font-medium text-white/80 pl-1 block">Full Name</label>
+                            <label className="text-sm font-medium text-white/80 pl-1 block">Telefoni</label>
                             <div className="relative group">
-                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-teal-300 transition-colors" />
                                 <input
-                                    type="text"
+                                    type="tel"
                                     required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-teal-400/50 focus:bg-white/10 transition-all"
-                                    placeholder="Enter your name"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-white placeholder-white/30 focus:outline-none focus:border-teal-400/50 focus:bg-white/10 transition-all"
+                                    placeholder="+383 44 ..."
                                 />
                             </div>
                         </div>

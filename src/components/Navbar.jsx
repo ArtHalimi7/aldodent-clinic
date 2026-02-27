@@ -77,18 +77,22 @@ const Navbar = () => {
             </a>
 
             {user ? (
-              <div className="flex items-center gap-4 border-l border-white/20 pl-6">
-                {user.role === 'admin' && (
-                  <Link to="/admin" className="text-sm font-medium text-teal-300 hover:text-teal-200 transition-colors">
-                    Dashboard
-                  </Link>
-                )}
-                <button
-                  onClick={logout}
-                  className="text-sm font-medium text-white/70 hover:text-white transition-colors"
-                >
-                  Logout
-                </button>
+              <div className="flex items-center gap-4 border-l border-white/20 pl-6 group relative">
+                <span className="text-sm font-medium text-white cursor-pointer py-2 flex items-center gap-1">
+                  {user.name} <ChevronDown size={14} className="opacity-50" />
+                </span>
+                
+                {/* Hover Dropdown */}
+                <div className="absolute top-full left-6 mt-0 w-48 bg-white rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0">
+                  {user.role === 'admin' && (
+                    <Link to="/admin" className="block px-4 py-2 text-sm text-[#1e3a8a] hover:bg-slate-50 font-medium">
+                      Dashboard
+                    </Link>
+                  )}
+                  <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-medium">
+                    Logout
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex items-center gap-4 border-l border-white/20 pl-6">
