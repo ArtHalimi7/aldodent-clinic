@@ -118,17 +118,3 @@ export const sendBookingReminder = async (appointment) => {
         console.error('Error sending reminder email:', error);
     }
 };
-
-export const testEmail = async () => {
-    try {
-        const data = await resend.emails.send({
-            from: 'onboarding@resend.dev',
-            to: 'test@example.com',
-            subject: 'Hello World',
-            html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
-        });
-        console.log('Test email sent!', data);
-    } catch (err) {
-        console.error('Test email failed:', err);
-    }
-};

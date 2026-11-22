@@ -1,4 +1,5 @@
 import postgres from 'postgres';
+import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,6 +18,17 @@ const sql = postgres(connectionString, {
 export async function initDb() {
     console.log("Starting database initialization...");
     try {
+        // doctors first: users.doctor_id references it
+        await sql`
+            CREATE TABLE IF NOT EXISTS doctors (
+                id VARCHAR(50) PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                role VARCHAR(255) NOT NULL,
+                avatar TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
         await sql`
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -67,16 +79,6 @@ export async function initDb() {
                 title VARCHAR(255) NOT NULL,
                 duration VARCHAR(100) NOT NULL,
                 price VARCHAR(100) NOT NULL,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-
-        await sql`
-            CREATE TABLE IF NOT EXISTS doctors (
-                id VARCHAR(50) PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                role VARCHAR(255) NOT NULL,
-                avatar TEXT,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         `;
@@ -133,15 +135,20 @@ export async function initDb() {
         console.log(`Current users count: ${usersCount[0].count}`);
 
         if (parseInt(usersCount[0].count) === 0) {
-            console.log("Seeding initial admin...");
-            // Password is '***REMOVED***' hashed with bcrypt (saltRounds: 10)
-            const defaultHashedPassword = '***REMOVED***';
-
-            await sql`
-                INSERT INTO users (name, email, password_hash, role)
-                VALUES ('Admin User', 'admin@aldodent.com', ${defaultHashedPassword}, 'admin')
-            `;
-            console.log("Initial admin seeded.");
+            // The first admin comes from ADMIN_EMAIL / ADMIN_PASSWORD; no credentials are hardcoded.
+            const adminEmail = process.env.ADMIN_EMAIL;
+            const adminPassword = process.env.ADMIN_PASSWORD;
+            if (!adminEmail || !adminPassword) {
+                console.warn("No users yet: set ADMIN_EMAIL and ADMIN_PASSWORD to seed the first admin.");
+            } else {
+                console.log("Seeding initial admin...");
+                const passwordHash = await bcrypt.hash(adminPassword, 10);
+                await sql`
+                    INSERT INTO users (name, email, password_hash, role)
+                    VALUES ('Admin User', ${adminEmail}, ${passwordHash}, 'admin')
+                `;
+                console.log("Initial admin seeded.");
+            }
         }
 
         console.log("Database initialized successfully.");

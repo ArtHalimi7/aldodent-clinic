@@ -4,10 +4,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sql from '../db.js';
 import { verifyToken } from '../authMiddleware.js';
+import { getJwtSecret } from '../jwtSecret.js';
 import { sendWelcomeEmail } from '../emailService.js';
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || '***REMOVED***';
 
 // Register (Signup)
 router.post('/signup', async (req, res) => {
@@ -37,7 +37,7 @@ router.post('/signup', async (req, res) => {
 
         // Generate JWT
         const user = newUser[0];
-        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user.id, role: user.role }, getJwtSecret(), { expiresIn: '7d' });
 
         // Trigger welcome email asynchronously
         sendWelcomeEmail(user);
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Generate JWT
-        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user.id, role: user.role }, getJwtSecret(), { expiresIn: '7d' });
 
         // Remove password hash from response
         // eslint-disable-next-line no-unused-vars

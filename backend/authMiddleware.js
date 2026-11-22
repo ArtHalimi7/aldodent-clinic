@@ -1,7 +1,7 @@
 /* global process */
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || '***REMOVED***';
+import { getJwtSecret } from './jwtSecret.js';
 
 export const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
     const token = authHeader.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, getJwtSecret());
         req.user = decoded; // Contains id and role
         next();
     } catch (err) { // eslint-disable-line no-unused-vars
